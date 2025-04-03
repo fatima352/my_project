@@ -1,0 +1,307 @@
+/************** BLOC GENERAL (partager) DU STYLE **************/
+/* Couleur utiliser dans l'ensemble du site */
+:root {
+    --background-dark: #27292d;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #14181c;
+
+}
+
+header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 99;
+}
+
+.logo {
+    font-size: 2.1em;
+    color: #ffffff;
+    user-select: none;
+}
+
+/* - Partage LOGIN / REGISTER */
+/* The .wrapper class is a shared container style used for both login and register pages. */
+.wrapper{
+    position: relative;
+    height: 35em;
+    width: 30%;
+    max-width: 400px;
+    background: var(--background-dark);
+    border: 2px solid rgba(255, 255, 255, 1);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    margin-top: 20px;
+}
+
+.btn {
+    width: 100%;
+    text-align: center;
+    height: 35px;
+    background: #fff;
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    color: #27292d;
+    font-weight: 500;
+    margin-top: 30px;
+}
+
+/* Shared form styling for consistent layout and alignment across pages */
+form{
+    width: 100%;
+    padding: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* SPECIFIQUE A LA PAGE INDEX */
+
+/* Styling for individual navigation links, ensuring proper spacing, font size, and hover effects */
+.navigation a{
+    position: relative;
+    font-size:1.15rem;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    margin-right: 40px;
+    line-height:1.25;
+}
+
+/* Creates an underline animation on hover for navigation links */
+.navigation a::after{
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 3px;
+    background: #ffffff;
+    border-radius: 5px;
+    transform-origin: right;
+    transform: scaleX(0);
+    transition: transform .5s;
+}
+
+.navigation a:hover::after{
+    transform-origin: left ;
+    transform: scaleX(1);
+}
+
+.navigation .btnLogin-popup{
+    width: 110px;
+    height: 40px;
+    background: transparent;
+    border: 2px solid #fff;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size:  1em;
+    color: #fff;
+    font-weight: 500;
+    margin-right: 10px;
+    transition: .5s;
+}
+
+.navigation .btnLogin-popup:hover{
+    background: #27292d;
+    color: #fff;
+}
+
+/* Search bar style */
+.search{
+    position: absolute;
+    left: 20%; /* Use a percentage for better responsiveness */
+    top: 50%;
+    transform: translateY(-50%); /* Vertically center it */
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.2); /* No change needed, already consistent */
+    border-radius: 10px;
+    padding: 5px 10px;
+}
+
+.search input{
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-size: 1em;
+    padding: 5px 50px;
+    outline: none;
+    border-radius: 5px;
+}
+
+.search input::placeholder{
+    color: #fff;
+}
+
+.search input {
+    padding-left: 10px;
+}
+
+.search i{
+    color: #fff;
+    font-size: 1.2em;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.search i:hover {
+    color: #000; /* Change icon color on hover */
+}
+
+/*************** SPECIFIQUE A LA PAGE LOGIN ***************/
+h1{
+    font-size: 2em;
+    font-weight: 525;
+    transform: translateY(-100%);
+}
+.input-box.login{
+    position: relative;
+    width: 100%;
+    height: 50px;
+    border-bottom:  2px solid #fff;
+    margin: 30px 0;
+}
+
+.input-box.login input{
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 1em;
+    padding: 0 30px 0 15px;
+}
+
+.input-box.login i{
+    position: absolute;
+    right: 10px; /* Positionnement horizontal */
+    font-size: 1.2em; /* Taille de l'icône */
+    color: #fff; /* Couleur de l'icône */
+    top: 45%; /* Positionnement vertical ajusté pour remonter l'icône */
+    transform: translateY(-50%); /* Centrage vertical précis */
+} 
+
+.remember-forgot{
+    font-size: .9em;
+    color: #fff;
+    font-weight: 500;
+    margin: -15px 0 15px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.remember-forgot label input{
+    accent-color: #ffffff;
+    margin-right: 3px;
+}
+
+.remember-forgot a{
+    color: #fff;
+    text-decoration: none;
+}
+
+.remember-forgot a:hover{
+    text-decoration:underline ;
+}
+
+
+.register-link{
+    font-size: .9em;
+    text-align: center;
+    font-weight: 500;
+    margin: 25px 0 10px;
+}
+
+.register-link p a{
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.register-link p a:hover{
+    text-decoration: underline;
+}
+
+
+/*************** SPECIFIQUE A LA PAGE REGISTER ***************/
+.h1.register{
+    font-size: 2em;
+    font-weight: 525;
+    transform: translateY(-70%);
+}
+.input-box.register {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    border-bottom:  2px solid #fff;
+    margin: 20px 0;
+}
+
+.input-box.register input{
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 1em;
+    padding: 5px 30px 5px 15px;
+    line-height: 1;
+    text-align: left;
+}
+.input-box.register i{
+    position: absolute;
+    right: 10px; /* Positionnement horizontal */
+    font-size: 1.2em; /* Taille de l'icône */
+    color: #fff; /* Couleur de l'icône */
+    top: 30%; /* Positionnement vertical ajusté pour remonter l'icône */
+    transform: translateY(-50%); /* Centrage vertical précis */
+} 
+
+.loginLink{
+    font-size: .9em;
+    text-align: center;
+    font-weight: 500;
+    margin: 25px 0 10px;
+}
+
+.loginLink p a{
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.loginLink p a:hover{
+    text-decoration: underline;
+}
+
+
