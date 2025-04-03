@@ -10,16 +10,5 @@ package-lock.json
 
 # Bases de données locales
 Back_end/data.db
-
-# Environnements et fichiers sensibles
-.env
-*.log
-
-# Dossiers système
-.DS_Store
-Thumbs.db
-
-# Fichiers générés
-dist/
-build/
+node_modules/
 

@@ -14,16 +14,16 @@
         </header>
 
         <div class ="wrapper login">
-            <form action ="">
+            <form id="logform" action ="" onsubmit="loginUser(event)">
                 <h1>LOGIN</h1>
                 <div class="input-box login">
-                    <input type="text" placeholder="Username" required>
+                    <input id="usernameLogin" type="text" placeholder="Username" required>
                     <!-- icone user -->
                     <i class='bx bxs-user'></i> 
                 </div>
 
                 <div class="input-box login">
-                    <input type="password" placeholder="Password" required> 
+                    <input id="passwordLogin" type="password" placeholder="Password" required> 
                     <!-- icone cadena -->
                     <i class='bx bxs-lock-alt' ></i>
                 </div>

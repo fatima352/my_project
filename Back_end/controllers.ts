@@ -1,4 +1,5 @@
 import { db } from "./database/data.ts";
+
 import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
 import { create, verify } from "https://deno.land/x/djwt/mod.ts";
 
@@ -20,7 +21,8 @@ const secretKey = await crypto.subtle.generateKey(
 //tableau pour stoker les tokens
 const tokens: {[key: string]: string} = {};
 
-//fonction pour s'inscrir
+
+//fonction pour s'inscrire
 export const register = async(ctx)=>{
     // const {username, email, password} = await ctx.request.body.json().value;
 
@@ -30,12 +32,14 @@ export const register = async(ctx)=>{
 
     if(!username || !email || !password){
         ctx.response.status = 400;
-        ctx.response.body = {message : "tous les champs sont obligatoire"}
+        ctx.response.body = {message :"Tous les champs sont obligatoires"}
+        console.log("Champs obligatoires manquants")
         return;
     }
     if(db.prepare(`SELECT * FROM users WHERE username = ?`).all(username).length > 0){
         ctx.response.status = 400;
-        ctx.response.body = {message : "Nom d'uilisateur existe déjà"}
+        ctx.response.body = {message :"Nom d'utilisateur déjà pris"}
+        console.log("Nom d'utilisateur déjà pris")
         return;
     }
 
@@ -43,7 +47,8 @@ export const register = async(ctx)=>{
     const result = db.prepare(`INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)`).run(username, email, passeword_hash);
     if(result.changes > 0){
         ctx.response.status = 201;
-        ctx.response.body = {message : "Utilisateur créé avec succès"}
+        ctx.response.body = {message :  "Utilisateur créé avec succès"}
+        console.log("Création réussie")
     }
 }
 
@@ -54,8 +59,8 @@ export const login = async(ctx)=>{
     const { response } = ctx;
 
     if(!username || !password){
-        ctx.response.status = 401;
-        ctx.response.body = {message : "tous les champs sont obligatoire"}
+        ctx.response.status = 400;
+        ctx.response.body = {message : "Tous les champs sont obligatoires"};
         return;
     }
 
@@ -65,7 +70,7 @@ export const login = async(ctx)=>{
     // Vérifie si l'utilisateur existe
     if (!user) {
         response.status = 401;
-        response.body = { message: "Utilisateur inexistant." };
+        response.body = { message: "Utilisateur inexistant"};
         return;
     }
 
@@ -75,7 +80,7 @@ export const login = async(ctx)=>{
 
     if(!result){
         ctx.response.status = 401;
-        ctx.response.body = {message : "mot de passe ou nom d'utilisateur invalide"}
+        ctx.response.body = {message : "Mot de passe ou nom d'utilisateur invalide"};
         return;
     }
 
@@ -84,7 +89,7 @@ export const login = async(ctx)=>{
 
     // ctx.response.headers.set("Set-Cookie", `auth_token=${token}; HttpOnly; SameSite=Strict; Max-Age=3600`);
     ctx.response.status = 200;
-    ctx.response.body = {message: "Connection avec succé"}
+    ctx.response.body = {message: "Connexion réussie"}
 }
 
 

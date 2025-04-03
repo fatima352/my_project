@@ -1,4 +1,5 @@
 import {Application } from "https://deno.land/x/oak@v17.1.4/mod.ts";
+import { oakCors } from "https://deno.land/x/cors/mod.ts"; // pour resoudre le probleme de oakCors
 import{router} from "./routes.ts"
 const app = new Application();
 
@@ -17,6 +18,15 @@ if (Deno.args.length >= 3) {
 }
   
 console.log(`Oak back server running on port ${options.port}`);
+
+//Toujours a la fin car il cherche les routes 
+app.use(oakCors({
+  origin: "http://localhost:8000",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Specify allowed methods
+  allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
+  credentials: true
+}));
+
 
 app.use(router.routes()); 
 app.use(router.allowedMethods()); 
