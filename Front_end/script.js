@@ -1,61 +1,98 @@
-//GESTION DES FONCTIONS DE LA PAGE LOGIN
+function registerUser(event) {
+    event.preventDefault(); // Prevent the form from refreshing the page
 
-const loginButton = document.getElementById('loginButton');
+    // Récupération des valeurs saisies par l'utilisateur
+    let username = document.getElementById("usernameReg").value;
+    let email = document.getElementById("emailReg").value;
+    let password = document.getElementById("passwordReg").value;
 
-// redirection vers la page de connexion a partir de la page home
-loginButton.addEventListener('click', () => {
-    // Redirige vers la page de connexion
-    window.location.href = 'login.html';
-});
+    // Create the data object to send to the backend
+    const data = {
+        username: username,
+        email: email,
+        password: password
+    };
 
+    console.log(data); // Log the data for debugging
 
-
-
-//FETCH 
-function getData() {
-    let login = document.getElementById("username").value
-    let password = document.getElementById("password").value
-
-
-    const data={
-        username:login,
-        password:password
-    }
-
-    console.log(data)
-
-    fetch(`http://localhost:3000/login`, {
+    // Send the data to the backend using fetch
+    fetch(`http://localhost:3000/register`, {
         method: 'POST',
-        mode: 'cors',
-        credentials : 'include',
-        body: JSON.stringify(data) //tjrs mettre avec 
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data) // Convert the data object to JSON
     })
-
-    .then(response =>{
-        if (response.ok){
-            return response.json();
-        }
-        else{
-            throw new Error('the token was not verified.');
-        }
+    .then(response => {
+        if (response.ok) {
+            return response.json(); // Parse the JSON response
+        } else {
+            switch (response.status) {
+                case 400:
+                    throw new Error('Requête invalide. Veuillez vérifier vos informations.');
+                case 401:
+                    throw new Error('Nom d’utilisateur déjà pris. Veuillez réessayer.');
+                case 500:
+                    throw new Error('Erreur serveur. Veuillez réessayer plus tard.');
+                default:
+                    throw new Error('Une erreur inconnue s’est produite.');
+            }        }
     })
-
-    .then(data =>{
-        console.log(data);
-       // alert('token verified' + JSON.stringify(data.token_data));
-        window.location.href = "index.html"
+    .then(data => {
+        console.log(data); // Log the response from the backend
+        alert('Inscription réussie !'); // Notify the user
+        window.location.href = "login.html"; // Redirect to the login page
     })
-
-    .catch(error =>{
-        alert('error: '+ error.message);
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error: ' + error.message); // Notify the user of the error
     });
 }
 
+function loginUser(event){
+    event.preventDefault(); // Prevent the form from refreshing the page
 
-/****************************** messages *************************************/
-let send_message_button = document.getElementById("send");
-send_message_button.addEventListener("submit", function(event) {
-    event.preventDefault(); 
-    sendJson({ message: new_message.value, auth_token: localStorage.auth_token});
-    new_message.value = " ";
-});
+    // Récupération des valeurs saisies par l'utilisateur
+    let username = document.getElementById("usernameLogin").value;
+    let password = document.getElementById("passwordLogin").value;
+
+    // Create the data object to send to the backend
+    const data = {
+        username: username,
+        password: password
+    };
+
+    fetch(`http://localhost:3000/login`, {
+        method : 'POST',
+        headers : {
+            'Content-Type': 'application/json'
+        },
+        body : JSON.stringify(data)
+    })
+    .then(response => {
+        if (response.ok){
+            return response.json();
+        }else{
+            switch (response.status) {
+                case 400:
+                    throw new Error('Requête invalide. Veuillez vérifier vos informations.');
+                case 401:
+                    throw new Error('Nom d’utilisateur ou mot de passe invalide. Veuillez réessayer.');
+                case 500:
+                    throw new Error('Erreur serveur. Veuillez réessayer plus tard.');
+                default:
+                    throw new Error('Une erreur inconnue s’est produite.');
+            }
+        }
+    })
+    .then(data =>{
+        console.log(data)
+        alert('Connection réussie!');
+        // window.location.href = REDIRECTION VERS LA PAGE DU PROFIL
+    })
+    .catch(error => {
+        console.error('Error', error);
+        alert('Error: ' + error.message);
+    })
+
+}
