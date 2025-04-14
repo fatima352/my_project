@@ -1,3 +1,6 @@
+
+console.log("scripte charger")
+//fetch pour s'inscrire
 function registerUser(event) {
     event.preventDefault(); // Prevent the form from refreshing the page
 
@@ -29,15 +32,16 @@ function registerUser(event) {
         } else {
             switch (response.status) {
                 case 400:
-                    throw new Error('Requête invalide. Veuillez vérifier vos informations.');
-                case 401:
+                    // alert('Utilisateur existe déjà')
                     throw new Error('Nom d’utilisateur déjà pris. Veuillez réessayer.');
                 case 500:
                     throw new Error('Erreur serveur. Veuillez réessayer plus tard.');
                 default:
                     throw new Error('Une erreur inconnue s’est produite.');
-            }        }
+            }        
+        }
     })
+    
     .then(data => {
         console.log(data); // Log the response from the backend
         alert('Inscription réussie !'); // Notify the user
@@ -47,11 +51,11 @@ function registerUser(event) {
         console.error('Error:', error);
         alert('Error: ' + error.message); // Notify the user of the error
     });
+    
 }
-
+//fetch pour se loguer
 function loginUser(event){
     event.preventDefault(); // Prevent the form from refreshing the page
-
     // Récupération des valeurs saisies par l'utilisateur
     let username = document.getElementById("usernameLogin").value;
     let password = document.getElementById("passwordLogin").value;
@@ -64,6 +68,8 @@ function loginUser(event){
 
     fetch(`http://localhost:3000/login`, {
         method : 'POST',
+        mode: 'cors',
+        credentials : 'include',
         headers : {
             'Content-Type': 'application/json'
         },
@@ -73,22 +79,24 @@ function loginUser(event){
         if (response.ok){
             return response.json();
         }else{
-            switch (response.status) {
-                case 400:
-                    throw new Error('Requête invalide. Veuillez vérifier vos informations.');
-                case 401:
-                    throw new Error('Nom d’utilisateur ou mot de passe invalide. Veuillez réessayer.');
-                case 500:
-                    throw new Error('Erreur serveur. Veuillez réessayer plus tard.');
-                default:
-                    throw new Error('Une erreur inconnue s’est produite.');
-            }
+            // switch (response.status) {
+            //     case 401:
+            //         throw new Error('Nom d’utilisateur ou mot de passe invalide. Veuillez réessayer.');
+            //     case 500:
+            //         throw new Error('Erreur serveur. Veuillez réessayer plus tard.');
+            //     default:
+            //         throw new Error('Une erreur inconnue s’est produite.');
+            // }
+            throw new Error('the token was not verified.');
         }
     })
     .then(data =>{
-        console.log(data)
-        alert('Connection réussie!');
-        // window.location.href = REDIRECTION VERS LA PAGE DU PROFIL
+        console.log("response recu : ", data);
+        // alert('Connection réussie!');
+
+        localStorage.setItem('token', data.token); //stocker les tokens
+        // window.location.href = "profil.html"; //rediriger vers la page profil
+
     })
     .catch(error => {
         console.error('Error', error);
@@ -96,3 +104,57 @@ function loginUser(event){
     })
 
 }
+//fonction pour ser deconnecter
+// function logoutUser() {
+//     event.preventDefault(); // Prevent the form from refreshing the page
+//     // Récupération des valeurs saisies par l'utilisateur
+//     let username = document.getElementById("usernameLogin").value;
+//     let password = document.getElementById("passwordLogin").value;
+
+//     // Create the data object to send to the backend
+//     const data = {
+//         username: username,
+//         password: password
+//     };
+
+//     console.log(data)
+
+//     fetch(`http://localhost:3000/login`, {
+//         method : 'POST',
+//         mode : crossOriginIsolated,
+//         headers : {
+//             'Content-Type': 'application/json'
+//         },
+//         body : JSON.stringify(data)
+//     })
+//     .then(response => {
+//         if (response.ok){
+//             return response.json();
+//         }else{
+//             switch (response.status) {
+//                 case 401:
+//                     throw new Error('Nom d’utilisateur ou mot de passe invalide. Veuillez réessayer.');
+//                 case 500:
+//                     throw new Error('Erreur serveur. Veuillez réessayer plus tard.');
+//                 default:
+//                     throw new Error('Une erreur inconnue s’est produite.');
+//             }
+//         }
+//     })
+//     .then(data =>{
+//         alert('Connection réussie!');
+//         localStorage.setItem('token', data.token); //stocker les tokens
+//         window.location.href = "profil.html"; //rediriger vers la page profil
+
+//     })
+//     .catch(error => {
+//         console.error('Error', error);
+//         alert('Error: ' + error.message);
+//     })
+// }
+
+
+// window.addEventListener("DOMContentLoaded", () => {
+//     console.log("DOM chargé");
+//   });
+  
