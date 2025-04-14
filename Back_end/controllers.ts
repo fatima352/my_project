@@ -1,8 +1,7 @@
 import { db } from "./database/data.ts";
-
+import {Context} from "https://deno.land/x/oak@v17.1.4/mod.ts";
 import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
 import { create, verify } from "https://deno.land/x/djwt/mod.ts";
-
 
 //fonction pour hasher les mots de passe
 const get_hash = async (password: string) => {
@@ -18,8 +17,54 @@ const secretKey = await crypto.subtle.generateKey(
     ["sign", "verify"]
 );
 
+
 //tableau pour stoker les tokens
 const tokens: {[key: string]: string} = {};
+
+// Middleware to verify JWT token (partie 3)
+export const authorizationMiddleware = async (ctx: Context, next: () => Promise<unknown>) => {
+    const cookie = ctx.request.headers.get("cookie");
+    const authToken = cookie?.split("; ").find(row => row.startsWith("auth_token="))?.split('=')[1];
+  
+    if (!authToken) {
+      ctx.response.status = 401;
+      ctx.response.body = { error: "Unauthorized: Missing token" };
+      return;
+    }
+  
+    try {
+      // Verify the token
+      const tokenData = await verify(authToken, secretKey);
+      ctx.state.tokenData = tokenData; // Store data in ctx.state for use in other middlewares/routes
+      await next();
+    } catch {
+      ctx.response.status = 401;
+      ctx.response.body = { error: "Unauthorized: Invalid token" };
+    }
+  };
+
+//------------------------
+export const WebSocket = async (ctx, connections: WebSocket[]) =>{
+    if (!ctx.isUpgradable) {
+        ctx.throw(501);
+    }
+    const ws = ctx.upgrade();
+
+    connections.push(ws);
+    console.log(`+ websocket connected (${connections.length})`);
+
+    ws.onerror = (_error) => {
+    const index = connections.indexOf(ws);
+    if (index !== -1) {
+        connections.splice(index, 1);
+    }
+    console.log(`- websocket error`);
+    };
+
+    ws.onmessage = (event) => {
+    console.log(event.data);
+    }
+}
 
 
 //fonction pour s'inscrire
@@ -83,13 +128,24 @@ export const login = async(ctx)=>{
         ctx.response.body = {message : "Mot de passe ou nom d'utilisateur invalide"};
         return;
     }
-
-    const token = await create({alg: "HS512", typ: "JWT"},{username : username}, secretKey );
+    
+    const token = await create({alg: "HS512", typ: "JWT"}, {username}, secretKey );
     tokens[username] = token; //stoke le token de l'utilisateur
 
-    // ctx.response.headers.set("Set-Cookie", `auth_token=${token}; HttpOnly; SameSite=Strict; Max-Age=3600`);
+    ctx.response.headers.set("Set-Cookie", `auth_token=${token}; HttpOnly; SameSite=Strict; Max-Age=3600`);
+    
     ctx.response.status = 200;
-    ctx.response.body = {message: "Connexion réussie"}
+    ctx.response.body = {
+        message: "Connexion réussie",
+        token: token
+    }
+}
+export const logout = async(ctx)=>{
+
+}
+//fonction pour le profil 
+export const get_profil = async(ctx)=>{    
+    ctx.response.body = { message: 'Token verified successfully', token_data: ctx.state.tokenData };
 }
 
 

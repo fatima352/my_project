@@ -1,6 +1,7 @@
 import {Application } from "https://deno.land/x/oak@v17.1.4/mod.ts";
 import { oakCors } from "https://deno.land/x/cors/mod.ts"; // pour resoudre le probleme de oakCors
 import{router} from "./routes.ts"
+
 const app = new Application();
 
 if (Deno.args.length < 1) {
@@ -30,5 +31,9 @@ app.use(oakCors({
 
 app.use(router.routes()); 
 app.use(router.allowedMethods()); 
+
+// app.addEventListener('error',evt =>{
+//   console.log(evt.error);
+// });
 
 await app.listen({port: 3000}); 
