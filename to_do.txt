@@ -1,0 +1,8 @@
+- je dois enlever le token du header voir avec data si ca marche ou pas pcq je comprends pas 
+- voir dans controllers les fonctionnalites 
+- ajouter l'icone 
+- logout
+/15-04-2025
+    -> faire le logout
+    -> faire l'icon
+    -> finir de gere les connexions 

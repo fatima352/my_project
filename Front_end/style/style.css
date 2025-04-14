@@ -132,6 +132,15 @@ form{
     color: #fff;
 }
 
+#main-menu {
+    list-style: none;
+    display: flex;         /* <-- C’est ça qui aligne en ligne */
+    gap: 2rem;             /* Espace entre les éléments */
+    margin: 0;
+    padding: 0;
+    align-items: center;   /* Centre verticalement les éléments */
+}
+
 /* Search bar style */
 .search{
     position: absolute;
@@ -304,4 +313,40 @@ h1{
     text-decoration: underline;
 }
 
+/* Page index.html */
+/* ===== STYLE NAVIGATION =====
+
+#top-nav {
+  background-color: #f5f5f5;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#main-menu {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+#main-menu li {
+  position: relative;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  font-size: 1rem;
+  display: inline-block;
+  padding: 0.3rem 0;
+  transition: color 0.3s ease; /* Smooth color transition */
+}
+
+/* Effet au survol */
+.nav-link:hover {
+  color: #007bff; /* Bleu au survol */
+} */
 

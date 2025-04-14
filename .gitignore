@@ -3,6 +3,9 @@
 .mypy_cache/
 node_modules/
 CACHE_DIR.TAG
+.DS_Store
+
+
 
 # Fichiers de dépendances verrouillés (facultatif si tu veux les ignorer)
 deno.lock
