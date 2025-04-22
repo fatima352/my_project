@@ -7,4 +7,5 @@ const connections: WebSocket[] = [];  //stock les requetes
 router.get("/", cont.authorizationMiddleware, (ctx) => cont.WebSocket(ctx, connections));// router.get("/register", cont.showRegister);//pour recupere la page register
 router.post("/register", cont.register); //route pour l'inscription
 router.post("/login", cont.login); //route pour la connection
-router.get('/profil', cont.authorizationMiddleware, cont.get_profil);//route pour le
+router.get('/user', cont.authorizationMiddleware, cont.get_profil);//route apres s'avoir loguer proteger par un middleware
+router.post('/logout', cont.logout);//route pour se deconnecter

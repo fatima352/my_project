@@ -6,3 +6,16 @@
     -> faire le logout
     -> faire l'icon
     -> finir de gere les connexions 
+
+
+Question 
+    comment je fais mon logout ✅
+    est ce que la construction de mon projet est bonne  ✅
+    est que mo token peut apparaitre dans mon header "ctx.response.headers.set("Set-Cookie", `auth_token=${token}; HttpOnly; SameSite=Strict; Max-Age=3600`);
+    "
+    je vois pas comment connecter mon logo.ico
+
+    /!\ problème ave le token qui n'est pas cacher ==> ${token}
+    ---> ctx.response.headers.set("Set-Cookie", `auth_token; HttpOnly; SameSite=Strict; Max-Age=3600`);
+    ---> ctx.response.headers.set("Set-Cookie", `auth_token=${token}; HttpOnly; SameSite=Strict; Max-Age=3600`);
+    
