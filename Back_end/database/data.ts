@@ -7,6 +7,7 @@ db.exec(`
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT UNIQUE NOT NULL,
+        role TEXT NOT NULL DEFAULT 'user',
         email TEXT UNIQUE NOT NULL,
         password_hash TEXT NOT NULL
     );
@@ -22,12 +23,13 @@ db.exec(`
     );
 `)
 
-//table des films
+//table de film
 db.exec(`
     CREATE TABLE IF NOT EXISTS film (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         titel TEXT UNIQUE NOT NULL,
-        poster_url TEXT
+        poster_url TEXT,
+        description TEXT
 
     );
 `)
@@ -69,5 +71,7 @@ db.exec(`
     CREATE TABLE IF NOT EXISTS notification(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         titre TEXT NOT NULL
+        user_id INTEGER NOT NULL,
+        FOREING KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     );
 `)

@@ -1,5 +1,4 @@
-# Automatically created by mypy
-# Caches et fichiers temporaires
+
 .mypy_cache/
 node_modules/
 CACHE_DIR.TAG
@@ -7,11 +6,9 @@ CACHE_DIR.TAG
 
 
 
-# Fichiers de dépendances verrouillés (facultatif si tu veux les ignorer)
 deno.lock
 package-lock.json
 
-# Bases de données locales
 Back_end/data.db
 node_modules/
 

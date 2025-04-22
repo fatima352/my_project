@@ -17,7 +17,6 @@ const secretKey = await crypto.subtle.generateKey(
     ["sign", "verify"]
 );
 
-
 //tableau pour stoker les tokens
 const tokens: {[key: string]: string} = {};
 
@@ -36,6 +35,13 @@ export const authorizationMiddleware = async (ctx: Context, next: () => Promise<
       // Verify the token
       const tokenData = await verify(authToken, secretKey);
       ctx.state.tokenData = tokenData; // Store data in ctx.state for use in other middlewares/routes
+    
+    //   if (tokenData.role !== "admin") {
+    //     ctx.response.status = 403;
+    //     ctx.response.body = { error: "Forbidden: Insufficient permissions" };
+    //     return;
+    //   }
+
       await next();
     } catch {
       ctx.response.status = 401;
@@ -43,7 +49,7 @@ export const authorizationMiddleware = async (ctx: Context, next: () => Promise<
     }
   };
 
-//------------------------
+//WebSocket
 export const WebSocket = async (ctx, connections: WebSocket[]) =>{
     if (!ctx.isUpgradable) {
         ctx.throw(501);
@@ -132,26 +138,54 @@ export const login = async(ctx)=>{
     const token = await create({alg: "HS512", typ: "JWT"}, {username}, secretKey );
     tokens[username] = token; //stoke le token de l'utilisateur
 
+    // ctx.response.headers.set("Set-Cookie", `auth_token; HttpOnly; SameSite=Strict; Max-Age=3600`);
     ctx.response.headers.set("Set-Cookie", `auth_token=${token}; HttpOnly; SameSite=Strict; Max-Age=3600`);
     
     ctx.response.status = 200;
-    ctx.response.body = {
-        message: "Connexion réussie",
-        token: token
-    }
+    ctx.response.body = {message: "Connexion réussie"}
 }
-export const logout = async(ctx)=>{
 
-}
+//fermer quand on a pas besoin /!\
+
+
+export const logout = async (ctx) => {
+    const cookies = ctx.cookies;
+  
+    if (!cookies || typeof cookies.get !== "function") {
+      ctx.response.status = 500;
+      ctx.response.body = { message: "Erreur serveur : cookies non disponibles" };
+      return;
+    }
+  
+    const token = await cookies.get("auth_token");
+  
+    if (!token) {
+      ctx.response.status = 401;
+      ctx.response.body = { message: "Déconnexion impossible : aucun token" };
+      return;
+    }
+  
+    await cookies.delete("auth_token");
+  
+    ctx.response.status = 200;
+    ctx.response.body = { message: "Déconnexion réussie" };
+  };
+  
+
+
 //fonction pour le profil 
 export const get_profil = async(ctx)=>{    
-    ctx.response.body = { message: 'Token verified successfully', token_data: ctx.state.tokenData };
+    ctx.response.status = 200;
+    ctx.response.body = {
+        status: "success",
+        message: "Welcome to your Dashboard!",
+    };
 }
 
 
 //fonction pour recuperer les film regarder par un utilisateur
 
-//fonction poir recuperere les comantaire d'un meme film
+//fonction pour recuperere les comantaire d'un meme film
 
 //fonction pour chercher un films dans la bibliotheque
 
