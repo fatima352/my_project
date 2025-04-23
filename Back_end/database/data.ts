@@ -70,8 +70,8 @@ db.exec(`
 db.exec(`
     CREATE TABLE IF NOT EXISTS notification(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        titre TEXT NOT NULL
+        titre TEXT NOT NULL,
         user_id INTEGER NOT NULL,
-        FOREING KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     );
 `)

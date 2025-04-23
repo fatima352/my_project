@@ -19,7 +19,7 @@ function registerUser(event) {
     // Send the data to the backend using fetch
     fetch(`http://localhost:3000/register`, {
         method: 'POST',
-        mode: 'cros',
+        // mode: 'cros',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -132,7 +132,7 @@ function logoutUser(event) {
     })
     .then(data =>{
         console.log(data);
-        // alert('Deconnexion réussie !');
+        alert('Deconnexion réussie !');
         alert(data.message);
         localStorage.removeItem('auth_token');
         window.location.href = '/login.html';
