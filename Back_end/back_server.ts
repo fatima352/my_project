@@ -1,6 +1,6 @@
 import {Application } from "https://deno.land/x/oak@v17.1.4/mod.ts";
 import { oakCors } from "https://deno.land/x/cors/mod.ts"; // pour resoudre le probleme de oakCors
-import{router} from "./routes/routes.ts"
+import{router} from "./routes.ts"
 
 const app = new Application();
 
@@ -35,5 +35,5 @@ app.use(router.allowedMethods());
 // app.addEventListener('error',evt =>{
 //   console.log(evt.error);
 // });
-
+console.log("Database path:", Deno.realPathSync("data.db")); // Log the database path
 await app.listen({port: 3000}); 

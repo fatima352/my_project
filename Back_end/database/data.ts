@@ -1,6 +1,6 @@
 
 import { DatabaseSync } from "node:sqlite";
-export const db = new DatabaseSync("data.db");
+export const db = new DatabaseSync("/Users/fatima/my_project/Back_end/database/data.db");
 
 //table des utiliasateurs
 db.exec(`
