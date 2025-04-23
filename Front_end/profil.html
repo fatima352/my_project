@@ -8,13 +8,13 @@
         <!-- pour les icones -->
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     </head>
-    <body class="profil-body">
+    <body onload="profileUser()" class="profil-body">
         <header class="header">
             <h2 class="logo">MOVIEW</h2> 
             <nav class="navigation">
                 <ul class= "menu" id="menu">
                     <li class="menu-home">
-                        <a href="index.html" class="nav-link">
+                        <a href="home.html" class="nav-link">
                             <span class="link-text">HOME</span>
                         </a>
                     </li>
@@ -46,8 +46,8 @@
                     </span>
                     <!-- Nom de l'utilisateur -->
                     <div class="name-user">
-                        <h3 class="iduser">
-                            <span>Iduser</span>
+                        <h3 class="iduser" >
+                            <p id="username"></p>
                         </h3>
                     </div>
                   </div>

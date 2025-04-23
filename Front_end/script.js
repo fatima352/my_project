@@ -1,4 +1,4 @@
-//fetch pour s'inscrire
+//fonction fetch pour s'inscrire
 function registerUser(event) {
     event.preventDefault(); // Prevent the form from refreshing the page
 
@@ -33,17 +33,19 @@ function registerUser(event) {
         } else {
             switch (response.status) {
                 case 400:
-                    // alert('Utilisateur existe déjà')
+                    alert('Utilisateur existe déjà. Veuillez reessayer.');
                     throw new Error('Nom d’utilisateur déjà pris. Veuillez réessayer.');
                 case 500:
+                    alert('Erreur serveur. Veuillez réessayer plus tard.');
                     throw new Error('Erreur serveur. Veuillez réessayer plus tard.');
                 default:
+                    alert('Une erreur inconnue s’est produite.');
                     throw new Error('Une erreur inconnue s’est produite.');
             }        
         }
     })
     
-    .then(data => {
+    then(data => {
         console.log(data); // Log the response from the backend
         alert('Inscription réussie !'); // Notify the user
         window.location.href = "login.html"; // Redirect to the login page
@@ -55,7 +57,7 @@ function registerUser(event) {
     
 }
 
-//fetch pour se loguer
+//fonction fetch pour se loguer
 function loginUser(event){
     event.preventDefault(); // Prevent the form from refreshing the page
     // Récupération des valeurs saisies par l'utilisateur
@@ -83,10 +85,13 @@ function loginUser(event){
         }else{
             switch (response.status) {
                 case 401:
+                    alert('Nom d’utilisateur ou mot de passe invalide. Veuillez réessayer.');
                     throw new Error('Nom d’utilisateur ou mot de passe invalide. Veuillez réessayer.');
                 case 500:
+                    alert('Erreur serveur. Veuillez réessayer plus tard.');
                     throw new Error('Erreur serveur. Veuillez réessayer plus tard.');
                 default:
+                    alert('Une erreur inconnue s’est produite.');
                     throw new Error('Une erreur inconnue s’est produite.');
             }
             // throw new Error('the token was not verified.');
@@ -95,11 +100,8 @@ function loginUser(event){
     .then(data =>{
         console.log("response recu : ", data);
         // alert('Connection réussie!');
-
-        localStorage.setItem('token', data.token); //stocker les tokens
-        window.location.href = "profil.html"; //rediriger vers la page profil
-
-    })
+        window.location.href = "home.html"    
+        })
     .catch(error => {
         console.error('Error', error);
         alert('Error: ' + error.message);
@@ -107,7 +109,35 @@ function loginUser(event){
 
 }
 
-//fonction pour ser deconnecter
+//fonction fetch pour affichier le profil de l'utilisateur
+function profileUser(event){
+    fetch(`http://localhost:3000/api/user`,
+        {
+            method : 'GET',
+            mode: 'cors',
+            credentials : 'include'
+        }
+    )
+    .then(response =>{
+        if (response.ok){
+            return response.json();
+        }else{
+            throw new Error('pas connecté');
+        }
+    })
+    .then(data => {
+        console.log("User authenticated:", data);
+        // Display user information on the profile page
+        document.getElementById("username").innerText = `@${data.username}`;
+        // document.getElementById("role").innerText = `Role: ${data.role}`;
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        window.location.href = "login.html";
+    });
+}
+
+//fonction fetch pour se deconnecter
 function logoutUser(event) {
     // event.preventDefault();
     fetch(`http://localhost:3000/logout`, {
@@ -133,19 +163,17 @@ function logoutUser(event) {
     .then(data =>{
         console.log(data);
         alert('Deconnexion réussie !');
-        alert(data.message);
-        localStorage.removeItem('auth_token');
+        // localStorage.removeItem('auth_token');// vu qu'
         window.location.href = '/login.html';
     })
     .catch(error => {
-        conlose.error('Error', error);
+        console.error('Error', error);
         alert('Error:' + error.message);
     })
 
 }
 
 
-// window.addEventListener("DOMContentLoaded", () => {
-//     console.log("DOM chargé");
-//   });
+
+
   

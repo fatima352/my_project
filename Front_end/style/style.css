@@ -55,7 +55,7 @@ header{
     align-items: center;
     min-height: 100vh;
     /* background-color: var(--couleursite); */
-    opacity: 0.5;
+
 
 }
 /* The .wrapper class is a shared container style used for both login and register pages. */
