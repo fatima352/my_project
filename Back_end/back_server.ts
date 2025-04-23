@@ -1,6 +1,6 @@
 import {Application } from "https://deno.land/x/oak@v17.1.4/mod.ts";
 import { oakCors } from "https://deno.land/x/cors/mod.ts"; // pour resoudre le probleme de oakCors
-import{router} from "./routes.ts"
+import{router} from "./routes/routes.ts"
 
 const app = new Application();
 

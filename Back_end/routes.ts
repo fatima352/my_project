@@ -1,11 +1,20 @@
-import * as cont from "./controllers.ts";
+import * as cont from "./controllers/contrUser.ts";
+import * as authCtrl from "./controllers/contrAuth.ts";//controllers pour l'authentification
+import * as mw from "./middlewares.ts";
 import {Router, Context} from "https://deno.land/x/oak@v17.1.4/mod.ts";
 
 export const router = new Router();
 
 const connections: WebSocket[] = [];  //stock les requetes 
-router.get("/", cont.authorizationMiddleware, (ctx) => cont.WebSocket(ctx, connections));// router.get("/register", cont.showRegister);//pour recupere la page register
-router.post("/register", cont.register); //route pour l'inscription
-router.post("/login", cont.login); //route pour la connection
-router.get('/user', cont.authorizationMiddleware, cont.get_profil);//route apres s'avoir loguer proteger par un middleware
-router.post('/logout', cont.logout);//route pour se deconnecter
+router.get("/", mw.authMw, (ctx) => cont.WebSocket(ctx, connections));// router.get("/register", cont.showRegister);//pour recupere la page register
+
+
+
+//Route pour authentification
+router.post("/register", authCtrl.register); //route pour l'inscription
+router.post("/login", authCtrl.login); //route pour la connection
+router.post('/logout', authCtrl.logout);//route pour se deconnecter
+
+
+//Route utilisateur
+router.get('/api/user', mw.authMw, cont.getUser);//route apres s'avoir loguer proteger par un middleware

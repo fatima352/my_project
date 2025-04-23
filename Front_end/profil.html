@@ -1,17 +1,23 @@
+<!-- PAGE APRES CONNECTION -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <title> MOVIEW </title>
-        <!-- <link rel="stylesheet" href="Style/style.css"> -->
+        <link rel="stylesheet" href="Style/style.css">
         <!-- pour les icones -->
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     </head>
-    <body class="login-body">
+    <body onload="profileUser()" class="profil-body">
         <header class="header">
             <h2 class="logo">MOVIEW</h2> 
             <nav class="navigation">
-                <ul id="menu-header">
+                <ul class= "menu" id="menu">
+                    <li class="menu-home">
+                        <a href="home.html" class="nav-link">
+                            <span class="link-text">HOME</span>
+                        </a>
+                    </li>
                   <li id="menu-films">
                     <a href="films.html" class="nav-link">
                         <span class="link-text">FILMS</span>
@@ -22,17 +28,78 @@
                         <span class="link-text">PROFIL</span>
                     </a>
                    </li>
-                    <li id="menu-logout">
-                        <a href="login.html" class="nav-link" onclick="logoutUser()">
+                    <li class="menu-logout">
+                        <a href="#" class="nav-link" onclick="logoutUser()">
                         <span class="link-text">LOG OUT</span>
                         </a>
                     </li>
                 </ul>
             </nav>
         </header>
-        <main>
-            
-        </main>
+        <div class="main-page">
+            <section class="header-profil">
+                <div class="profil-container">
+                  <!-- Photo de profil -->
+                  <div class="profil">
+                    <span class="icon-profil">
+                      <img src="fav.png" alt="image" class="profil-img">
+                    </span>
+                    <!-- Nom de l'utilisateur -->
+                    <div class="name-user">
+                        <h3 class="iduser" >
+                            <p id="username"></p>
+                        </h3>
+                    </div>
+                  </div>
+
+                  <!-- Bouton modifier (à remplir) -->
+                  <div class="bouton-edit">
+                    <!-- Par exemple : -->
+                    <button class="btn-edit">Modifier</button>                  
+                </div>
+                </div>
+            </section>
+            <div class="container">
+                <h3 class="titre">COLLECTION</h3>
+                <hr class="line">
+                <lu class="list">
+                    <li class="item">
+                        <img src="fav.png" alt="image-film" class="img">
+                        <a href="#" class="films-links"> film 1</a>
+                    </li>
+                    <li class="item">
+                        <img src="fav.png" alt="image-film" class="img">
+                        <a href="#" class="films-links"> film 2</a>
+                    </li>
+                     <!-- cree un autre element a chauque fois que l'utilistaure ajoute un film  -->
+                </lu>
+            </div>
+
+            <div class="container">
+                <h3 class="titre">LISTES</h3>
+                <hr class="line">
+                <lu class="list">
+                    <li class="item">
+                        <img src="fav.png" alt="image" class="img">
+
+                        <a href="#" class="lists-links">
+                            Liste1
+                        </a>
+                    </li>
+                </lu>
+            </div>
+             <!-- 
+            <div class="commentaire-container">
+                <h3 class="titre">Commentaire</h3>
+                <lu class="commentaire-list">
+                    <li class="commentaire-item">
+                        <a href="#" class="commentaire-links">
+                            <span class="commentaire-name">Commentaire1</span>
+                        </a>
+                    </li>
+                </lu>
+            </div> -->
+        </div>
 
     </body>
     <script src="script.js"></script>
