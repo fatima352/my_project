@@ -109,34 +109,6 @@ function loginUser(event){
 
 }
 
-//fonction fetch pour affichier le profil de l'utilisateur
-function profileUser(event){
-    fetch(`http://localhost:3000/api/user`,
-        {
-            method : 'GET',
-            mode: 'cors',
-            credentials : 'include'
-        }
-    )
-    .then(response =>{
-        if (response.ok){
-            return response.json();
-        }else{
-            throw new Error('pas connecté');
-        }
-    })
-    .then(data => {
-        console.log("User authenticated:", data);
-        // Display user information on the profile page
-        document.getElementById("username").innerText = `@${data.username}`;
-        // document.getElementById("role").innerText = `Role: ${data.role}`;
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        window.location.href = "login.html";
-    });
-}
-
 //fonction fetch pour se deconnecter
 function logoutUser(event) {
     // event.preventDefault();
@@ -171,6 +143,67 @@ function logoutUser(event) {
         alert('Error:' + error.message);
     })
 
+}
+
+//fonction fetch pour affichier le profil de l'utilisateur
+function profileUser(event){
+    fetch(`http://localhost:3000/api/user`,
+        {
+            method : 'GET',
+            mode: 'cors',
+            credentials : 'include'
+        }
+    )
+    .then(response =>{
+        if (response.ok){
+            return response.json();
+        }else{
+            throw new Error('pas connecté');
+        }
+    })
+    .then(data => {
+        console.log("User authenticated:", data);
+        // Display user information on the profile page
+        document.getElementById("username").innerText = `@${data.username}`;
+        // document.getElementById("role").innerText = `Role: ${data.role}`;
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        window.location.href = "login.html";
+    });
+}
+
+//fonction fetch pour recupperer les films
+function getMovies(event){
+    fetch(`http://localhost:3000/api/films`,{
+        method : 'GET',
+        mode: 'cors',
+        credentials: 'include'
+    })
+    .then(response => {
+        if(response.ok){
+            return response.json();
+        }
+        else{
+            throw new Error('Erreur lors de la récuperation des films');
+        }
+    })
+    .then(data =>{
+        const filmsContainer = document.getElementById('filmsContainer');
+        filmsContainer.innerHTML = '';
+        data.forEach(element => {
+            const filmsItem = document.createElement('li');
+            filmsItem.innerHTML = `
+                <img src="${data.poster_url}" alt="${data.titel}" class="img">
+                <a href="#" class="films-links">${data.titel}</a>`;
+            filmsContainer.appendChield(filmsItem);
+        });
+
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Erreur: ' + error.message);
+    });
 }
 
 
