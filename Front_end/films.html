@@ -7,7 +7,7 @@
         <!-- pour les icones -->
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     </head>
-    <body  onload="profileUser()"class="login-body">
+    <body  onload="profileUser();getMovies()"class="films-body">
         <header>
             <h2 class="logo">MOVIEW</h2> 
             <nav class="navigation">
@@ -35,17 +35,17 @@
             <div class="all-films-container">
                 <h3 class="titre">FILMS</h3>
                 <hr class="line">
-                <lu class="list">
-                    <li class="item">
+                <ul id="filmsContainer" class="list">
+                    <!-- <li class="item">
                         <img src="fav.png" alt="image-film" class="img">
                         <a href="#" class="films-links"> film 1</a>
                     </li>
                     <li class="item">
                         <img src="fav.png" alt="image-film" class="img">
                         <a href="#" class="films-links"> film 2</a>
-                    </li>
+                    </li> -->
                      <!-- cree un autre element a chauque fois que l'utilistaure ajoute un film  -->
-                </lu>
+                </ul>
             </div>
 
             <!-- <div class="container">
@@ -76,5 +76,5 @@
         </section>
     </body>
     <script src="script.js"></script> <!-- script pour les fetchs-->
-    <script src="script2.js"></script> <!-- script pour les fonction de la page-->
+    <!-- <script src="script2.js"></script> script pour les fonction de la page -->
 </html>

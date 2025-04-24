@@ -190,13 +190,20 @@ function getMovies(event){
     })
     .then(data =>{
         const filmsContainer = document.getElementById('filmsContainer');
+        if (!filmsContainer) {
+            console.error("filmsContainer element not found in the DOM.");
+            return;
+        }
+
         filmsContainer.innerHTML = '';
-        data.forEach(element => {
+        data.films.forEach(film => {
             const filmsItem = document.createElement('li');
+            filmsItem.classList.add('item')
             filmsItem.innerHTML = `
-                <img src="${data.poster_url}" alt="${data.titel}" class="img">
-                <a href="#" class="films-links">${data.titel}</a>`;
-            filmsContainer.appendChield(filmsItem);
+                <img src="http://localhost:3000/images/${film.poster_url}" alt="${film.titel}" class="img">
+                <a href="#" class="films-links">${film.titel}</a>
+            `;
+            filmsContainer.appendChild(filmsItem);
         });
 
     })
@@ -205,8 +212,5 @@ function getMovies(event){
         alert('Erreur: ' + error.message);
     });
 }
-
-
-
 
   

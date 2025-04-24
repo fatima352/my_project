@@ -40,6 +40,47 @@ export const getUser = async(ctx)=>{
     ctx.response.body = {message : "token recuperer", username: tokenData.username, role:tokenData.role};
 }
 
+//fonction pour recuperer tout les films
+export const getAllFilms = async (ctx: Context) => {
+    try {
+        const films = db.prepare(`SELECT * FROM films`).all(); // Fetch all films from the "film" table
+        ctx.response.status = 200;
+        ctx.response.body = { films }; // Return the films as JSON
+        console.log("Films fetched successfully:", films);
+    } catch (error) {
+        console.error("Error fetching films:", error);
+        ctx.response.status = 500;
+        ctx.response.body = { message: "Erreur lors de la récupération des films" };
+    }
+};
+
+//fonction pour ajouter un film
+export const addFilm = async(ctx)=>{
+    const body = await ctx.request.body.json();
+    const {titel,poster_url,description} = body;
+    const {response}= ctx;
+
+    if(!titel || !poster_url || !description){
+        ctx.response.status = 400;
+        ctx.response.body = {message : "Tout les champs sont obligatoires"};
+        console.log("tout les champs sont obligatoires");
+        return;
+    }
+    const film = db.prepare(`SELECT * FROM films WHERE titel = ?`).get(titel);
+    if(film){
+        ctx.response.status = 400;
+        ctx.response.body = {message : "Film deja existe dans la bibliotheque"};
+        console.log("Film deja existe dans la bibliotheque");
+        return;
+    }
+    db.prepare(`INSERT INTO films (titel, poster_url, description) VALUES (?,?,?)`).all(titel, poster_url, description);
+    ctx.response.status = 200;
+    ctx.response.body = {message: "Film ajouter avec succes", film: {titel, poster_url, description}};
+    console.log("Film ajouter avec succes");
+}
+
+
+
 
 
 

@@ -1,4 +1,4 @@
-import {Application } from "https://deno.land/x/oak@v17.1.4/mod.ts";
+import {Application, send} from "https://deno.land/x/oak@v17.1.4/mod.ts";
 import { oakCors } from "https://deno.land/x/cors/mod.ts"; // pour resoudre le probleme de oakCors
 import{router} from "./routes.ts"
 
@@ -20,6 +20,19 @@ if (Deno.args.length >= 3) {
   
 console.log(`Oak back server running on port ${options.port}`);
 
+//fichiers statiques
+app.use(async (ctx, next) => {
+  if (ctx.request.url.pathname.startsWith("/images")) {
+    const filePath = ctx.request.url.pathname.replace("/images", ""); // Remove "/images" prefix
+    await send(ctx, filePath, {
+      root: `${Deno.cwd()}/images`, // Correct path to the "images" folder
+    });
+  } else {
+    await next();
+  }
+});
+
+
 //Toujours a la fin car il cherche les routes 
 app.use(oakCors({
   origin: "http://localhost:8000",
@@ -35,5 +48,4 @@ app.use(router.allowedMethods());
 // app.addEventListener('error',evt =>{
 //   console.log(evt.error);
 // });
-console.log("Database path:", Deno.realPathSync("data.db")); // Log the database path
 await app.listen({port: 3000}); 

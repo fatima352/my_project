@@ -23,9 +23,9 @@ db.exec(`
     );
 `)
 
-//table de film
+//table de films
 db.exec(`
-    CREATE TABLE IF NOT EXISTS film (
+    CREATE TABLE IF NOT EXISTS films (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         titel TEXT UNIQUE NOT NULL,
         poster_url TEXT,

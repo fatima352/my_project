@@ -18,3 +18,8 @@ router.post('/logout', authCtrl.logout);//route pour se deconnecter
 
 //Route utilisateur
 router.get('/api/user', mw.authMw, cont.getUser);//route apres s'avoir loguer proteger par un middleware
+
+
+//Route pour les films
+router.get('/api/films',mw.authMw, cont.getAllFilms); //route pour recuperer tout les films acces admin
+router.post('/api/films',mw.authMw,mw.adminMw, cont.addFilm); //route pour ajouter un film a la db unqiuement accesible par l'admin

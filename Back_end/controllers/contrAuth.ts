@@ -76,7 +76,7 @@ export const login = async(ctx)=>{
     const role = user?.role;
     //utilisation de l'username et du role pour créer le token ou pas ?
     // const token = await create({alg: "HS512", typ: "JWT"}, {username, role}, secretKey );
-    const token = await create({alg: "HS512", typ: "JWT"}, {username}, mw.secretKey );
+    const token = await create({alg: "HS512", typ: "JWT"}, {username,role}, mw.secretKey );
     mw.tokens[username] = token; //stocké le token de l'utilisateur
 
     // ctx.response.headers.set("Set-Cookie", `auth_token; HttpOnly; SameSite=Strict; Max-Age=3600`); ?????
