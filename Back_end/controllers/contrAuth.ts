@@ -1,6 +1,6 @@
 import { db } from "../database/data.ts";
 import * as mw from "../middlewares.ts";
-import {Context} from "https://deno.land/x/oak@v17.1.4/mod.ts";
+// import {Context} from "https://deno.land/x/oak@v17.1.4/mod.ts";
 import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
 import { create, verify } from "https://deno.land/x/djwt/mod.ts";
 
@@ -46,7 +46,7 @@ export const register = async(ctx)=>{
 export const login = async(ctx)=>{
     const body = await ctx.request.body.json();
     const { username, password } = body;
-    const { response } = ctx; 
+    // const { response } = ctx; 
 
     if(!username || !password){
         ctx.response.status = 400;
@@ -59,8 +59,8 @@ export const login = async(ctx)=>{
 
     // Vérifie si l'utilisateur existe
     if (!user) {
-        response.status = 401;
-        response.body = { message: "Utilisateur inexistant"};
+        ctx.response.status = 401;
+        ctx.response.body = { message: "Utilisateur inexistant"};
         return;
     }
 

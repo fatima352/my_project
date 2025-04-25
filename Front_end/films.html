@@ -7,7 +7,7 @@
         <!-- pour les icones -->
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     </head>
-    <body  onload="profileUser();getMovies()"class="films-body">
+    <body  onload="profileUser();getMovies();checkAdmin()"class="films-body">
         <header>
             <h2 class="logo">MOVIEW</h2> 
             <nav class="navigation">
@@ -16,7 +16,12 @@
                     <a href="profil.html" class="nav-link" id="username">
                         <span class="link-text"></span>
                     </a>
-                </li>
+                  </li>
+                  <li class="menu-home">
+                    <a href="home.html" class="nav-link">
+                        <span class="link-text">HOME</span>
+                    </a>
+                 </li>
                   <li id="menu-lists">
                     <a href="lists.html" class="nav-link">
                         <span class="link-text">LISTS</span>
@@ -32,48 +37,47 @@
         </header>
 
         <section class="all-films">
-            <div class="all-films-container">
+            <div class="mini-headers">
                 <h3 class="titre">FILMS</h3>
-                <hr class="line">
-                <ul id="filmsContainer" class="list">
-                    <!-- <li class="item">
-                        <img src="fav.png" alt="image-film" class="img">
-                        <a href="#" class="films-links"> film 1</a>
-                    </li>
-                    <li class="item">
-                        <img src="fav.png" alt="image-film" class="img">
-                        <a href="#" class="films-links"> film 2</a>
-                    </li> -->
-                     <!-- cree un autre element a chauque fois que l'utilistaure ajoute un film  -->
-                </ul>
+                <div id="adminAction" class="adminActions">
+                    <!-- ajouter un boutton add et suprimer si admin -->
+                </div>
             </div>
-
-            <!-- <div class="container">
-                <h3 class="titre">LISTES</h3>
-                <hr class="line">
-                <lu class="list">
-                    <li class="item">
-                        <img src="fav.png" alt="image" class="img">
-
-                        <a href="#" class="lists-links">
-                            Liste1
-                        </a>
-                    </li>
-                </lu>
-            </div> -->
-             <!-- 
-            <div class="commentaire-container">
-                <h3 class="titre">Commentaire</h3>
-                <lu class="commentaire-list">
-                    <li class="commentaire-item">
-                        <a href="#" class="commentaire-links">
-                            <span class="commentaire-name">Commentaire1</span>
-                        </a>
-                    </li>
-                </lu>
-            </div> -->
-        </div>
+            <hr class="line">
+            <ul id="filmsContainer" class="list">
+                <!-- cree un autre element a chauque fois que l'admin ajoute un film  -->
+            </ul>
+            </div>
+      
         </section>
+        <div id="addMoviePopup" class="popup hidden">
+            <div class="popup-content">
+                <div class="headerpop">
+                    <h2 class="popuptitel">Add a New Movie</h2>
+                    <span class="close-btn" onclick="closePopup()">&times;</span>
+
+                </div>
+                <div class="addfilm" id="addfilm">
+                    <div class="mini">
+                        <label for="titelfilm">Title:</label>
+                        <input class="input" type="text" id="titelfilm" name="titel" required>
+                    </div>
+                    <div class="mini">
+                        <label for="datefilm">Release Date:</label>
+                        <input class="input" type="date" id="datefilm" name="date" required>    
+                    </div>
+                    <div class="mini">
+                        <label for="posterURL">Poster URL:</label>
+                        <input class="input" type="text" id="posterURL" name="posterURL" required>    
+                    </div>
+                    <div class="mini">
+                        <label for="descriptionfilm">Description:</label>
+                        <textarea class="input desc" id="descriptionfilm" name="description" required></textarea>
+                    </div>
+                    <button class="btn add" type="submit" onclick="submitMovie(event)">Add Movie</button>
+                </div>
+            </div>
+        </div>
     </body>
     <script src="script.js"></script> <!-- script pour les fetchs-->
     <!-- <script src="script2.js"></script> script pour les fonction de la page -->

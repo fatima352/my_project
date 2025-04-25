@@ -60,23 +60,37 @@
                 </div>
             </section>
             <div class="container">
+                <div class="mini-headers">
                 <h3 class="titre">COLLECTION</h3>
+                <div class="userActions">
+                    <button class="btn-add">Ajouter film</button>
+                </div>
+                </div>
                 <hr class="line">
+                
                 <lu class="list">
                     <li class="item">
                         <img src="fav.png" alt="image-film" class="img">
                         <a href="#" class="films-links"> film 1</a>
-                    </li>
-                    <li class="item">
-                        <img src="fav.png" alt="image-film" class="img">
-                        <a href="#" class="films-links"> film 2</a>
-                    </li>
+                </li>
+
+                <li class="item">
+                    <img src="fav.png" alt="image-film" class="img">
+                    <a href="#" class="films-links"> film 2</a>
+                </li>
                      <!-- cree un autre element a chauque fois que l'utilistaure ajoute un film  -->
                 </lu>
             </div>
 
             <div class="container">
-                <h3 class="titre">LISTES</h3>
+                <div class="mini-headers">
+                    <h3 class="titre">LISTES</h3>
+                    <div class="userActions">
+                        <button class="btn-add">Créer liste</button>
+                        <!-- POPUP CRÉER LISTE -->
+
+                    </div>
+                </div>
                 <hr class="line">
                 <lu class="list">
                     <li class="item">
@@ -88,18 +102,20 @@
                     </li>
                 </lu>
             </div>
-             <!-- 
-            <div class="commentaire-container">
-                <h3 class="titre">Commentaire</h3>
-                <lu class="commentaire-list">
-                    <li class="commentaire-item">
-                        <a href="#" class="commentaire-links">
-                            <span class="commentaire-name">Commentaire1</span>
-                        </a>
-                    </li>
-                </lu>
-            </div> -->
         </div>
+
+        <!-- POPUP CRÉER LISTE
+        <div id="popup" class="popup hidden">
+            <div class="popup-content">
+            <h3>Créer une nouvelle liste</h3>
+            <input type="text" id="listName" placeholder="Nom de la liste" />
+            <div class="popup-buttons">
+                <button onclick="createList()">Confirmer</button>
+                <button onclick="closePopup()">Fermer</button>
+            </div>
+            </div>
+        </div> -->
+  
 
     </body>
     <script src="script.js"></script> <!-- script pour les fetchs-->

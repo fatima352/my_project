@@ -19,7 +19,7 @@ function registerUser(event) {
     // Send the data to the backend using fetch
     fetch(`http://localhost:3000/register`, {
         method: 'POST',
-        // mode: 'cros',
+        mode: 'cros',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -44,8 +44,7 @@ function registerUser(event) {
             }        
         }
     })
-    
-    then(data => {
+    .then(data => {
         console.log(data); // Log the response from the backend
         alert('Inscription réussie !'); // Notify the user
         window.location.href = "login.html"; // Redirect to the login page
@@ -200,7 +199,7 @@ function getMovies(event){
             const filmsItem = document.createElement('li');
             filmsItem.classList.add('item')
             filmsItem.innerHTML = `
-                <img src="http://localhost:3000/images/${film.poster_url}" alt="${film.titel}" class="img">
+                <img src="http://localhost:3000/images/${film.posterURL}" alt="${film.titel}" class="img">
                 <a href="#" class="films-links">${film.titel}</a>
             `;
             filmsContainer.appendChild(filmsItem);
@@ -213,4 +212,109 @@ function getMovies(event){
     });
 }
 
-  
+//fonction fetch pour ajouter des films
+function showPopup() {
+    const popup = document.getElementById('addMoviePopup');
+    popup.classList.remove('hidden');
+}
+
+function closePopup() {
+    const popup = document.getElementById('addMoviePopup');
+    popup.classList.add('hidden');
+}
+
+function submitMovie(event) {
+    event.preventDefault();
+    addFilm(); // Call the existing addFilm function
+    closePopup(); // Close the popup after submission
+}
+
+// Modify the checkAdmin function
+function checkAdmin(event) {
+    fetch(`http://localhost:3000/api/user`, {
+        method: 'GET',
+        mode: 'cors',
+        credentials: 'include',
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Erreur lors de la verification du rôle');
+        }
+    })
+    .then(data => {
+        console.log('user role:', data.role);
+        const adminAction = document.getElementById('adminAction');
+        if (data.role === 'admin') {
+            const btnAddFilm = document.createElement('button');
+            btnAddFilm.innerText = 'Add movie';
+            btnAddFilm.classList.add('btn-addFilm');
+            btnAddFilm.onclick = showPopup(); // Show popup on click
+            adminAction.appendChild(btnAddFilm);
+        }
+    });
+}
+
+//fonction fetch pour ajouter un film
+function addFilm(){
+    const titel = document.getElementById('titel').value;
+    const date = document.getElementById('date').value;
+    const posterURL = document.getElementById('posterURL').value;
+    const description = document.getElementById('description').value;
+
+
+    const data = {
+        titel : titel,
+        date : date,
+        posterURL: posterURL,
+        description: description
+    }
+
+    fetch(`http://localhost:3000/api/films`,{
+        method : 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify(data) // Convert the data object to JSON
+    })
+    .then(response => {
+        if (response.ok){
+            return response.json();
+        }
+        else{
+            switch (response.status) {
+                case 400:
+                    alert('Tous les champs sont obligatoires ou mal formatés');
+                    throw new Error('Tous les champs sont obligatoires ou mal formatés');
+                case 401:
+                    alert('Token non valide, veuillez vous reconnecter');
+                    throw new Error('Token non valide, veuillez vous reconnecter');
+
+                case 403:
+                    alert('Accès interdit, vous n\'êtes pas admin');
+                    throw new Error('Accès interdit, vous n\'êtes pas admin');
+                case 409:
+                    alert('Film déjà existant');
+                    throw new Error('Film déjà existant');
+                case 500:
+                    alert('Une erreur est survenue sur le serveur');
+                    throw new Error('Une erreur est survenue sur le serveur');
+                default:
+                    alert('Une erreur inconnue est survenue');
+                    throw new Error('Une erreur inconnue est survenue');
+            }        
+        }
+    })
+    .then(data => {
+        console.log(data);
+        alert('Film ajouté avec succès !');
+        window.location.href = 'films.html';
+    })
+
+}
+
+
+

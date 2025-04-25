@@ -9,6 +9,7 @@
     --couleurecriturebouton: #2e1a47;
     /* --couleurtransitioncc:#d6cbe6; */
     --couleurtransition: #b9aed8;
+    --backgroundPopup: rgba(50, 37, 91, 0.5);
 
     --taillepoliceheader: 1em;
     --policesite: 'Poppins', sans-serif;
@@ -45,7 +46,7 @@ header{
 
 .logo {
     font-size: 2em;
-    user-select: none;
+    /* user-select: none; */
 }
 
 /* - Partage LOGIN / REGISTER */
@@ -450,3 +451,128 @@ h1{
     margin: 60.5px;
 
 }
+
+.mini-headers{
+    display: flex;
+    flex-direction:row;
+    justify-content: space-between;
+}
+
+.adminAction {
+    display: flex;
+    flex-direction: row;
+}
+
+/* Style for the Add Movie button */
+.btn-addFilm {
+    margin-right: 20px;
+    padding: 3px 10px; /* Add padding for a better button size */
+    background-color: var(--couleurtransition); /* Use a transition color for consistency */
+    color: var(--couleurecriturebouton); /* Text color */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 1em; /* Adjust font size */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+.btn-addFilm:hover {
+    background-color: #9a8bbd; /* Change background color on hover */
+    color: white; /* Change text color on hover */
+    transform: scale(1.05); /* Slightly enlarge the button on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover */
+    font-weight: bold;
+}
+
+
+/* **************************POP UP PAGES ************************** */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--backgroundPopup) ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background-color: var(--couleurtransition);
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    height: 500px;
+    /* max-width: 90%; */
+    color: var(--couleurecriturebouton);
+}
+.headerpop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    margin-bottom: 10px; /* changé de 20px à 50px */
+  }
+
+.popuptitel {
+    margin: 0 auto;
+    text-align: center;
+    flex-grow: 1;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.addfilm{
+    display: flex;
+    flex-direction: column;
+    padding: 0px 50px;
+    gap:20px;
+}
+
+.mini{    
+    display: flex;
+    flex-direction: column;
+    gap:5px;
+}
+.input {
+    width: 100%;
+    height: 40px;
+    padding: 12px 15px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 12px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input.desc{
+    height: 95px;
+}
+
+.input:focus {
+    border-color: #6a5acd; /* violet doux */
+    box-shadow: 0 0 8px rgba(106, 90, 205, 0.3);
+    outline: none;
+}
+
+.btn.add{
+    margin-top: 0px ;
+}
+
+
+.hidden {
+    display: none;
+}
+
+.close-btn {
+    float: right;
+    cursor: pointer;
+    font-size: 24px;
+    color: red;
+    margin-left: auto; /* ✅ pousse complètement à droite */
+}
+
+
