@@ -15,6 +15,8 @@ const connections: WebSocket[] = [];  //stock les requetes
 router.post("/register", authCtrl.register); //route pour l'inscription
 router.post("/login", authCtrl.login); //route pour la connection
 router.post('/logout', authCtrl.logout);//route pour se deconnecter
+router.get('/', mw.authMw, userCtrl.getUser);//route quand l'utilisateur est connecter
+
 
 
 //Route utilisateur
@@ -22,12 +24,17 @@ router.get('/api/user', mw.authMw, userCtrl.getUser);//route apres s'avoir logue
 
 
 //Route pour les film
-router.get('/api/films', filmCtrl.getAllFilms); //route pour recuperer tout les films
+router.get('/api/films',filmCtrl.getAllFilms); //route pour recuperer tout les films
 // router.post('/api/films',mw.authMw,mw.adminMw, userCtrl.addFilm); //route pour ajouter un film a la db unqiuement accesible par l'admin
 // router.post("/upload", userCtrl.uploadImage);
 router.post('/api/films',mw.authMw, mw.adminMw, filmCtrl.addFilm); //route pour ajouter un film a la db uniquement accesible par l'admin
-router.get('/api/films/:id',filmCtrl.getFilm) //route pour voir tous les films
-
+router.get('/api/films/:id',filmCtrl.getFilm); //route pour voir tous les films
+router.put('/api/films/:id',filmCtrl.updateFilm);//route pour mettre a jour le donnée du film
+router.delete('/api/films/:id',mw.authMw, mw.adminMw,filmCtrl.deleteFilm);// Route DELETE pour supprimer un film par ID
 
 //Route pour les listes
 router.post('/api/liste',mw.authMw, userCtrl.createList); //route pour creer une liste
+
+
+router.get("/api/admin-access", mw.authMw, mw.adminMw);
+

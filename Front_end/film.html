@@ -8,29 +8,34 @@
         <!-- pour les icones -->
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     </head>
-    <body class="profil-body" onload="getMovie();checkAdmin()">
+    <body class="profil-body" onload="getMovie();authUser(event);checkAdminAccess()">
         <header class="header">
             <h2 class="logo">MOVIEW</h2> 
             <nav class="navigation">
                 <ul class= "menu" id="menu">
                     <li class="menu-home">
-                        <a href="home.html" class="nav-link">
+                        <a href="index.html" class="nav-link">
                             <span class="link-text">HOME</span>
                         </a>
                     </li>
-                  <li id="menu-films">
-                    <a href="films.html" class="nav-link">
-                        <span class="link-text">FILMS</span>
-                    </a>
-                  </li>
-                  <li id="menu-profil">
-                    <a href="user.html" class="nav-link">
-                        <span class="link-text">PROFIL</span>
-                    </a>
-                   </li>
-                    <li class="menu-logout">
-                        <a href="#" class="nav-link" onclick="logoutUser()">
-                        <span class="link-text">LOG OUT</span>
+                      <li id="menu-films">
+                        <a href="films.html" class="nav-link">
+                            <span class="link-text">MOVIES</span>
+                        </a>
+                    </li>
+                      <li id="menu-lists">
+                        <a href="lists.html" class="nav-link">
+                            <span class="link-text">LISTS</span>
+                        </a>
+                    </li>
+                    <li id="menu-login">
+                        <a href="login.html" class="nav-link">
+                            <span class="link-text">LOGIN</span>
+                        </a>
+                    </li>
+                      <li id="menu-register">
+                        <a href="register.html" class="nav-link">
+                            <span class="link-text">REGISTER</span>
                         </a>
                     </li>
                 </ul>
@@ -77,8 +82,9 @@
                 <!-- DESCRIPTION DU FILM -->
                 <div class="description-film">
                     <p id="description-film">
-                        Lorsque Bill et Hal, des jumeaux, trouvent dans le grenier un vieux jouet ayant appartenu à leur père, 
-                        une série de morts atroces commence à se produire autour d'eux...
+                       
+                        PAS DES FILM
+
                     </p>
                 </div>
 
@@ -105,7 +111,36 @@
             </div>
         </div>
 
+        <!-- MODIFIER -->
+        <div id="addMoviePopup" class="popup hidden">
+            <div class="popup-content">
+                <div class="headerpop">
+                    <h2 class="popuptitle">Modification</h2>
+                    <span class="close-btn" onclick="closePopup()">&times;</span>
+
+                </div>
+                <div class="addfilm" id="addfilm">
+                    <div class="mini">
+                        <label for="titlefilm">Title:</label>
+                        <input class="input" type="text" id="titlefilm" name="title">
+                    </div>
+                    <div class="mini">
+                        <label for="datefilm">Release Date:</label>
+                        <input class="input" type="text" id="datefilm" name="date">    
+                    </div>
+                    <div class="mini">
+                        <label for="posterURL">Poster URL:</label>
+                        <input class="input" type="text" id="posterURL" name="posterURL">    
+                    </div>
+                    <div class="mini">
+                        <label for="descriptionfilm">Description:</label>
+                        <textarea class="input desc" id="descriptionfilm" name="description"></textarea>
+                    </div>
+                    <button class="btn add" type="submit" onclick="updateFilm(event)">Modifier</button>
+                </div>
+            </div>
+        </div>
+
     </body>
     <script src="script.js"></script> <!-- script pour les fetchs-->
-    <script src="script2.js"></script> <!-- script pour les fonction de la page-->
 </html>

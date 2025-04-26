@@ -531,7 +531,7 @@ h1{
     margin-bottom: 10px; /* changé de 20px à 50px */
   }
 
-.popuptitel {
+.popuptitle {
     margin: 0 auto;
     text-align: center;
     flex-grow: 1;

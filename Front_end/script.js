@@ -99,7 +99,7 @@ function loginUser(event){
     .then(data =>{
         console.log("response recu : ", data);
         // alert('Connection réussie!');
-        window.location.href = "home.html"    
+        window.location.href = "index.html"    
         })
     .catch(error => {
         console.error('Error', error);
@@ -144,8 +144,16 @@ function logoutUser(event) {
 
 }
 
-//fonction fetch pour affichier le profil de l'utilisateur
-function profileUser(event){
+//fonction fetch pour recuperer les information de l'utilisateur avec l'id
+function getUser(event){
+    // // Extraire l'id depuis l'URL
+    // const params = new URLSearchParams(window.location.search);
+    // const id = params.get("id");
+
+    // if (!id) {
+    //     console.error("Aucun ID trouvé dans l'URL");
+    //     return;
+    // }
     fetch(`http://localhost:3000/api/user`,
         {
             method : 'GET',
@@ -169,6 +177,60 @@ function profileUser(event){
     .catch(error => {
         console.error("Error:", error);
         window.location.href = "login.html";
+    });
+}
+
+function authUser(event){
+    fetch(`http://localhost:3000/`,
+        {
+            method : 'GET',
+            mode: 'cors',
+            credentials : 'include'
+        }
+    )
+    .then(response =>{
+        if (response.ok){
+            return response.json();
+        }else{
+            throw new Error('pas connecté');
+        }
+    })
+    .then(data => {
+        console.log("User authenticated:", data);
+        // Display user information on the profile page
+        // document.getElementById("role").innerText = `Role: ${data.role}`;
+        const menu = document.getElementById("menu")
+        if(menu){
+            menu.innerHTML = '';
+            menu.innerHTML = `
+                <li id="menu-profil">
+                <a href="profil.html" class="nav-link" id="username">
+                    <span class="link-text">PROFIL</span>
+                </a>
+                </li>
+                <li class="menu-home">
+                    <a href="index.html" class="nav-link">
+                        <span class="link-text">HOME</span>
+                    </a>
+                </li>
+                <li id="menu-films">
+                <a href="films.html" class="nav-link">
+                    <span class="link-text">MOVIES</span>
+                </a>
+                </li>
+                <li class="menu-logout">
+                    <a href="#" class="nav-link" onclick="logoutUser()">
+                    <span class="link-text">LOG OUT</span>
+                    </a>
+                </li>
+            `;
+
+        }
+        document.getElementById("username").innerText = `@${data.username}`;
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        // window.location.href = 'login.html';
     });
 }
 
@@ -200,9 +262,9 @@ function getMovies(event){
             filmsItem.classList.add('item')
             filmsItem.innerHTML = `
                <a href="film.html?id=${film.id}">
-                    <img src="http://localhost:3000/images/${film.posterURL}" alt="${film.titel}" class="img"> 
+                    <img src="http://localhost:3000/images/${film.posterURL}" alt="${film.title}" class="img"> 
                 </a>
-                <a href="infoFilm.html?id=${film.id}" class="films-links">${film.titel}</a>
+                <a href="infoFilm.html?id=${film.id}" class="films-links">${film.title}</a>
             `;
             filmsContainer.appendChild(filmsItem);
         });
@@ -225,68 +287,68 @@ function closePopup() {
     popup.classList.add('hidden');
 }
 
-function submitMovie(event) {
-    event.preventDefault();
-    addFilm(); // Call the existing addFilm function
+//ajout film
+function addFilm(event) {
+    fetchaddFilm(); // Call the existing addFilm function
     closePopup(); // Close the popup after submission
 }
 
-// Modify the checkAdmin function
-function checkAdmin(event) {
-    fetch(`http://localhost:3000/api/user`, {
-        method: 'GET',
-        mode: 'cors',
-        credentials: 'include',
-    })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error('Erreur lors de la verification du rôle');
-        }
-    })
-    .then(data => {
-        console.log('user role:', data.role);
-        if (data.role === 'admin') {
-            // PAGE FILMS
-        const adminAction = document.getElementById("adminAction");
-        if (adminAction) {
-            const button = document.createElement("button");
-            button.className = "btn-addFilm";
-            button.innerText = "Add Film";
-            button.onclick =  showPopup; 
-            adminAction.appendChild(button);
-        }
+// // Modify the checkAdmin function
+// function checkAdmin(event) {
+//     fetch(`http://localhost:3000/api/user`, {
+//         method: 'GET',
+//         mode: 'cors',
+//         credentials: 'include',
+//     })
+//     .then(response => {
+//         if (response.ok) {
+//             return response.json();
+//         } else {
+//             throw new Error('Erreur lors de la verification du rôle');
+//         }
+//     })
+//     .then(data => {
+//         console.log('user role:', data.role);
+//         if (data.role === 'admin') {
+//             // PAGE FILMS
+//         const adminAction = document.getElementById("adminAction");
+//         if (adminAction) {
+//             const button = document.createElement("button");
+//             button.className = "btn-addFilm";
+//             button.innerText = "Add Film";
+//             button.onclick =  showPopup; 
+//             adminAction.appendChild(button);
+//         }
 
-        // PAGE PROFIL (film individuel)
-        const actionModif = document.getElementById("actionModif");
-        if (actionModif) {
-            const modifBtn = document.createElement("button");
-            modifBtn.className = "btn-addFilm ";
-            modifBtn.innerText = "Modifier";
-            // modifBtn.onclick = () => { /* ta logique de modif */ };
-            actionModif.appendChild(modifBtn);
+//         // PAGE PROFIL (film individuel)
+//         const actionModif = document.getElementById("actionModif");
+//         if (actionModif) {
+//             const modifBtn = document.createElement("button");
+//             modifBtn.className = "btn-addFilm ";
+//             modifBtn.innerText = "Modifier";
+//             modifBtn.onclick =  showPopup; 
+//             actionModif.appendChild(modifBtn);
 
-            const deleteBtn = document.createElement("button");
-            deleteBtn.className = "btn-addFilm ";
-            deleteBtn.innerText = "Supprimer";
-            // deleteBtn.onclick = () => { /* ta logique de suppression */ };
-            actionModif.appendChild(deleteBtn);
-        }
-        }
-    });
-}
+//             const deleteBtn = document.createElement("button");
+//             deleteBtn.className = "btn-addFilm ";
+//             deleteBtn.innerText = "Supprimer";
+//             // button.onclick =  showPopup; 
+//             actionModif.appendChild(deleteBtn);
+//         }
+//         }
+//     });
+// }
 
 //fonction fetch pour ajouter un film
-function addFilm(){
-    const titel = document.getElementById('titelfilm').value;
+function fetchaddFilm(){
+    const title = document.getElementById('titlefilm').value;
     const date = document.getElementById('datefilm').value;
     const posterURL = document.getElementById('posterURL').value;
     const description = document.getElementById('descriptionfilm').value;
 
 
     const data = {
-        titel : titel,
+        title : title,
         date : date,
         posterURL: posterURL,
         description: description
@@ -368,11 +430,11 @@ function getMovie(){
 
         //ajouter image
         document.getElementById("poster").innerHTML = `                    
-            <img src="http://localhost:3000/images/${film.posterURL}" alt="${film.titel}" class="poster"> 
+            <img src="http://localhost:3000/images/${film.posterURL}" alt="${film.title}" class="poster"> 
             `;
 
         // Titre du film
-        document.getElementById("titreFilm").innerText = film.titel;
+        document.getElementById("titreFilm").innerText = film.title;
         
         //ajouter la decription
         document.getElementById("description-film").innerText =film.description;
@@ -381,6 +443,107 @@ function getMovie(){
         console.error("Erreur:", error.message);
     });
 }
+
+//ajout film
+function updateFilm(event) {
+    fetchUpdateFilm(); // Call the existing addFilm function
+    closePopup(); // Close the popup after submission
+}
+
+function fetchUpdateFilm(event) {
+    // Récupérer les valeurs saisies par l'utilisateur
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    if (!id) {
+        console.error("Aucun ID trouvé dans l'URL");
+        return;
+    }
+
+    const title = document.getElementById("titlefilm").value;
+    const date = document.getElementById("datefilm").value;
+    const posterURL = document.getElementById("posterURL").value;
+    const description = document.getElementById("descriptionfilm").value;
+
+    // Créer un objet de données à envoyer au backend
+    const data = {
+        title,
+        date,
+        posterURL,
+        description
+    };
+
+    fetch(`http://localhost:3000/api/films/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Erreur lors de la mise à jour du film');
+        }
+    })
+    .then(data => {
+        console.log("Réponse reçue : ", data);
+        alert(data.message); // Afficher un message de succès
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Erreur: ' + error.message); // Afficher une erreur en cas de problème
+    });
+}
+
+function checkAdminAccess() {
+    fetch('http://localhost:3000/api/admin-access', {
+        method: 'GET',
+        mode: 'cors',
+        credentials: 'include'
+    })
+    .then(response => {
+        if (!response.ok) {
+            // Si la réponse n’est pas 200, on redirige vers home ou login
+            throw new Error('Accès refusé');
+        }
+        return response.json();
+    })
+    .then(data => {
+        const adminAction = document.getElementById("adminAction");
+        if (adminAction) {
+            const button = document.createElement("button");
+            button.className = "btn-addFilm";
+            button.innerText = "Add Film";
+            button.onclick =  showPopup; 
+            adminAction.appendChild(button);
+        }
+
+        // PAGE PROFIL (film individuel)
+        const actionModif = document.getElementById("actionModif");
+        if (actionModif) {
+            const modifBtn = document.createElement("button");
+            modifBtn.className = "btn-addFilm ";
+            modifBtn.innerText = "Modifier";
+            modifBtn.onclick =  showPopup; 
+            actionModif.appendChild(modifBtn);
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.className = "btn-addFilm ";
+            deleteBtn.innerText = "Supprimer";
+            // button.onclick =  showPopup; 
+            actionModif.appendChild(deleteBtn);
+        }
+        
+        console.log(data.message); // Affiche "Accès autorisé"
+    })
+    .catch(error => {
+        console.warn("Non admin ou non connecté :", error.message);
+        // window.location.href = 'index.html'; // ou login.html si pas connecté
+    });
+}
+
 
 
 

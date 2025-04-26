@@ -24,7 +24,7 @@ export const WebSocket = async (ctx, connections: WebSocket[]) =>{
     }
 }
 //fonction pour recupere les information de l'utilisateur
-export const getUser = async(ctx)=>{    
+export const getUser = async(ctx:Context)=>{    
     const tokenData = ctx.state.tokenData; //recupere le token du middleware
     if(!tokenData){
         ctx.response.status =401;
@@ -36,7 +36,7 @@ export const getUser = async(ctx)=>{
 }
 
 //creer une liste de film
-export const createList = async (ctx)=>{
+export const createList = async (ctx:Context)=>{
     const tokenData = ctx.state.tokenData;
     if(!tokenData){
         ctx.response.status = 401;

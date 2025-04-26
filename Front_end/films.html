@@ -7,31 +7,36 @@
         <!-- pour les icones -->
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     </head>
-    <body  onload="getMovies();checkAdmin()"class="films-body">
+    <body  onload="getMovies();authUser();checkAdminAccess()"class="films-body">
         <header>
             <h2 class="logo">MOVIEW</h2> 
             <nav class="navigation">
                 <ul class= "menu"id="menu">
-                  <li id="menu-login">
-                    <a href="profil.html" class="nav-link" id="username">
-                        <span class="link-text"></span>
-                    </a>
-                  </li>
-                  <li class="menu-home">
-                    <a href="home.html" class="nav-link">
-                        <span class="link-text">HOME</span>
-                    </a>
-                 </li>
-                  <li id="menu-lists">
-                    <a href="lists.html" class="nav-link">
-                        <span class="link-text">LISTS</span>
-                    </a>
-                </li>
-                <li class="menu-logout">
-                    <a href="#" class="nav-link" onclick="logoutUser()">
-                    <span class="link-text">LOG OUT</span>
-                    </a>
-                </li>
+                    <li class="menu-home">
+                        <a href="index.html" class="nav-link">
+                            <span class="link-text">HOME</span>
+                        </a>
+                    </li>
+                      <li id="menu-films">
+                        <a href="films.html" class="nav-link">
+                            <span class="link-text">MOVIES</span>
+                        </a>
+                    </li>
+                      <li id="menu-lists">
+                        <a href="lists.html" class="nav-link">
+                            <span class="link-text">LISTS</span>
+                        </a>
+                    </li>
+                    <li id="menu-login">
+                        <a href="login.html" class="nav-link">
+                            <span class="link-text">LOGIN</span>
+                        </a>
+                    </li>
+                      <li id="menu-register">
+                        <a href="register.html" class="nav-link">
+                            <span class="link-text">REGISTER</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </header>
@@ -53,14 +58,14 @@
         <div id="addMoviePopup" class="popup hidden">
             <div class="popup-content">
                 <div class="headerpop">
-                    <h2 class="popuptitel">Add a New Movie</h2>
+                    <h2 class="popuptitle">Add a New Movie</h2>
                     <span class="close-btn" onclick="closePopup()">&times;</span>
 
                 </div>
                 <div class="addfilm" id="addfilm">
                     <div class="mini">
-                        <label for="titelfilm">Title:</label>
-                        <input class="input" type="text" id="titelfilm" name="titel" required>
+                        <label for="titlefilm">Title:</label>
+                        <input class="input" type="text" id="titlefilm" name="title" required>
                     </div>
                     <div class="mini">
                         <label for="datefilm">Release Date:</label>
@@ -74,11 +79,10 @@
                         <label for="descriptionfilm">Description:</label>
                         <textarea class="input desc" id="descriptionfilm" name="description" required></textarea>
                     </div>
-                    <button class="btn add" type="submit" onclick="submitMovie(event)">Add Movie</button>
+                    <button class="btn add" type="submit" onclick="addFilm(event)">Add Movie</button>
                 </div>
             </div>
         </div>
     </body>
     <script src="script.js"></script> <!-- script pour les fetchs-->
-    <!-- <script src="script2.js"></script> script pour les fonction de la page -->
 </html>

@@ -17,7 +17,7 @@ db.exec(`
 db.exec(`
     CREATE TABLE IF NOT EXISTS film (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        titel TEXT UNIQUE NOT NULL,
+        title TEXT UNIQUE NOT NULL,
         date TEXT NOT NULL,
         posterURL TEXT,
         description TEXT

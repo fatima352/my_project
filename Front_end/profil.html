@@ -8,26 +8,21 @@
         <!-- pour les icones -->
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     </head>
-    <body onload="profileUser()" class="profil-body">
+    <body onload="getUser()" class="profil-body">
         <header class="header">
             <h2 class="logo">MOVIEW</h2> 
             <nav class="navigation">
                 <ul class= "menu" id="menu">
                     <li class="menu-home">
-                        <a href="home.html" class="nav-link">
+                        <a href="index.html" class="nav-link">
                             <span class="link-text">HOME</span>
                         </a>
                     </li>
                   <li id="menu-films">
                     <a href="films.html" class="nav-link">
-                        <span class="link-text">FILMS</span>
+                        <span class="link-text">MOVIES</span>
                     </a>
                   </li>
-                  <li id="menu-profil">
-                    <a href="user.html" class="nav-link">
-                        <span class="link-text">PROFIL</span>
-                    </a>
-                   </li>
                     <li class="menu-logout">
                         <a href="#" class="nav-link" onclick="logoutUser()">
                         <span class="link-text">LOG OUT</span>

@@ -1,6 +1,6 @@
 import { db } from "../database/data.ts";
 import * as mw from "../middlewares.ts";
-// import {Context} from "https://deno.land/x/oak@v17.1.4/mod.ts";
+import {Context} from "https://deno.land/x/oak@v17.1.4/mod.ts";
 import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
 import { create, verify } from "https://deno.land/x/djwt/mod.ts";
 
@@ -13,7 +13,7 @@ const get_hash = async (password: string) => {
 }
 
 //fonction pour s'inscrire
-export const register = async(ctx)=>{
+export const register = async(ctx:Context)=>{
     // const {username, email, password} = await ctx.request.body.json().value;
 
     const body = await ctx.request.body.json();
@@ -43,7 +43,7 @@ export const register = async(ctx)=>{
 }
 
 //fonction pour se connecter
-export const login = async(ctx)=>{
+export const login = async(ctx:Context)=>{
     const body = await ctx.request.body.json();
     const { username, password } = body;
     // const { response } = ctx; 
@@ -86,7 +86,7 @@ export const login = async(ctx)=>{
     ctx.response.body = {message: "Connexion réussie"};//ajout du token dans le body ???
 }
 
-export const logout = async (ctx) => {
+export const logout = async (ctx:Context) => {
     const cookies = ctx.cookies;
   
     if (!cookies || typeof cookies.get !== "function") {
@@ -108,4 +108,5 @@ export const logout = async (ctx) => {
     ctx.response.status = 200;
     ctx.response.body = { message: "Déconnexion réussie" };
 };
+
 
