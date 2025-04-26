@@ -13,7 +13,7 @@ const get_hash = async (password: string) => {
 }
 
 //fonction pour s'inscrire
-export const register = async(ctx)=>{
+export const register = async(ctx:Context)=>{
     // const {username, email, password} = await ctx.request.body.json().value;
 
     const body = await ctx.request.body.json();
@@ -43,10 +43,10 @@ export const register = async(ctx)=>{
 }
 
 //fonction pour se connecter
-export const login = async(ctx)=>{
+export const login = async(ctx:Context)=>{
     const body = await ctx.request.body.json();
     const { username, password } = body;
-    const { response } = ctx; 
+    // const { response } = ctx; 
 
     if(!username || !password){
         ctx.response.status = 400;
@@ -59,8 +59,8 @@ export const login = async(ctx)=>{
 
     // Vérifie si l'utilisateur existe
     if (!user) {
-        response.status = 401;
-        response.body = { message: "Utilisateur inexistant"};
+        ctx.response.status = 401;
+        ctx.response.body = { message: "Utilisateur inexistant"};
         return;
     }
 
@@ -76,7 +76,7 @@ export const login = async(ctx)=>{
     const role = user?.role;
     //utilisation de l'username et du role pour créer le token ou pas ?
     // const token = await create({alg: "HS512", typ: "JWT"}, {username, role}, secretKey );
-    const token = await create({alg: "HS512", typ: "JWT"}, {username}, mw.secretKey );
+    const token = await create({alg: "HS512", typ: "JWT"}, {username,role}, mw.secretKey );
     mw.tokens[username] = token; //stocké le token de l'utilisateur
 
     // ctx.response.headers.set("Set-Cookie", `auth_token; HttpOnly; SameSite=Strict; Max-Age=3600`); ?????
@@ -86,7 +86,7 @@ export const login = async(ctx)=>{
     ctx.response.body = {message: "Connexion réussie"};//ajout du token dans le body ???
 }
 
-export const logout = async (ctx) => {
+export const logout = async (ctx:Context) => {
     const cookies = ctx.cookies;
   
     if (!cookies || typeof cookies.get !== "function") {
@@ -108,4 +108,5 @@ export const logout = async (ctx) => {
     ctx.response.status = 200;
     ctx.response.body = { message: "Déconnexion réussie" };
 };
+
 

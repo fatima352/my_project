@@ -1,9 +1,5 @@
 import { db } from "../database/data.ts";
-import * as mw from "../middlewares.ts";
 import {Context} from "https://deno.land/x/oak@v17.1.4/mod.ts";
-import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
-import { create, verify } from "https://deno.land/x/djwt/mod.ts";
-
 
 //WebSocket
 export const WebSocket = async (ctx, connections: WebSocket[]) =>{
@@ -27,9 +23,8 @@ export const WebSocket = async (ctx, connections: WebSocket[]) =>{
     console.log(event.data);
     }
 }
-  
 //fonction pour recupere les information de l'utilisateur
-export const getUser = async(ctx)=>{    
+export const getUser = async(ctx:Context)=>{    
     const tokenData = ctx.state.tokenData; //recupere le token du middleware
     if(!tokenData){
         ctx.response.status =401;
@@ -40,12 +35,35 @@ export const getUser = async(ctx)=>{
     ctx.response.body = {message : "token recuperer", username: tokenData.username, role:tokenData.role};
 }
 
+//creer une liste de film
+export const createList = async (ctx:Context)=>{
+    const tokenData = ctx.state.tokenData;
+    if(!tokenData){
+        ctx.response.status = 401;
+        ctx.response.body = {message: "Token non valide, utilisateur non connecter"};
+        console.log("probleme token");
+        return;
+    }
+    const body =await ctx.request.body.json();
+    const {listName} = body;
+    const username = tokenData.username;
+    const user = db.prepare(`SELECT id FROM users WHERE username = ?`).get(username) as {id: number} | undefined;
 
+    if(!user){
+        ctx.response.status = 401;
+        ctx.response.body = {message: "Utilisateur inexistant"};
+        return;
+    }
+    const userId = user?.id;
+    db.prepare(`INSERT INTO liste (name, userId) VALUES (?,?)`).run(listName, userId);
+    ctx.response.status = 200;
+    ctx.response.body = {message: "Liste crée avec succée"};
+    console.log("Liste crée avec succée");
+}
 
+//fonction pour ajouter un film
 
-//fonction pour recuperer les film regarder par un utilisateur
-
-//fonction pour recuperere les comantaire d'un meme film
+//fonction pour recuperere les commentaire d'un meme film
 
 //fonction pour chercher un films dans la bibliotheque
 
@@ -85,3 +103,34 @@ export const getUser = async(ctx)=>{
 // Gestion des catégories et genres : Implémenter un système de gestion des genres de films (action, comédie, drame, etc.) et permettre aux utilisateurs de filtrer les films par genre.
 // Gestion des listes de lecture de films : Créer une fonctionnalité permettant de gérer des listes de films (par exemple, les films vus, les films à voir, les films favoris).
 
+
+//------------------------------------------------
+
+// const uploadDir = "./Back_end/uploads";
+// await ensureDir(uploadDir);
+
+// export const uploadImage = async (ctx: Context) => {
+//     const body = await ctx.request.body({ type: "form-data" });
+//     const formData = await body.value;
+    
+//     for await (const [key, value] of formData.entries()) {
+//       if (value instanceof File) {
+//         const content = await value.arrayBuffer();
+//         const uint8Array = new Uint8Array(content);
+    
+//         const uploadDir = "./images"; // mets ton bon chemin ici
+//         const destPath = path.join(uploadDir, value.name);
+//         await Deno.writeFile(destPath, uint8Array);
+    
+//         ctx.response.status = 200;
+//         ctx.response.body = { message: "Image uploadée", fileName: value.name };
+//         console.log("image chargée avec succès :", value.name);
+//         return;
+//       }
+//     }
+    
+//     ctx.response.status = 400;
+//     ctx.response.body = { message: "Aucun fichier reçu" };
+//     console.log("0 fichier reçu");
+    
+// };

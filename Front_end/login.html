@@ -34,14 +34,15 @@
 
                 <div class="input-box login">
                     <input id="passwordLogin" type="password" placeholder="Password" required> 
+                    <!-- <input id="showPassword" type="checkbox" onclick="showPassword()"> -->
                     <!-- icone cadena -->
                     <i class='bx bxs-lock-alt' ></i>
                 </div>
 
                 <!-- check if you want to save your information / link if you forget your password -->
                 <div class="remember-forgot">
-                    <!-- <label><input type="checkbox"> Remember me</label> -->
-                    <a href="#">Forget passeword?</a>
+                    <label><input id = "showPassword" type="checkbox" onchange="showPassword()"> Show Password </label>
+                    <a href="#">Forget password?</a>
                 </div>
 
                 <button type="submit", class="btn login">Login</button>
@@ -52,5 +53,6 @@
             </form>
         </div>
     </body>
-    <script src="script.js"></script>
+    <script src="script.js"></script> <!-- script pour les fetchs-->
+    <!-- <script src="script2.js"></script> script pour les fonction de la page -->
 </html>

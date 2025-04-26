@@ -1,14 +1,20 @@
 /************** BLOC GENERAL (partager) DU STYLE **************/
 /* Couleur utiliser dans l'ensemble du site */
 :root {
-    --couleursite: #32255b;
-    --couleurheader: #4e3b73;
-    --couleurbouton: white;
-    --couleurfenetrepopup:#4e3b73;
-    --couleurecriture: white;
-    --couleurecriturebouton: #2e1a47;
-    /* --couleurtransitioncc:#d6cbe6; */
-    --couleurtransition: #b9aed8;
+ --couleursite: #1e2235;             
+  --couleurheader: #2c3148;            
+  --couleurbouton: #e0f4ff;            
+  --couleurfenetrepopup: #2c3148;       
+  --couleurecriture: #f0f0f0;          
+  --couleurecriturebouton: #121622;     
+  --couleurbtnLogout:  #40648d;
+  --couleurecritureLogout: #f9f9fa;
+  
+  --couleurtransition: #92a6cf;         
+  --backgroundPopup: rgba(37, 49, 91, 0.5); 
+  --couleurpopup:  #7297cb;
+
+
 
     --taillepoliceheader: 1em;
     --policesite: 'Poppins', sans-serif;
@@ -45,7 +51,7 @@ header{
 
 .logo {
     font-size: 2em;
-    user-select: none;
+    /* user-select: none; */
 }
 
 /* - Partage LOGIN / REGISTER */
@@ -187,8 +193,8 @@ form{
 .menu-logout .nav-link {
     display: inline-block;
     padding: 8px 15px; 
-    color: white;
-    background-color: #8e6ca0;  /*Couleur du boutton logout*/
+    color: var(--couleurecritureLogout);
+    background-color: var(--couleurbtnLogout);  /*Couleur du boutton logout*/
     border-radius: 6px;
     text-decoration: none;
     transition: all 0.3s ease;
@@ -197,7 +203,7 @@ form{
   /* Effet au survol du bouton Logout */
 .menu-logout .nav-link:hover {
     background-color: transparent;  /*Blanc avec transparence*/
-    /* color: black;  Texte en noir */
+    /* color:  */
     transform: scale(1.05); 
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
@@ -340,11 +346,11 @@ h1{
     text-decoration: none;
     /* opacity: 0.9; */
 }
-.header-profil{
+/* valable pour la page profil et la page information film */
+.sous-header{
     padding: 20px 200px;
     margin-top: 2em;
     display:block;
-    /* background-color: #b9aed8; */
     color: var(--couleurecriture);
 }
 .profil-container {
@@ -354,13 +360,15 @@ h1{
     /* gap:70px */
     justify-content: space-between;
 }
+
+/* Photo de profil */
 .profil-container img{
     width: 100px;
     height: 100px;
     border-radius: 20%;
 }
 
-/* photo + username */
+/* photo + username (aussi pour la page info*/
 .profil{
     display: flex;
     flex-direction: column;
@@ -385,7 +393,7 @@ h1{
   
 .btn-edit:hover {
     color: var(--couleurecriture);
-    background-color: #9a8bbd; /* Change la couleur du bouton au survol */
+    background-color: var(--couleurtransition); /* Change la couleur du bouton au survol */
 }
   
 /*Librairie-liste*/
@@ -421,10 +429,15 @@ h1{
     text-decoration: none;
 }
 
+/* TITRE DES FILMS DANS LA BIBLIOTEQUE GENERALE */
+.films-links{
+    width: 150px;
+}
+
 .img:hover{
     transform: scale(1.05);
     transition: all 0.3s ease;
-    border: #8e6ca0 solid 2px;
+    border: var(--couleurtransition) solid 2px;
 }
 
 .item{
@@ -441,91 +454,168 @@ h1{
     color: var(--couleurecriture);
 }
 
+/* Tout les films */
+.all-films{
+    /* display: flex;
+    /* flex-direction: row; */
+    /* gap: 40px;*/ 
+    padding: 40px 20px; 
+    margin: 60.5px;
 
+}
 
-/*
-  /* Partie top : image, nom, edit 
-  .photo-profil, .name-user-action, .bouton-edit {
+.mini-headers{
     display: flex;
+    flex-direction:row;
+    justify-content: space-between;
+}
 
-  }
-  
-  .profil-top {
+.adminAction {
+    display: flex;
+    flex-direction: row;
+    align-items: last baseline;
+}
+
+/* Style for the Add Movie button */
+.btn-addFilm {
+    margin-right: 20px;
+    padding: 5px 10px; /* Add padding for a better button size */
+    background-color: var(--couleurtransition); /* Use a transition color for consistency */
+    color: var(--couleurecriturebouton); /* Text color */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 1em; /* Adjust font size */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+    margin-bottom: 10px;
+}
+
+.btn-addFilm:hover {
+    background-color: var(--couleurbtnLogout); /* Change background color on hover */
+    color: white; /* Change text color on hover */
+    transform: scale(1.05); /* Slightly enlarge the button on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover */
+    font-weight: bold;
+}
+
+
+/* **************************POP UP PAGES ************************** */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--backgroundPopup) ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background-color: var(--couleurpopup);
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    height: 500px;
+    /* max-width: 90%; */
+    color: var(--couleurecriturebouton);
+}
+.headerpop {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2em;
+    padding: 10px 20px;
+    margin-bottom: 10px; /* changé de 20px à 50px */
   }
-  
-  .photo-profil .profil-img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-  }
-  
-  .name-user-action {
-    position: absolute;
-    top: 10%;
-    justify-content: center;
-    font-size: 1.8em;
-    font-weight: bold;
-  }
-  
-  .bouton-edit .btn-edit {
-    padding: 0.5em 1em;
-    background-color: red;
-    color: white;
-    border: none;
-    border-radius: 0.5em;
-    text-decoration: none;
-  }
-  
-  /* Titres de section 
-  .titre {
-    font-size: 1.5em;
-    margin-top: 2em;
-    margin-bottom: 0.5em;
-    position: relative;
-  }
-  
-  /* Ligne sous titre 
-  .titre::after {
-    content: "";
-    display: block;
-    height: 2px;
-    background-color: #ddd;
-    margin-top: 0.5em;
-    width: 100%;
-  }
-  
-  /* Listes 
-  ul {
-    list-style: none;
-    padding: 0;
-    margin-top: 1em;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1em;
-  }
-  
-  .films-item, .lists-item, .commentaire-container {
-    background-color: white;
-    padding: 1em;
-    border-radius: 0.5em;
-    box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    flex: 1 1 30%;
+
+.popuptitle {
+    margin: 0 auto;
     text-align: center;
-  }
-  
-  .films-links, .lists-links, .commentaire-links {
-    text-decoration: none;
-    color: #333;
-  }
-  
-  .list-name-img {
-    display: block;
-    width: 50px;
-    height: 50px;
-    margin: 0.5em auto 0;
-  }
-   */
+    flex-grow: 1;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.addfilm{
+    display: flex;
+    flex-direction: column;
+    padding: 0px 50px;
+    gap:10px;
+}
+
+.mini{    
+    display: flex;
+    flex-direction: column;
+    gap:5px;
+}
+.input {
+    width: 100%;
+    height: 40px;
+    padding: 12px 15px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 12px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input.desc{
+    height: 95px;
+}
+
+.input:focus {
+    border-color: var(--couleurheader) ; /* violet doux */
+    box-shadow: 0 0 8px rgba(38, 139, 206, 0.3);
+    outline: none;
+}
+
+.btn.add{
+    margin-top: 0px ;
+}
+
+
+.hidden {
+    display: none;
+}
+
+.close-btn {
+    float: right;
+    cursor: pointer;
+    font-size: 24px;
+    color: var(--couleurecriturebouton);
+    margin-left: auto; /* ✅ pousse complètement à droite */
+}
+
+
+/* ******************************* PAGE INFORMATION FILM ******************************************* */
+
+.description-film {
+    background-color: var(--couleurtransition);
+    padding: 15px 20px;
+    margin-top: 10px;
+    border-radius: 10px;
+    color: var(--couleurecriturebouton); /* texte foncé */
+    font-size: 1rem;
+    line-height: 1.5;
+    box-shadow: 0 0 10px rgba(50, 37, 91, 0.2);
+}
+
+.film-container {
+    display: flex;
+    align-items: baseline; 
+    margin-top: 10px;
+    justify-content: space-between;
+}
+
+.film-container img{
+    width: 150px;
+    height: 200px;
+    border-radius: 4%;
+}
+
+
+
+

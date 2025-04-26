@@ -8,26 +8,21 @@
         <!-- pour les icones -->
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     </head>
-    <body onload="profileUser()" class="profil-body">
+    <body onload="getUser()" class="profil-body">
         <header class="header">
             <h2 class="logo">MOVIEW</h2> 
             <nav class="navigation">
                 <ul class= "menu" id="menu">
                     <li class="menu-home">
-                        <a href="home.html" class="nav-link">
+                        <a href="index.html" class="nav-link">
                             <span class="link-text">HOME</span>
                         </a>
                     </li>
                   <li id="menu-films">
                     <a href="films.html" class="nav-link">
-                        <span class="link-text">FILMS</span>
+                        <span class="link-text">MOVIES</span>
                     </a>
                   </li>
-                  <li id="menu-profil">
-                    <a href="user.html" class="nav-link">
-                        <span class="link-text">PROFIL</span>
-                    </a>
-                   </li>
                     <li class="menu-logout">
                         <a href="#" class="nav-link" onclick="logoutUser()">
                         <span class="link-text">LOG OUT</span>
@@ -37,7 +32,7 @@
             </nav>
         </header>
         <div class="main-page">
-            <section class="header-profil">
+            <section class="sous-header">
                 <div class="profil-container">
                   <!-- Photo de profil -->
                   <div class="profil">
@@ -54,29 +49,44 @@
 
                   <!-- Bouton modifier (à remplir) -->
                   <div class="bouton-edit">
-                    <!-- Par exemple : -->
-                    <button class="btn-edit">Modifier</button>                  
+                    <!-- Par exemple que l'admin: -->
+                    <button class="btn-edit">Modifier</button>  
+
                 </div>
                 </div>
             </section>
             <div class="container">
+                <div class="mini-headers">
                 <h3 class="titre">COLLECTION</h3>
+                <div class="userActions">
+                    <button class="btn-add">Ajouter film</button>
+                </div>
+                </div>
                 <hr class="line">
+                
                 <lu class="list">
                     <li class="item">
                         <img src="fav.png" alt="image-film" class="img">
                         <a href="#" class="films-links"> film 1</a>
-                    </li>
-                    <li class="item">
-                        <img src="fav.png" alt="image-film" class="img">
-                        <a href="#" class="films-links"> film 2</a>
-                    </li>
+                </li>
+
+                <li class="item">
+                    <img src="fav.png" alt="image-film" class="img">
+                    <a href="#" class="films-links"> film 2</a>
+                </li>
                      <!-- cree un autre element a chauque fois que l'utilistaure ajoute un film  -->
                 </lu>
             </div>
 
             <div class="container">
-                <h3 class="titre">LISTES</h3>
+                <div class="mini-headers">
+                    <h3 class="titre">LISTES</h3>
+                    <div class="userActions">
+                        <button class="btn-add">Créer liste</button>
+                        <!-- POPUP CRÉER LISTE -->
+
+                    </div>
+                </div>
                 <hr class="line">
                 <lu class="list">
                     <li class="item">
@@ -88,19 +98,22 @@
                     </li>
                 </lu>
             </div>
-             <!-- 
-            <div class="commentaire-container">
-                <h3 class="titre">Commentaire</h3>
-                <lu class="commentaire-list">
-                    <li class="commentaire-item">
-                        <a href="#" class="commentaire-links">
-                            <span class="commentaire-name">Commentaire1</span>
-                        </a>
-                    </li>
-                </lu>
-            </div> -->
         </div>
 
+        <!-- POPUP CRÉER LISTE
+        <div id="popup" class="popup hidden">
+            <div class="popup-content">
+            <h3>Créer une nouvelle liste</h3>
+            <input type="text" id="listName" placeholder="Nom de la liste" />
+            <div class="popup-buttons">
+                <button onclick="createList()">Confirmer</button>
+                <button onclick="closePopup()">Fermer</button>
+            </div>
+            </div>
+        </div> -->
+  
+
     </body>
-    <script src="script.js"></script>
+    <script src="script.js"></script> <!-- script pour les fetchs-->
+    <script src="script2.js"></script> <!-- script pour les fonction de la page-->
 </html>
