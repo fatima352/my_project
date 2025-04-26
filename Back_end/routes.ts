@@ -29,7 +29,7 @@ router.get('/api/films',filmCtrl.getAllFilms); //route pour recuperer tout les f
 // router.post("/upload", userCtrl.uploadImage);
 router.post('/api/films',mw.authMw, mw.adminMw, filmCtrl.addFilm); //route pour ajouter un film a la db uniquement accesible par l'admin
 router.get('/api/films/:id',filmCtrl.getFilm); //route pour voir tous les films
-router.put('/api/films/:id',filmCtrl.updateFilm);//route pour mettre a jour le donnée du film
+router.put('/api/films/:id',filmCtrl.updateFilm);//route pour mettre a jour le donnée du film(ici j'ai enlever mw.adminMw)
 router.delete('/api/films/:id',mw.authMw, mw.adminMw,filmCtrl.deleteFilm);// Route DELETE pour supprimer un film par ID
 
 //Route pour les listes
