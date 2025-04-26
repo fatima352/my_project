@@ -199,8 +199,10 @@ function getMovies(event){
             const filmsItem = document.createElement('li');
             filmsItem.classList.add('item')
             filmsItem.innerHTML = `
-                <img src="http://localhost:3000/images/${film.posterURL}" alt="${film.titel}" class="img">
-                <a href="#" class="films-links">${film.titel}</a>
+               <a href="film.html?id=${film.id}">
+                    <img src="http://localhost:3000/images/${film.posterURL}" alt="${film.titel}" class="img"> 
+                </a>
+                <a href="infoFilm.html?id=${film.id}" class="films-links">${film.titel}</a>
             `;
             filmsContainer.appendChild(filmsItem);
         });
@@ -245,23 +247,42 @@ function checkAdmin(event) {
     })
     .then(data => {
         console.log('user role:', data.role);
-        const adminAction = document.getElementById('adminAction');
         if (data.role === 'admin') {
-            const btnAddFilm = document.createElement('button');
-            btnAddFilm.innerText = 'Add movie';
-            btnAddFilm.classList.add('btn-addFilm');
-            btnAddFilm.onclick = showPopup(); // Show popup on click
-            adminAction.appendChild(btnAddFilm);
+            // PAGE FILMS
+        const adminAction = document.getElementById("adminAction");
+        if (adminAction) {
+            const button = document.createElement("button");
+            button.className = "btn-addFilm";
+            button.innerText = "Add Film";
+            button.onclick =  showPopup; 
+            adminAction.appendChild(button);
+        }
+
+        // PAGE PROFIL (film individuel)
+        const actionModif = document.getElementById("actionModif");
+        if (actionModif) {
+            const modifBtn = document.createElement("button");
+            modifBtn.className = "btn-addFilm ";
+            modifBtn.innerText = "Modifier";
+            // modifBtn.onclick = () => { /* ta logique de modif */ };
+            actionModif.appendChild(modifBtn);
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.className = "btn-addFilm ";
+            deleteBtn.innerText = "Supprimer";
+            // deleteBtn.onclick = () => { /* ta logique de suppression */ };
+            actionModif.appendChild(deleteBtn);
+        }
         }
     });
 }
 
 //fonction fetch pour ajouter un film
 function addFilm(){
-    const titel = document.getElementById('titel').value;
-    const date = document.getElementById('date').value;
+    const titel = document.getElementById('titelfilm').value;
+    const date = document.getElementById('datefilm').value;
     const posterURL = document.getElementById('posterURL').value;
-    const description = document.getElementById('description').value;
+    const description = document.getElementById('descriptionfilm').value;
 
 
     const data = {
@@ -281,10 +302,7 @@ function addFilm(){
         body: JSON.stringify(data) // Convert the data object to JSON
     })
     .then(response => {
-        if (response.ok){
-            return response.json();
-        }
-        else{
+        if (!response.ok){
             switch (response.status) {
                 case 400:
                     alert('Tous les champs sont obligatoires ou mal formatés');
@@ -305,7 +323,10 @@ function addFilm(){
                 default:
                     alert('Une erreur inconnue est survenue');
                     throw new Error('Une erreur inconnue est survenue');
-            }        
+            } 
+        }
+        else{
+            return response.json();
         }
     })
     .then(data => {
@@ -315,6 +336,52 @@ function addFilm(){
     })
 
 }
+
+//fonction pour recupere les informations d'un film
+function getMovie(){
+    // Extraire l'id depuis l'URL
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    if (!id) {
+        console.error("Aucun ID trouvé dans l'URL");
+        return;
+    }
+    fetch(`http://localhost:3000/api/films/${id}`,{
+        method: 'GET',
+        mode: 'cors',
+        credentials: 'include',
+
+    }
+    )
+    .then(response =>{
+        if(response.ok){
+            return response.json();
+        }
+        else{
+            throw new Error('Erreur lors de la recuperation des donées')
+        }
+    })
+    .then(data =>{
+        const film =data.film;
+        console.log("FILM", film);
+
+        //ajouter image
+        document.getElementById("poster").innerHTML = `                    
+            <img src="http://localhost:3000/images/${film.posterURL}" alt="${film.titel}" class="poster"> 
+            `;
+
+        // Titre du film
+        document.getElementById("titreFilm").innerText = film.titel;
+        
+        //ajouter la decription
+        document.getElementById("description-film").innerText =film.description;
+    })
+    .catch(error => {
+        console.error("Erreur:", error.message);
+    });
+}
+
 
 
 

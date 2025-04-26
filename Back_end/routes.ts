@@ -22,10 +22,11 @@ router.get('/api/user', mw.authMw, userCtrl.getUser);//route apres s'avoir logue
 
 
 //Route pour les film
-router.get('/api/films',mw.authMw, filmCtrl.getAllFilms); //route pour recuperer tout les films acces admin
+router.get('/api/films', filmCtrl.getAllFilms); //route pour recuperer tout les films
 // router.post('/api/films',mw.authMw,mw.adminMw, userCtrl.addFilm); //route pour ajouter un film a la db unqiuement accesible par l'admin
 // router.post("/upload", userCtrl.uploadImage);
-router.post('/api/films', filmCtrl.addFilm); //route pour ajouter un film a la db uniquement accesible par l'admin
+router.post('/api/films',mw.authMw, mw.adminMw, filmCtrl.addFilm); //route pour ajouter un film a la db uniquement accesible par l'admin
+router.get('/api/films/:id',filmCtrl.getFilm) //route pour voir tous les films
 
 
 //Route pour les listes

@@ -8,7 +8,7 @@
         <!-- pour les icones -->
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     </head>
-    <body onload="profileUser()" class="profil-body">
+    <body class="profil-body" onload="getMovie();checkAdmin()">
         <header class="header">
             <h2 class="logo">MOVIEW</h2> 
             <nav class="navigation">
@@ -38,85 +38,72 @@
         </header>
         <div class="main-page">
             <section class="sous-header">
-                <div class="profil-container">
+                <div class="film-container">
                   <!-- Photo de profil -->
                   <div class="profil">
-                    <span class="icon-profil">
-                      <img src="fav.png" alt="image" class="profil-img">
+                    <span id="poster" class="icon-profil">
+                      <!-- <img src="fav.png" alt="image" class="poster"> -->
                     </span>
-                    <!-- Nom de l'utilisateur -->
-                    <div class="name-user">
-                        <h3 class="iduser" >
-                            <p id="username"></p>
+                    <!-- TITRE FILM -->
+                    <div class="titrefilm">
+                        <h3 class="iduser" id="titreFilm">
+                            Titre
                         </h3>
                     </div>
                   </div>
 
-                  <!-- Bouton modifier (à remplir) -->
-                  <div class="bouton-edit">
-                    <!-- Par exemple que l'admin: -->
-                    <button class="btn-edit">Modifier</button>  
+                  <!-- <p class="anne">2003</p>  -->
 
-                </div>
+                  <!-- Bouton modifier (à remplir) -->
+                  <div id="actionModif" class="bouton-edit">
+                 
+                    <!-- Par exemple : -->
+                    <!-- <button class="btn-edit">Modifier</button>  
+                    <button class="btn-edit">Supprimer</button>   -->
+                
+                   </div>
                 </div>
             </section>
             <div class="container">
                 <div class="mini-headers">
-                <h3 class="titre">COLLECTION</h3>
+                <h3 class="titre">DESCRIPTION</h3>
                 <div class="userActions">
-                    <button class="btn-add">Ajouter film</button>
+                    <!-- modifier descriptio admin -->
+                    <!-- <button class="btn-add">Ajouter film</button> -->
                 </div>
                 </div>
                 <hr class="line">
                 
-                <lu class="list">
-                    <li class="item">
-                        <img src="fav.png" alt="image-film" class="img">
-                        <a href="#" class="films-links"> film 1</a>
-                </li>
+                <!-- DESCRIPTION DU FILM -->
+                <div class="description-film">
+                    <p id="description-film">
+                        Lorsque Bill et Hal, des jumeaux, trouvent dans le grenier un vieux jouet ayant appartenu à leur père, 
+                        une série de morts atroces commence à se produire autour d'eux...
+                    </p>
+                </div>
 
-                <li class="item">
-                    <img src="fav.png" alt="image-film" class="img">
-                    <a href="#" class="films-links"> film 2</a>
-                </li>
-                     <!-- cree un autre element a chauque fois que l'utilistaure ajoute un film  -->
-                </lu>
             </div>
 
             <div class="container">
                 <div class="mini-headers">
-                    <h3 class="titre">LISTES</h3>
+                    <h3 class="titre">COMMENTAIRES</h3>
                     <div class="userActions">
-                        <button class="btn-add">Créer liste</button>
-                        <!-- POPUP CRÉER LISTE -->
+
+                        <!-- admin gere les commentaires -->
+                        <!-- <button class="btn-add">Créer liste</button>
+                        POPUP CRÉER LISTE -->
 
                     </div>
                 </div>
                 <hr class="line">
                 <lu class="list">
                     <li class="item">
-                        <img src="fav.png" alt="image" class="img">
-
-                        <a href="#" class="lists-links">
-                            Liste1
+                            <p> COMMENTAIRES </p>
                         </a>
                     </li>
                 </lu>
             </div>
         </div>
-
-        <!-- POPUP CRÉER LISTE
-        <div id="popup" class="popup hidden">
-            <div class="popup-content">
-            <h3>Créer une nouvelle liste</h3>
-            <input type="text" id="listName" placeholder="Nom de la liste" />
-            <div class="popup-buttons">
-                <button onclick="createList()">Confirmer</button>
-                <button onclick="closePopup()">Fermer</button>
-            </div>
-            </div>
-        </div> -->
-  
 
     </body>
     <script src="script.js"></script> <!-- script pour les fetchs-->

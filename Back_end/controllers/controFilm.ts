@@ -18,20 +18,6 @@ export const getAllFilms = async (ctx: Context) => {
 
 //fonction pour ajouter un film
 export const addFilm = async (ctx) =>{
-    const tokenData = ctx.state.tokenData;
-    if(!tokenData){
-        ctx.response.status = 401;
-        ctx.response.body = {message:"Token non valide, utilisateur non connecter"};
-        console.log("probleme token");
-        return;
-    }
-    const userRole = tokenData.role;
-    if(userRole !== "admin"){
-        ctx.response.status = 403;
-        ctx.response.body = {message : "Acces interdit, vous n'etes pas admin"};
-        console.log("Acces interdit");
-        return;
-    }
     const body = await ctx.request.body.json();
     const {titel, date, posterURL, description} = body;
     if(!titel || !date || !posterURL || !description){
@@ -63,4 +49,26 @@ export const addFilm = async (ctx) =>{
     // }
     // console.log("Film emitted to WebSocket clients");
 
+}
+
+//recuperer un film
+export const getFilm = async (ctx)=>{
+    // const body = await ctx.request.body.json(); car fa fonction c'est un get et pas un post
+    // const {id} = body;
+    const id = ctx.params.id;//recupere le parametre du url
+    if(!id){
+        ctx.response.status = 400;
+        ctx.response.body = { message: "ID manquant dans l'URL" };
+        return;
+    }
+
+    const film = db.prepare(`SELECT * FROM film WHERE id = ?`).get(id) as {id: number} | undefined;
+    if(!film){
+        ctx.response.status = 404;
+        ctx.response.body = {message: "Le film n'existe pas dans la base de donnée"};
+        console.log("Le film n'existe pas dans la base de donnée");
+        return;
+    }
+   ctx.response.status = 200;
+   ctx.response.body = {message:"Film trouvé", film};
 }

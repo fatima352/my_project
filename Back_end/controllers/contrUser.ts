@@ -1,8 +1,5 @@
 import { db } from "../database/data.ts";
 import {Context} from "https://deno.land/x/oak@v17.1.4/mod.ts";
-//import to upload image
-import * as path from "https://deno.land/std/path/mod.ts";
-
 
 //WebSocket
 export const WebSocket = async (ctx, connections: WebSocket[]) =>{

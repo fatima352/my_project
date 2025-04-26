@@ -1,16 +1,10 @@
-//Afficher mots de passe
 function showPassword() {
-  const pwdField = document.getElementById("passwordLogin");
-  const pwdField2 = document.getElementById("passwordReg");
+  const password = document.getElementById("password");
   const isChecked = document.getElementById("showPassword").checked;
-
-  if (pwdField) {
-    pwdField.type = isChecked ? "text" : "password";
-  }
-  if (pwdField2) {
-    pwdField2.type = isChecked ? "text" : "password";
-  }
+  
+  password.type = isChecked ? "text" : "password"; // Use 'password' instead of 'pwdField'
 }
+
 
 document.querySelectorAll(".btn-add").forEach(btn => {
   if (btn.textContent.includes("Créer liste")) {
