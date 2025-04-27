@@ -276,7 +276,7 @@ function getMovies(event){
     });
 }
 
-//fonction fetch pour ajouter des films
+//fonction fpour les popup pages
 function showPopup() {
     const popup = document.getElementById('addMoviePopup');
     popup.classList.remove('hidden');
@@ -287,59 +287,12 @@ function closePopup() {
     popup.classList.add('hidden');
 }
 
-//ajout film
+//fonction fetch pour ajouter un film
 function addFilm(event) {
     fetchaddFilm(); // Call the existing addFilm function
     closePopup(); // Close the popup after submission
 }
 
-// // Modify the checkAdmin function
-// function checkAdmin(event) {
-//     fetch(`http://localhost:3000/api/user`, {
-//         method: 'GET',
-//         mode: 'cors',
-//         credentials: 'include',
-//     })
-//     .then(response => {
-//         if (response.ok) {
-//             return response.json();
-//         } else {
-//             throw new Error('Erreur lors de la verification du rôle');
-//         }
-//     })
-//     .then(data => {
-//         console.log('user role:', data.role);
-//         if (data.role === 'admin') {
-//             // PAGE FILMS
-//         const adminAction = document.getElementById("adminAction");
-//         if (adminAction) {
-//             const button = document.createElement("button");
-//             button.className = "btn-addFilm";
-//             button.innerText = "Add Film";
-//             button.onclick =  showPopup; 
-//             adminAction.appendChild(button);
-//         }
-
-//         // PAGE PROFIL (film individuel)
-//         const actionModif = document.getElementById("actionModif");
-//         if (actionModif) {
-//             const modifBtn = document.createElement("button");
-//             modifBtn.className = "btn-addFilm ";
-//             modifBtn.innerText = "Modifier";
-//             modifBtn.onclick =  showPopup; 
-//             actionModif.appendChild(modifBtn);
-
-//             const deleteBtn = document.createElement("button");
-//             deleteBtn.className = "btn-addFilm ";
-//             deleteBtn.innerText = "Supprimer";
-//             // button.onclick =  showPopup; 
-//             actionModif.appendChild(deleteBtn);
-//         }
-//         }
-//     });
-// }
-
-//fonction fetch pour ajouter un film
 function fetchaddFilm(){
     const title = document.getElementById('titlefilm').value;
     const date = document.getElementById('datefilm').value;
@@ -444,13 +397,24 @@ function getMovie(){
     });
 }
 
-//ajout film
-function updateFilm(event) {
+//modifier film
+//fonction fpour les popup pages
+function showPopupEdit() {
+    const popup = document.getElementById('addMoviePopup');
+    popup.classList.remove('hidden');
+}
+
+function closePopupEdit() {
+    const popup = document.getElementById('addMoviePopup');
+    popup.classList.add('hidden');
+}
+
+function updateFilm() {
     fetchUpdateFilm(); // Call the existing addFilm function
     closePopup(); // Close the popup after submission
 }
 
-function fetchUpdateFilm(event) {
+function fetchUpdateFilm() {
     // Récupérer les valeurs saisies par l'utilisateur
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
@@ -476,7 +440,7 @@ function fetchUpdateFilm(event) {
     fetch(`http://localhost:3000/api/films/${id}`, {
         method: 'PUT',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify(data)
     })
@@ -497,6 +461,7 @@ function fetchUpdateFilm(event) {
     });
 }
 
+//fonction fetch pour verifier l'admin
 function checkAdminAccess() {
     fetch('http://localhost:3000/api/admin-access', {
         method: 'GET',
@@ -525,14 +490,14 @@ function checkAdminAccess() {
         if (actionModif) {
             const modifBtn = document.createElement("button");
             modifBtn.className = "btn-addFilm ";
-            modifBtn.innerText = "Modifier";
-            modifBtn.onclick =  showPopup; 
+            modifBtn.innerText = "Edit";
+            modifBtn.onclick =  showPopupEdit; 
             actionModif.appendChild(modifBtn);
 
             const deleteBtn = document.createElement("button");
-            deleteBtn.className = "btn-addFilm ";
-            deleteBtn.innerText = "Supprimer";
-            // button.onclick =  showPopup; 
+            deleteBtn.className = "btn-addFilm delete ";
+            deleteBtn.innerText = "Delete";
+            deleteBtn.onclick =  showPopupDelete; 
             actionModif.appendChild(deleteBtn);
         }
         
@@ -543,6 +508,59 @@ function checkAdminAccess() {
         // window.location.href = 'index.html'; // ou login.html si pas connecté
     });
 }
+
+//fonction pour supprimer un film
+
+function showPopupDelete() {
+    const popup = document.getElementById('DeleteMoviePopup');
+    popup.classList.remove('hidden');
+}
+
+function closePopupDelete() {
+    const popup = document.getElementById('DeleteMoviePopup');
+    popup.classList.add('hidden');
+}
+
+function deleteMovie(){
+    fetchDeleteMovie();
+    closePopupDelete();
+}
+
+function fetchDeleteMovie(){
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    if (!id) {
+        console.error("Aucun ID trouvé dans l'URL");
+        return;
+    }
+
+    fetch(`http://localhost:3000/api/films/${id}`,{
+        method: 'DELETE',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+    })
+    .then(response => {
+        if(response.ok){
+            return response.json();
+        }else{
+            throw new Error('Erreur lors de la suppression du film');
+        }
+    })
+    .then(data=>{
+        console.log("Suppression réussie")
+        alert(data.message);
+        window.location.href = "films.html";
+    })
+    .catch(error => {
+        console.log(error);
+        alert('Erreur: ' + error.message);
+    });
+}
+
 
 
 

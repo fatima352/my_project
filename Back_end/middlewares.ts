@@ -43,7 +43,7 @@ export const adminMw = async(ctx : Context, next:() => Promise<unknown>)=>{
   if(!tokenData){
     ctx.response.status = 401;
     ctx.response.body = {message: "Token non valide, utilisatueur non connecter"};
-    console.log("probleme token");
+    console.log("probleme token cote admin");
     return;
   }
   if(tokenData.role !== "admin"){

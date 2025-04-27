@@ -81,6 +81,7 @@ export const updateFilm = async (ctx:Context)=>{
     if(!id){
         ctx.response.status = 400;
         ctx.response.body = { message: "ID manquant dans l'URL" };
+        console.log("problème id");
         return;
     }
     const film = db.prepare(`SELECT * FROM film WHERE id = ?`).get(id);
@@ -122,8 +123,9 @@ export const deleteFilm = async(ctx:Context)=>{
         console.log("Le film n'existe pas dans la base de donnée");
     }
 
-    db.prepare(`DELETE FROM films WHERE id = ?`).run(id);
+    db.prepare(`DELETE FROM film WHERE id = ?`).run(id);
     ctx.response.status = 200;
     ctx.response.body = {message: "Suprimer avec succe"};
     console.log("film supprimer");
 }
+
