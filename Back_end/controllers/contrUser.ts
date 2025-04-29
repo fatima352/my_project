@@ -76,7 +76,7 @@ export const addFilmCollection = async (ctx)=>{
     if(!tokenData){
         ctx.response.status =401;
         ctx.response.body = {message: "Token non valide, utilisateur non connecter"};
-        console.log("probleme token");
+        console.log("problème token");
         return;
     }
 
@@ -92,7 +92,7 @@ export const addFilmCollection = async (ctx)=>{
     if(!user){
         ctx.response.status = 404;
         ctx.response.body = {message: "Le film n'existe pas dans la base de donnée"};
-        console.log("Le film n'existe pas dans la base de donnée");
+        console.log("Le user n'existe pas dans la base de donnée");
         return;
     }
     db.prepare(`INSERT INTO library (userId, filmId) VALUES (?,?)`).run(user.id, film.id);
@@ -110,6 +110,8 @@ export const createList = async (ctx:Context)=>{
         console.log("probleme token");
         return;
     }
+
+    console.log("coucouuu");
     const body = await ctx.request.body.json();
     const {listName} = body;
     const username = tokenData.username;

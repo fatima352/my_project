@@ -59,7 +59,7 @@
                 <div class="mini-headers">
                 <h3 class="titre">COLLECTION</h3>
                 <div class="userActions">
-                    <button class="btn-add">Ajouter film</button>
+                    <button class="btn-addFilm" onclick="showPopupUserAdd()">Add movie</button>
                 </div>
                 </div>
                 <hr class="line">
@@ -82,7 +82,7 @@
                 <div class="mini-headers">
                     <h3 class="titre">LISTES</h3>
                     <div class="userActions">
-                        <button class="btn-add">Créer liste</button>
+                        <button class="btn-addFilm" onclick="showPopupcreateList()">Create list</button>
                         <!-- POPUP CRÉER LISTE -->
 
                     </div>
@@ -90,30 +90,52 @@
                 <hr class="line">
                 <lu class="list">
                     <li class="item">
-                        <img src="fav.png" alt="image" class="img">
-
+                        <!-- <img src="fav.png" alt="image" class="img"> -->
                         <a href="#" class="lists-links">
-                            Liste1
+                            
                         </a>
                     </li>
                 </lu>
             </div>
         </div>
+        <!-- POPUP POUR CREE LISTE -->
+        <div id="creatListPopup" class="popup hidden ">
+            <div class="popup-content-delete">
+                <div class="headerpop">
+                    <h2 class="popuptitle">CREATE LIST</h2>
+                    <span class="close-btn" onclick="closePopupCreateList()">&times;</span>
+                </div>
+                <div class="addfilm" id="addfilm">
+                    <div class="mini">
+                        <label for="titlefilm">Name list :</label>
+                        <input class="input" type="text" id="nameList" name="title">
 
-        <!-- POPUP CRÉER LISTE
-        <div id="popup" class="popup hidden">
-            <div class="popup-content">
-            <h3>Créer une nouvelle liste</h3>
-            <input type="text" id="listName" placeholder="Nom de la liste" />
-            <div class="popup-buttons">
-                <button onclick="createList()">Confirmer</button>
-                <button onclick="closePopup()">Fermer</button>
+                    </div>
+                    <button class="btn add" type="submit" onclick="CreateList()">Confirm</button>
+                </div>
             </div>
+        </div>
+
+        <!-- POPUP POUR AJOUTER UN FILM DANS LA COLLECTION -->
+        <div id="AddFilmPopup" class="popup hidden ">
+            <div class="popup-content-delete">
+                <div class="headerpop">
+                    <h2 class="popuptitle">ADD MOVIE</h2>
+                    <span class="close-btn" onclick="closePopupUserAdd()">&times;</span>
+                </div>
+                <div class="addfilm" id="addfilm">
+                    <div class="mini">
+                        <label for="titlefilm">Movie's name :</label>
+                        <input class="input" type="text" id="titleMovie" name="title">
+
+                    </div>
+                    <button class="btn add" type="submit" onclick="userAddmovie()">confirm</button>
+                </div>
             </div>
-        </div> -->
+        </div>
   
 
     </body>
     <script src="script.js"></script> <!-- script pour les fetchs-->
-    <script src="script2.js"></script> <!-- script pour les fonction de la page-->
+    <!-- <script src="script2.js"></script> script pour les fonction de la page -->
 </html>

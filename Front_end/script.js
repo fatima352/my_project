@@ -1,3 +1,5 @@
+
+/*********************  FONCTIONS FETCHS  *********************/
 //fonction fetch pour s'inscrire
 function registerUser(event) {
     event.preventDefault(); // Prevent the form from refreshing the page
@@ -98,6 +100,7 @@ function loginUser(event){
     })
     .then(data =>{
         console.log("response recu : ", data);
+        // localStorage.setItem('token', data.token); // Store the token
         // alert('Connection réussie!');
         window.location.href = "index.html"    
         })
@@ -276,23 +279,7 @@ function getMovies(event){
     });
 }
 
-//fonction fpour les popup pages
-function showPopup() {
-    const popup = document.getElementById('addMoviePopup');
-    popup.classList.remove('hidden');
-}
-
-function closePopup() {
-    const popup = document.getElementById('addMoviePopup');
-    popup.classList.add('hidden');
-}
-
-//fonction fetch pour ajouter un film
-function addFilm(event) {
-    fetchaddFilm(); // Call the existing addFilm function
-    closePopup(); // Close the popup after submission
-}
-
+//FONCTION FETCH PPUR AJOUTER UN FILM
 function fetchaddFilm(){
     const title = document.getElementById('titlefilm').value;
     const date = document.getElementById('datefilm').value;
@@ -397,23 +384,6 @@ function getMovie(){
     });
 }
 
-//modifier film
-//fonction fpour les popup pages
-function showPopupEdit() {
-    const popup = document.getElementById('addMoviePopup');
-    popup.classList.remove('hidden');
-}
-
-function closePopupEdit() {
-    const popup = document.getElementById('addMoviePopup');
-    popup.classList.add('hidden');
-}
-
-function updateFilm() {
-    fetchUpdateFilm(); // Call the existing addFilm function
-    closePopup(); // Close the popup after submission
-}
-
 function fetchUpdateFilm() {
     // Récupérer les valeurs saisies par l'utilisateur
     const params = new URLSearchParams(window.location.search);
@@ -508,24 +478,7 @@ function checkAdminAccess() {
         // window.location.href = 'index.html'; // ou login.html si pas connecté
     });
 }
-
-//fonction pour supprimer un film
-
-function showPopupDelete() {
-    const popup = document.getElementById('DeleteMoviePopup');
-    popup.classList.remove('hidden');
-}
-
-function closePopupDelete() {
-    const popup = document.getElementById('DeleteMoviePopup');
-    popup.classList.add('hidden');
-}
-
-function deleteMovie(){
-    fetchDeleteMovie();
-    closePopupDelete();
-}
-
+//fonction pour supprimer film
 function fetchDeleteMovie(){
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
@@ -561,6 +514,166 @@ function fetchDeleteMovie(){
     });
 }
 
+//function fetch pour cree une liste
+function fetchCreateList(){
+    const listName = document.getElementById('nameList').value;
+    const data = {listName};
+
+    fetch(`http://localhost:3000/api/liste`,{
+        method : 'POST',
+        mode: 'cors',
+        headers: {
+             'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify(data)
+    })
+    .then(response =>{
+        if (response.ok){
+            return response.json();
+        }else{
+            alert("Utilisateur non connecter");
+            throw Error("Token non valide, utilisateur non connecter");
+        }
+    })
+    .then(data =>{
+        console.log(data);
+        alert('List created');
+        window.location.href = 'profil.html';
+    })
+    .catch(error => {
+        console.log(error);
+        alert('Erreur: ' + error.message);
+    });
+
+}
+
+//fonction fetch pour pemettre a l'utilisateur d'ajouter un film a sa collection
+function fetchUserAddmovie(){
+    const title = document.getElementById('titleMovie').value;
+    const data = {title};
+
+    fetch(`http://localhost:3000/api/collection`,{
+        method : 'POST',
+        mode: 'cors',
+        headers: {
+             'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify(data)
+    })
+    .then(response =>{
+        if (response.ok){
+            return response.json();
+        }else{
+            switch(response.status){
+                case 401:
+                    alert("Utilisateur non connecter");
+                    throw Error("Token non valide, utilisateur non connecter");
+                case 404:
+                    alert("Film introuvable");
+                    throw Error("Film introuvable, pas disponible dans la base de donnée");
+                default:
+                    throw Error("Erreur inconnue");
+            }
+        }
+    })
+    .then(data =>{
+        console.log(data);
+        alert('Film ajouter');
+        window.location.href = 'profil.html';
+    })
+    .catch(error => {
+        console.log(error);
+        alert('Erreur: ' + error.message);
+    });
+}
+
+
+/* ************************** AUTRES FONCTIONS ************************** */
+//fonction pour ouvrir popup page pour ajouter un film
+function showPopup() {
+    const popup = document.getElementById('addMoviePopup');
+    popup.classList.remove('hidden');
+}
+//fonction pour fermer popup page pour ajouter un film
+function closePopup() {
+    const popup = document.getElementById('addMoviePopup');
+    popup.classList.add('hidden');
+}
+
+//fonction pour ajouter un film et fermer la fenetre après 
+function addFilm(event) {
+    fetchaddFilm(); // Call the existing addFilm function
+    closePopup(); // Close the popup after submission
+}
+
+//modifier film
+//fonction pour les popup pages pour modifier un film
+function showPopupEdit() {
+    const popup = document.getElementById('addMoviePopup');
+    popup.classList.remove('hidden');
+}
+//fermer fenetre popup edit  
+function closePopupEdit() {
+    const popup = document.getElementById('addMoviePopup');
+    popup.classList.add('hidden');
+}
+
+//fonction pour ajouter dees
+function updateFilm() {
+    fetchUpdateFilm(); // Call the existing addFilm function
+    closePopup(); // Close the popup after submission
+}
+
+//fonction pour supprimer un film
+function showPopupDelete() {
+    const popup = document.getElementById('DeleteMoviePopup');
+    popup.classList.remove('hidden');
+}
+
+function closePopupDelete() {
+    const popup = document.getElementById('DeleteMoviePopup');
+    popup.classList.add('hidden');
+}
+
+function deleteMovie(){
+    fetchDeleteMovie();
+    closePopupDelete();
+}
+
+//function ouvrir fenetre pop up cree liste 
+function showPopupcreateList() {
+    const popup = document.getElementById('creatListPopup');
+    popup.classList.remove('hidden');
+}
+
+function closePopupCreateList() {
+    const popup = document.getElementById('creatListPopup');
+    popup.classList.add('hidden');
+}
+
+function CreateList(){
+    fetchCreateList();
+    closePopupCreateList();
+}
+
+
+//function ouvrir fenetre pop up ajouter film a la collection (cote utilisateur)
+function showPopupUserAdd() {
+    const popup = document.getElementById('AddFilmPopup');
+    popup.classList.remove('hidden');
+}
+
+function closePopupUserAdd() {
+    const popup = document.getElementById('AddFilmPopup');
+    popup.classList.add('hidden');
+}
+
+function userAddmovie(){
+    fetchUserAddmovie();
+    closePopupUserAdd();
+}
 
 
 

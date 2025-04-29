@@ -15,6 +15,7 @@ export const tokens: {[key: string]: string} = {};
 
 // Middleware to verify JWT token (partie 3)
 export const authMw = async (ctx: Context, next: () => Promise<unknown>) => {
+
   const cookie = ctx.request.headers.get("cookie");
   const authToken = cookie?.split("; ").find(row => row.startsWith("auth_token="))?.split('=')[1];
 

@@ -21,7 +21,7 @@ router.get('/', mw.authMw, userCtrl.getUser);//route quand l'utilisateur est con
 
 //Route utilisateur
 router.get('/api/user', mw.authMw, userCtrl.getUser);//route apres s'avoir loguer proteger par un middleware
-router.get("/api/admin-access", mw.authMw, mw.adminMw);//checke l'admin
+router.get('/api/admin-access', mw.authMw, mw.adminMw);//checke l'admin
 router.post('/api/films/:id/reviews', userCtrl.commentFilm);//ajouter un commentaire au film (A TESTER)
 router.post('/api/collection', mw.authMw, userCtrl.addFilmCollection);//route pour ajouter un film à la collection
 
