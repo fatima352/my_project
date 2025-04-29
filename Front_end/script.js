@@ -589,8 +589,75 @@ function fetchUserAddmovie(){
     });
 }
 
+function getUserList(){
+    fetch(`http://localhost:3000/api/liste`,{
+        method : 'GET',
+        mode: 'cors',
+        credentials: 'include'
+    })
+    .then(response => {
+        if(response.ok){
+            return response.json();
+        }
+        else{
+            throw new Error('Erreur lors de la récuperation des liste');
+        }
+    })
+    .then(data =>{
+        const containerListe = document.getElementById('containerListe');
+        if (!containerListe) {
+            console.error("containerListe element not found in the DOM.");
+            return;
+        }
+        containerListe.innerHTML = '';
+        data.userList.forEach(list => {
+            const listItem = document.createElement('li');
+            listItem.classList.add('item')
+            listItem.innerHTML = `
+                <a href="infoList.html?id=${list.id}" class="films-links">${list.name}</a>
+            `;
+            containerListe.appendChild(listItem);
+        });
 
-/* ************************** AUTRES FONCTIONS ************************** */
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Erreur: ' + error.message);
+    });
+
+}
+
+// async function testAuth() {
+//     fetch(`http://localhost:3000/api/test-auth`, {
+//         method: "GET",
+//         mode: "cors",
+//         credentials: "include",
+//         // body: JSON.stringify(data)
+//     })
+//     .then(response => {
+//         if(response.ok){
+//             alert("yesss");
+//             console.log("yesss")
+//             return response.json();
+//         }
+//         else{
+//             alert("pb mw")
+//             console.log ("pb mw ");
+//         }
+//     })
+//     .then(data=>{
+//         console.log(data);
+//         alert('yess');
+//     })
+//     .catch(error => {
+//         console.log(error);
+//         alert('Erreur: ' + error.message);
+//     });
+// }
+  
+  
+
+/* ********************************************* AUTRES FONCTIONS ******************************************** */
 //fonction pour ouvrir popup page pour ajouter un film
 function showPopup() {
     const popup = document.getElementById('addMoviePopup');

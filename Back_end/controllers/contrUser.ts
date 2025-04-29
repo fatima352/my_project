@@ -70,16 +70,15 @@ export const commentFilm = async (ctx)=>{
 //ajouter un film a la collection
 //ajouter directement a partir de la page description film ou apartir de la page profil qui renvoie vers page recherche film avoir  
 export const addFilmCollection = async (ctx)=>{
-    const body = await ctx.request.body.json();
-    const {title} = body;
     const tokenData = ctx.state.tokenData;
     if(!tokenData){
-        ctx.response.status =401;
+        ctx.response.status = 401;
         ctx.response.body = {message: "Token non valide, utilisateur non connecter"};
-        console.log("problème token");
+        console.log("probleme token");
         return;
     }
-
+    const body = await ctx.request.body.json();
+    const {title} = body;
     const film = db.prepare(`SELECT id FROM film WHERE title = ?`).get(title) as {id:number} | undefined;
     if(!film){
         ctx.response.status = 404;
@@ -131,4 +130,34 @@ export const createList = async (ctx:Context)=>{
 export const addFilmListe = async (ctx)=>{
     const body = await ctx.request.body.json();
     // const {titel} = ctx
+}
+//recuperer les liste de l'utilisateur
+export const getUserList = async (ctx)=>{
+    const tokenData = ctx.state.tokenData;
+    if(!tokenData){
+        ctx.response.status =401;
+        ctx.response.body = {message: "Token non valide, utilisateur non connecter"};
+        console.log("probleme token");
+        return;
+    }
+    const username = tokenData.username;
+
+    const userId = db.prepare(`SELECT id FROM users WHERE username = ?`).get(username) as {id:number}|undefined;
+    if(!userId){
+        ctx.response.status = 401;
+        ctx.response.body = {message : "Utilisateur introuvable"};
+        console.log("Utilisateur introuvable");
+        return;
+    }
+
+    const userList = db.prepare(`SELECT * FROM liste WHERE userId = ?`).all(userId.id);
+    if(userList.length > 0){
+        ctx.response.status = 200;
+        ctx.response.body = {message : "Récupération des liste réussite", userList};
+        console.log("recuperation des liste reussite"); 
+        return;
+    }
+    ctx.response.status = 404;
+    ctx.response.body = {message : "Aucune liste créer"};
+    console.log("Aucune liste");
 }
