@@ -126,17 +126,17 @@ export const deleteFilmCollection = async (ctx)=>{
 
     const userId = db.prepare(`SELECT id FROM users WHERE username = ?`).get(tokenData.username) as {id: number}|undefined;
     if(!userId){
-        ctx.reponse.status = 401;
+        ctx.response.status = 401;
         ctx.response.body = {message:"Utilisateur introuvable"};
         console.log("Utilisateur introuvable");
         return;
     }
+
     console.log("user bien recuperer");
-
-    //recupere id film envoyer par le front
-
-    //supprimer
     db.prepare(`DELETE FROM library WHERE userId = ? AND filmId = ?`).run(userId.id,filmId);
+    ctx.response.status = 200;
+    ctx.response.body = {message: "Film supprimé avec succé"};
+    console.log("Film supprimé avec succé");
 }
 
 //permettre a l'utilisateur de commenter

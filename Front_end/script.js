@@ -843,8 +843,9 @@ function fetchDeleteFilmCollec(filmId){
         credentials : 'include',
         body : JSON.stringify({filmId : filmId})
     })
-    .then(response=> {
+    .then(response => {
         if(response.ok){
+            alert("Film supprimé avec succé");
             return response.json();
         }else{
             throw new Error('Erreur lors de la suppression du film');
