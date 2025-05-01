@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title> MOVIEW </title>
+        <link rel="stylesheet" href="Style/style.css">
+        <!-- pour les icones -->
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    </head>
+    <body  onload="authUser();getFilmsList()"class="films-body">
+        <header>
+            <h2 class="logo">MOVIEW</h2> 
+            <nav class="navigation">
+                <ul class= "menu"id="menu">
+                    <li class="menu-home">
+                        <a href="index.html" class="nav-link">
+                            <span class="link-text">HOME</span>
+                        </a>
+                    </li>
+                      <li id="menu-films">
+                        <a href="films.html" class="nav-link">
+                            <span class="link-text">MOVIES</span>
+                        </a>
+                    </li>
+                      <li id="menu-lists">
+                        <a href="lists.html" class="nav-link">
+                            <span class="link-text">LISTS</span>
+                        </a>
+                    </li>
+                    <li id="menu-login">
+                        <a href="login.html" class="nav-link">
+                            <span class="link-text">LOGIN</span>
+                        </a>
+                    </li>
+                      <li id="menu-register">
+                        <a href="register.html" class="nav-link">
+                            <span class="link-text">REGISTER</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <section class="all-films">
+            <div id= "mini-headers" class="mini-headers">
+                <h3 id="nameList" class="titre"></h3>
+                <div id="UserAction" class="adminAction">
+                    <!-- ajouter un boutton add si proprietaire -->
+                     <button id="ajoutfilm" class="btn-addFilm" onclick="showPopup()">Add Film</button>
+                </div>
+            </div>
+            <hr class="line">
+            <ul id="filmsContainer" class="list">
+                <!-- cree un autre element a chauque fois que l'admin ajoute un film  -->
+            </ul>
+            </div>
+      
+        </section>
+
+        <!-- FENÊTRE POPUP -->
+        <div id="addMoviePopup" class="popup hidden">
+            <div class="popup-content-delete">
+                <div class="headerpop">
+                    <h2 class="popuptitle">Add a New Movie</h2>
+                    <span class="close-btn" onclick="closePopup()">&times;</span>
+
+                </div>
+                <div class="addfilm" id="addfilm">
+                    <div class="mini">
+                        <label for="titlefilm">Title:</label>
+                        <input class="input" type="text" id="titlefilm" name="title" required>
+                    </div>
+                    <button class="btn add" type="submit" onclick="addFilmList()">Add Movie</button>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="script.js"></script> <!-- script pour les fetchs-->
+</html>
