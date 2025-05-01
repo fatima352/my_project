@@ -2,7 +2,7 @@
 import { DatabaseSync } from "node:sqlite";
 export const db = new DatabaseSync("/Users/fatima/my_project/Back_end/database/data.db");
 
-//table des utiliasateurs
+/* TABLE UTILISATEUR */
 db.exec(`
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -13,7 +13,7 @@ db.exec(`
     );
 `)
 
-//table de film
+/* TABLE FILM */
 db.exec(`
     CREATE TABLE IF NOT EXISTS film (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -23,9 +23,7 @@ db.exec(`
         description TEXT
     );
 `)
-
-//table bibliothéque stocker les films
-// bibliothèque des film de l'utilisateur
+/* TABLE COLLECTION DE FILM DE L'UTILISATEUR */
 db.exec(`
     CREATE TABLE IF NOT EXISTS library(
         userId INTEGER NOT NULL,
@@ -36,7 +34,7 @@ db.exec(`
     );
 `)
 
-//table des avis/commentaires des films
+/* TABLE COMMENTAIRE DES FILMS */
 db.exec(`
    CREATE TABLE IF NOT EXISTS reviews (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -50,7 +48,9 @@ db.exec(`
     );
 `)
 
-// association film et liste 
+/* TABLE ASSOCIATION LIST FILM 
+     --> Les films que contient la liste
+ */
 db.exec(`
     CREATE TABLE IF NOT EXISTS listeFilm(
         listeId INTEGER NOT NULL,
@@ -61,8 +61,9 @@ db.exec(`
         );
 `)
 
-//table des listes
-// liste cree par l'utilisateur pour organiser le stocage de  
+/* TABLE LISTE 
+     --> Liste que posséde un utilisateur
+*/
 db.exec(`
     CREATE TABLE IF NOT EXISTS liste (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -72,29 +73,7 @@ db.exec(`
     );
 `)
 
-//tables de likes d'une liste
-db.exec(`
-    CREATE TABLE IF NOT EXISTS likeListes(
-        listeId INTEGER NOT NULL,
-        userId INTEGER NOT NULL,
-        PRIMARY KEY (listeId, userId),
-        FOREIGN KEY (listeId) REFERENCES listes(id) ON DELETE CASCADE,
-        FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
-    );
-`)
-
-//table likes des films
-db.exec(`
-    CREATE TABLE IF NOT EXISTS likeFilm(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        filmId INTERGER NOT NULL,
-        userId INTEGER NOT NULL,
-        FOREIGN KEY (filmId) REFERENCES films(id) ON DELETE CASCADE,
-        FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
-    );
-`)
-
-//table commentaire d'une liste 
+/* TABLE COMMENTAIRE DES LISTES */
 db.exec(`
     CREATE TABLE IF NOT EXISTS commentList(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -107,7 +86,7 @@ db.exec(`
     );
 `)
 
-//table notification
+/* TABLE NOTIFICATIONS */
 db.exec(`
     CREATE TABLE IF NOT EXISTS notification(
         id INTEGER PRIMARY KEY AUTOINCREMENT,

@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title> MOVIEW </title>
         <link rel="stylesheet" href="Style/style.css">
-        <!-- pour les icones -->
+        <!-- Pour les icones -->
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     </head>
     <body  onload="getMovies();authUser();checkAdminAccess()"class="films-body">
@@ -45,12 +45,12 @@
             <div class="mini-headers">
                 <h3 class="titre">FILMS</h3>
                 <div id="adminAction" class="adminAction">
-                    <!-- ajouter un boutton add si admin -->
+                    <!-- Boutton "Add Movie" -->
                 </div>
             </div>
             <hr class="line">
             <ul id="filmsContainer" class="list">
-                <!-- cree un autre element a chauque fois que l'admin ajoute un film  -->
+                <!-- Ajout des films ici  -->
             </ul>
             </div>
       
@@ -60,29 +60,33 @@
                 <div class="headerpop">
                     <h2 class="popuptitle">Add a New Movie</h2>
                     <span class="close-btn" onclick="closePopup()">&times;</span>
-
                 </div>
+
                 <div class="addfilm" id="addfilm">
                     <div class="mini">
                         <label for="titlefilm">Title:</label>
                         <input class="input" type="text" id="titlefilm" name="title" required>
                     </div>
+
                     <div class="mini">
                         <label for="datefilm">Release Date:</label>
                         <input class="input" type="text" id="datefilm" name="date" required>    
                     </div>
+
                     <div class="mini">
                         <label for="posterURL">Poster URL:</label>
                         <input class="input" type="text" id="posterURL" name="posterURL" required>    
                     </div>
+
                     <div class="mini">
                         <label for="descriptionfilm">Description:</label>
                         <textarea class="input desc" id="descriptionfilm" name="description" required></textarea>
                     </div>
+
                     <button class="btn add" type="submit" onclick="addFilm(event)">Add Movie</button>
                 </div>
             </div>
         </div>
     </body>
-    <script src="script.js"></script> <!-- script pour les fetchs-->
+    <script src="script.js"></script> 
 </html>

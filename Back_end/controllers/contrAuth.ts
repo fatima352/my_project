@@ -4,15 +4,25 @@ import {Context} from "https://deno.land/x/oak@v17.1.4/mod.ts";
 import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
 import { create, verify } from "https://deno.land/x/djwt/mod.ts";
 
-
-//fonction pour hasher les mots de passe
+// Fonction pour hasher les mots de passes
 const get_hash = async (password: string) => {
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password,salt);
     return hash;
 }
 
-//fonction pour s'inscrire
+// Fonction pour effacer les token 
+// But: évite qu'un user aie plusieurs sessions
+function removeTokenByUser(user: string) {
+    for (const token in   mw.tokens) {
+      if ( mw.tokens[token] === user) {
+        delete   mw.tokens[token];
+        break;
+      }
+    }
+}
+
+// Fonction pour s'inscrire
 export const register = async(ctx:Context)=>{
     // const {username, email, password} = await ctx.request.body.json().value;
 
@@ -42,7 +52,7 @@ export const register = async(ctx:Context)=>{
     }
 }
 
-//fonction pour se connecter
+// Fonction pour se connecter
 export const login = async(ctx:Context)=>{
     const body = await ctx.request.body.json();
     const { username, password } = body;
@@ -76,16 +86,20 @@ export const login = async(ctx:Context)=>{
     const role = user?.role;
     //utilisation de l'username et du role pour créer le token ou pas ?
     // const token = await create({alg: "HS512", typ: "JWT"}, {username, role}, secretKey );
-    const token = await create({alg: "HS512", typ: "JWT"}, {username,role}, mw.secretKey );
+    const token = await create({alg: "HS512", typ: "JWT"}, {username,role},  mw.secretKey );
+
+    removeTokenByUser(username);//supprimer token si existant commme ca un seule session par utilisateur
+
     mw.tokens[username] = token; //stocké le token de l'utilisateur
 
-    // ctx.response.headers.set("Set-Cookie", `auth_token; HttpOnly; SameSite=Strict; Max-Age=3600`); ?????
+    // ctx.response.headers.set("Set-Cookie", `auth_token; HttpOnly; SameSite=Strict; Max-Age=3600`); //?????
     ctx.response.headers.set("Set-Cookie", `auth_token=${token}; HttpOnly; SameSite=Strict; Max-Age=3600`);
 
     ctx.response.status = 200;
     ctx.response.body = {message: "Connexion réussie"};//ajout du token dans le body ???
 }
 
+// Fonction pour se deconnecter
 export const logout = async (ctx:Context) => {
     const cookies = ctx.cookies;
   

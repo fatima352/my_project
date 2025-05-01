@@ -44,12 +44,12 @@
         <div class="main-page">
             <section class="sous-header">
                 <div class="film-container">
-                  <!-- Photo de profil -->
+
                   <div class="profil">
                     <span id="poster" class="icon-profil">
                       <!-- <img src="fav.png" alt="image" class="poster"> -->
                     </span>
-                    <!-- TITRE FILM -->
+
                     <div class="titrefilm">
                         <h3 class="iduser" id="titreFilm">
                             Title
@@ -57,19 +57,16 @@
                     </div>
                   </div>
 
-                  <!-- <p class="anne">2003</p>  -->
-
-                  <!-- Bouton modifier (à remplir) -->
                   <div id="actionModif" class="bouton-edit">
-                 
-                    <!-- Par exemple : -->
-                    <!-- <button class="btn-edit">Modifier</button>  
-                    <button class="btn-edit">Supprimer</button>   -->
-                
+                    <!-- Visible que quand admin
+                    <button class="btn-edit">Modifier</button>  
+                    <button class="btn-edit">Supprimer</button>   
+                    -->
                    </div>
+
                 </div>
             </section>
-            <div class="container">
+            <div class="container description">
                 <div class="mini-headers">
                 <h3 class="titre">DESCRIPTION</h3>
                 <div class="userActions">
@@ -82,15 +79,13 @@
                 <!-- DESCRIPTION DU FILM -->
                 <div class="description-film">
                     <p id="description-film">
-                       
                         PAS DES FILM
-
+                        <!-- Ajout de la description du film -->
                     </p>
                 </div>
-
             </div>
 
-            <div class="container">
+            <div class="container commentaires">
                 <div class="mini-headers">
                     <h3 class="titre">REVIEWS</h3>
                     <div class="userActions">
@@ -102,12 +97,15 @@
                     </div>
                 </div>
                 <hr class="line">
-                <lu class="list">
+                <ul class="list">
                     <li class="item">
-                            <p> REVIEWS </p>
+                        <a href="#" class="nav-link">
+                            <p> REVIEWS
+                                <!-- Ajout des commentaires ici -->
+                            </p>
                         </a>
                     </li>
-                </lu>
+                </ul>
             </div>
         </div>
 
@@ -117,7 +115,7 @@
             <div class="popup-content">
                 <div class="headerpop">
                     <h2 class="popuptitle">EDIT</h2>
-                    <span class="close-btn" onclick="closePopupEdit()">&times;</span>
+                    <span class="close-btn" onclick="closePopup()">&times;</span>
                 </div>
                 <div class="addfilm" id="addfilm">
                     <div class="mini">
@@ -145,7 +143,7 @@
             <div class="popup-content-delete">
                 <div class="headerpop">
                     <h2 class="popuptitle">DELETE</h2>
-                    <span class="close-btn" onclick="closePopupDelete()">&times;</span>
+                    <span class="close-btn" onclick="closePopup2()">&times;</span>
                 </div>
                 <div class="addfilm" id="addfilm">
                     <div class="mini">

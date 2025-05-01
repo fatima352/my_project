@@ -3,17 +3,17 @@ import {Context} from "https://deno.land/x/oak@v17.1.4/mod.ts";
 import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
 import { create, verify } from "https://deno.land/x/djwt/mod.ts";
 
-//Clés secrete pour sécuriser les tokens JWT
+//Clés secréte pour sécuriser les tokens JWT
 export const secretKey = await crypto.subtle.generateKey(
     { name: "HMAC", hash: "SHA-512" },
     true,
     ["sign", "verify"]
 );
 
-//tableau pour stoker les tokens
+//Tableau pour stocker les tokens
 export const tokens: {[key: string]: string} = {};
 
-// Middleware to verify JWT token (partie 3)
+// Middleware pour vérifier les Tokens (connections des utilisateurs)
 export const authMw = async (ctx: Context, next: () => Promise<unknown>) => {
 
   const cookie = ctx.request.headers.get("cookie");
@@ -36,7 +36,6 @@ export const authMw = async (ctx: Context, next: () => Promise<unknown>) => {
     ctx.response.body = { error: "Unauthorized: Invalid token" };
   }
 };
-
 
 //Middelware pour proteger les routes de l'admin
 export const adminMw = async(ctx : Context, next:() => Promise<unknown>)=>{

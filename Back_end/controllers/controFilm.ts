@@ -2,60 +2,50 @@ import { db } from "../database/data.ts";
 import {Context} from "https://deno.land/x/oak@v17.1.4/mod.ts";
 
 
-//fonction pour recuperer tout les films
+//Fonction pour récupérer tous les films de la base de données
 export const getAllFilms = async (ctx:Context) => {
     try {
         const films = db.prepare(`SELECT * FROM film`).all(); // Fetch all films from the "film" table
         ctx.response.status = 200;
         ctx.response.body = { films }; // Return the films as JSON
-        console.log("Films fetched successfully:");
+        console.log("Films récupérer avec succé");
     } catch (error) {
-        console.error("Error fetching films:", error);
+        console.error("Erreur lors de la récupérartion:", error);
         ctx.response.status = 500;
         ctx.response.body = { message: "Erreur lors de la récupération des films" };
     }
 };
 
-//fonction pour ajouter un film
+// Fonction pour ajouter un film à la base de données (Accés admin uniquement)
+// --> ameliorations : ajouter websocket
 export const addFilm = async (ctx:Context) =>{
     const body = await ctx.request.body.json();
     const {title, date, posterURL, description} = body;
+    
     if(!title || !date || !posterURL || !description){
         ctx.response.status = 400;
-        ctx.response.body = {message : "Tout les champs sont obligatoires"};
-        console.log("Tout les champs sont obligatoires");
+        ctx.response.body = {message : "Tous les champs sont obligatoires"};
+        console.log("Tous les champs sont obligatoires");
         return;
     }
     const film = db.prepare(`SELECT * FROM film WHERE title = ?`).get(title) as {title: string} | undefined;
 
     if(film){
         ctx.response.status = 409;
-        ctx.response.body = {message: "Film deja existant"};
-        console.log("Film deja existant");
+        ctx.response.body = {message: "Film déjà existant"};
+        console.log("Film déjà existant");
         return;
     }
 
     db.prepare(`INSERT INTO film (title, date, posterURL, description) VALUES (?, ?, ?, ?)`).run(title, date, posterURL, description);
     ctx.response.status = 201;
-    ctx.response.body = {message: "Film ajouter avec succes"};
-    console.log("Film ajouter avec succes");
-
-    //PARTIE WEBSOCKET MIS A JOUR AUTOMATIQUE DE LA BIBLOTHEQUE 
-    // // Emit the new film to all connected WebSocket clients
-    // for (const connection of connections) {
-    //     if (connection.readyState === WebSocket.OPEN) {
-    //         connection.send(JSON.stringify({ action: "addFilm", film: { title, date, posterURL, description } }));
-    //     }
-    // }
-    // console.log("Film emitted to WebSocket clients");
-
+    ctx.response.body = {message: "Film ajouter avec succés"};
+    console.log("Film ajouter avec succés");
 }
 
-//recuperer un film (j'ai enlever async sans test)
+// Fonction pour récupérer les informations d'un film
 export const getFilm = (ctx:Context)=>{
-    // const body = await ctx.request.body.json(); car la fonction c'est un get et pas un post
-    // const {id} = body;
-    const id = ctx.params.id;//recupere le parametre du url
+    const id = ctx.params.id;
     if(!id){
         ctx.response.status = 400;
         ctx.response.body = { message: "ID manquant dans l'URL" };
@@ -65,14 +55,15 @@ export const getFilm = (ctx:Context)=>{
     const film = db.prepare(`SELECT * FROM film WHERE id = ?`).get(id) as {id: number} | undefined;
     if(!film){
         ctx.response.status = 404;
-        ctx.response.body = {message: "Le film n'existe pas dans la base de donnée"};
-        console.log("Le film n'existe pas dans la base de donnée");
+        ctx.response.body = {message: "Le film n'existe pas dans la base de données"};
+        console.log("Le film n'existe pas dans la base de données");
         return;
     }
    ctx.response.status = 200;
    ctx.response.body = {message:"Film trouvé", film};
 }
 
+//Fonction pour mettre à jour les information d'un film (Accés Admin)
 export const updateFilm = async (ctx:Context)=>{
     const body = await ctx.request.body.json();
     const {title, date, posterURL, description} = body;
@@ -109,6 +100,7 @@ export const updateFilm = async (ctx:Context)=>{
 
 }
 
+// Fonction pour supprimer un film de la base de données (Accés Admin)
 export const deleteFilm = async(ctx:Context)=>{
     const id = ctx.params.id;
     if(!id){
