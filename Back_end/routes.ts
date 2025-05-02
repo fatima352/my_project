@@ -98,7 +98,7 @@ router.delete('/api/liste', mw.authMw, ListCtr.deleteList);
  */
 
 // Route pour ajouter un commentaire
-router.post('/api/films/:id/reviews', reviewCtr.commentFilm);
+router.post('/api/films/:id/reviews',mw.authMw, reviewCtr.commentFilm);
 
 
 

@@ -104,12 +104,12 @@ export const getUserCollection = (ctx)=>{
         return;
     }
     const userCollection = db.prepare(`SELECT * FROM library, film WHERE userId = ? AND library.filmId = film.id`).all(userId.id);
-    if(userCollection.length <= 0){
-        ctx.response.status = 404;
-        ctx.response.body = {message : "Aucun film dans la collection"};
-        console.log("Aucun film dans la collection");
-        return;
-    }
+    // if(userCollection.length <= 0){
+    //     ctx.response.status = 404;
+    //     ctx.response.body = {message : "Aucun film dans la collection"};
+    //     console.log("Aucun film dans la collection");
+    //     return;
+    // }
     ctx.response.status = 200;
     ctx.response.body = {message : "Récupération de la collection réussite", userCollection};
     console.log("recuperation de la collection reussite");

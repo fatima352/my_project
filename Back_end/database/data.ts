@@ -36,7 +36,7 @@ db.exec(`
 
 /* TABLE COMMENTAIRE DES FILMS */
 db.exec(`
-   CREATE TABLE IF NOT EXISTS reviews (
+   CREATE TABLE IF NOT EXISTS reviewsfilm (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         userId INTEGER NOT NULL,
         filmId INTEGER NOT NULL,
@@ -44,7 +44,7 @@ db.exec(`
         date TEXT NOT NULL, 
         rating INTEGER CHECK(rating BETWEEN 1 AND 5),
         FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
-        FOREIGN KEY (filmId) REFERENCES films(id) ON DELETE CASCADE
+        FOREIGN KEY (filmId) REFERENCES film(id) ON DELETE CASCADE
     );
 `)
 

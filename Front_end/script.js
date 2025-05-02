@@ -224,11 +224,23 @@ function authUser(event){
         //     // UserAction.appendChild(buttonUpdate);
 
         // }
+        //Ajouter un commentaire utilisateur
+        const userActions = document.getElementById('userActions');
+        if(userActions){
+            const btnCommenter = document.createElement('button');
+            btnCommenter.className = 'btn-addFilm';
+            btnCommenter.innerText = 'Commenter';
+            btnCommenter.onclick = showPopup4;
+            userActions.appendChild(btnCommenter);
+        }
 
 })
     .catch(error => {
         console.error("Error:", error);
-        // window.location.href = 'login.html';
+        const pageProfil = document.getElementById('profil');
+        if(pageProfil){
+            window.location.href = 'login.html';
+        }
     });
 }
 
@@ -328,6 +340,7 @@ function fetchAddMovieCollection(){
     });
 }
 
+// Fonction fetch pour récupérer la collection de l'utilisateur
 function getUserCollection(){
     fetch(`http://localhost:3000/api/collection`,{
         method : 'GET',
@@ -378,6 +391,61 @@ function getUserCollection(){
 
 }
 
+// Fonction fetch pour commenter un film
+function fetchCommenterFilm(){
+    const contenu = document.getElementById('contenu').value;
+    const date = document.getElementById('date').value;
+    const rating = document.getElementById('rating').value;
+
+    const params = new URLSearchParams(window.location.search);
+    const idFilm = params.get("id");
+
+    const data = {idFilm,contenu,date,rating};
+
+    fetch(`http://localhost:3000/api/films/${idFilm}/reviews`,{
+        method:'POST',
+        mode : 'cors',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },        
+        body: JSON.stringify(data)
+
+    })
+    .then(response =>{
+        if(response.ok){
+            return response.json();
+        }else {
+            switch(response.status){
+                case 400:
+                    alert("Requête invalide : Film introuvable");
+                    throw new Error("Requête invalide : Film introuvable");
+                case 401:
+                    alert("Non autorisé : Utilisateur non connecté");
+                    throw new Error("Non autorisé : Utilisateur non connecté");
+                case 500:
+                    alert("Erreur serveur : Veuillez réessayer plus tard");
+                    throw new Error("Erreur serveur : Veuillez réessayer plus tard");
+                default:
+                    alert("Erreur inconnue : " + response.status);
+                    throw new Error("Erreur inconnue : " + response.status);
+            }
+        }
+        
+    })
+    .then(data=>{
+        console.log("Réponse reçue : ", data);
+        alert(data.message);
+    })
+    .catch(error => {
+        console.error("Erreur:", error.message);
+    });
+}
+
+// Fonction fetch pour récupérer les commentaires d'un film
+function getReviews(){
+
+}
 
 /*--- GESTIONS DES FILMS ---*/
 
@@ -955,12 +1023,12 @@ function AddMovieCollection(){
     closePopup2();
 }
 
-// --> Fonction popup pour supprimer une liste apartir d'un bouton
-let listeToDelete; // Variable pour stocker l'ID de la liste à supprimer
+// --> Fonction popup pour supprimer une liste ou film de la collection a partir d'un bouton
+let aSupprimer; // Variable pour stocker l'ID de la liste à supprimer
 
-function showPopup3(listId) {
+function showPopup3(Id) {
 
-    listeToDelete = listId;
+    aSupprimer = Id;
     const popupDeleteList = document.getElementById('DeleteListPopup');
     const popupDeleteFilm = document.getElementById('DeleteFilmPopup');
 
@@ -983,15 +1051,34 @@ function closePopup3() {
         popupDeleteFilm.classList.add('hidden');
     }
 
-    listeToDelete = null;
+    aSupprimer = null;
 }
 
 function deleteList(){
-    fetchDeleteList(listeToDelete);
+    fetchDeleteList(aSupprimer);
     closePopup3();
 }
 
 function deleteFilmColl(){
-    fetchDeleteFilmCollec(listeToDelete);
+    fetchDeleteFilmCollec(aSupprimer);
     closePopup3();
+}
+
+
+
+// Fonction pour afficher la fenetre popup de l'ajout de film
+function showPopup4() {
+    const popup = document.getElementById('popupComment');
+    popup.classList.remove('hidden');
+}
+
+// Fonction pour fermer la fenetre popup de l'ajout de film
+function closePopup4() {
+    const popup = document.getElementById('popupComment');
+    popup.classList.add('hidden');
+}
+
+function commenter(){
+    fetchCommenterFilm();
+    closePopup4();
 }
