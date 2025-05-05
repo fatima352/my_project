@@ -649,5 +649,39 @@ h1{
 }
 
 
+/* REVIEWS DES FILMS */
+
+/* Style for the review container */
+.infoReview {
+    display: flex;
+    flex-direction: column;
+    background-color: #f9f9f9; /* Light background for contrast */
+    border: 1px solid #ddd; /* Subtle border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 16px; /* Spacing inside the container */
+    margin-bottom: 12px; /* Space between reviews */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* Style for the username link */
+.infoReview .films-links {
+    font-weight: bold;
+    color: #007BFF; /* Blue color for links */
+    text-decoration: none;
+    margin-bottom: 8px; /* Space below the username */
+}
+
+.infoReview .films-links:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+/* Style for the review content */
+.infoReview .reviewContenu {
+    font-size: 14px;
+    color: #333; /* Darker text for readability */
+    line-height: 1.5; /* Better line spacing */
+}
+
+
 
 

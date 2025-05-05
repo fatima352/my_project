@@ -1,7 +1,7 @@
 /************************************************************ */
 /*********************  FONCTIONS FETCHS  *********************/
 /************************************************************ */
-
+// Établir la connexion WebSocket
 
 /*--- AUTHENTIFICATIONS ---*/
 
@@ -23,7 +23,7 @@ function registerUser(event) {
     //Envoyer les données vers le backend avec la méthode POST
     fetch(`http://localhost:3000/register`, {
         method: 'POST',
-        mode: 'cros',
+        // mode: 'cros',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -444,7 +444,47 @@ function fetchCommenterFilm(){
 
 // Fonction fetch pour récupérer les commentaires d'un film
 function getReviews(){
+    const params = new URLSearchParams(window.location.search);
+    const idFilm = params.get("id");
 
+    fetch(`http://localhost:3000/api/films/${idFilm}/reviews`,{
+        method:'GET',
+        mode : 'cors'
+    })
+    .then(response => {
+        if(response.ok){
+            return response.json();
+        }else{
+            switch(response.status){
+                case 400:
+                    alert("Requête invalide : Commentaire introuvable");
+                    throw new Error("Requête invalide : Film introuvable");
+                case 500:
+                    alert("Erreur serveur : Veuillez réessayer plus tard");
+                    throw new Error("Erreur serveur : Veuillez réessayer plus tard");
+                default:
+                    alert("Erreur inconnue : " + response.status);
+                    throw new Error("Erreur inconnue : " + response.status);    
+            }
+        }
+    })
+    .then(data => {
+        const reviewsContainer = document.getElementById('reviewsContainer');
+        reviewsContainer.innerHTML = '';
+        data.reviews.forEach(review => {
+            const reviewItem = document.createElement('li');
+
+            reviewItem.classList.add('item_review')
+            reviewItem.innerHTML = `
+               <div class="infoReview">
+               <a href="#" class="films-links">${review.username} </a>
+                <p class="reviewContenu">${review.contenu}</p>
+               </div>
+               
+            `;
+            reviewsContainer.appendChild(reviewItem);
+        });
+    })
 }
 
 /*--- GESTIONS DES FILMS ---*/
@@ -549,7 +589,7 @@ function fetchaddFilm(){
     .then(data => {
         console.log(data);
         alert('Film ajouté avec succès !');
-        window.location.href = 'films.html';
+        // window.location.href = 'films.html';
     })
 
 }

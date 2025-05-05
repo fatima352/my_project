@@ -13,7 +13,7 @@ export const getUser = async(ctx:Context)=>{
     ctx.response.body = {message : "token recuperer", username: tokenData.username, role:tokenData.role};
 }
 
-//Fonction popur ajouter un film à la collection
+//Fonction pour ajouter un film à la collection
 export const addFilmCollection = async (ctx)=>{
 
     const tokenData = ctx.state.tokenData;
@@ -42,8 +42,8 @@ export const addFilmCollection = async (ctx)=>{
     const dejaAjouter = db.prepare(`SELECT * FROM library WHERE filmId = ? AND userId = ?`).get(film.id,userId.id);
     if(dejaAjouter){
         ctx.response.status = 404;
-        ctx.response.body = {message:"Film déjà ajouter"};
-        console.log("Film déjà ajouter");
+        ctx.response.body = {message:"Film déjà ajouté"};
+        console.log("Film déjà ajouté");
         return;
     }
     
@@ -132,11 +132,11 @@ export const deleteFilmCollection = async (ctx)=>{
         return;
     }
 
-    console.log("user bien recuperer");
+    console.log("user bien récupéré");
     db.prepare(`DELETE FROM library WHERE userId = ? AND filmId = ?`).run(userId.id,filmId);
     ctx.response.status = 200;
-    ctx.response.body = {message: "Film supprimé avec succé"};
-    console.log("Film supprimé avec succé");
+    ctx.response.body = {message: "Film supprimé avec succès"};
+    console.log("Film supprimé avec succès");
 }
 
 //permettre a l'utilisateur de commenter

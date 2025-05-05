@@ -8,6 +8,7 @@ import * as filmCtrl from "./controllers/controFilm.ts";//controllers pour les f
 import * as reviewCtr from "./controllers/contrReview.ts";//contreollers popur la gestion des commentaires
 import * as ListCtr from "./controllers/contrListe.ts";
 
+
 export const router = new Router();
 
 const connections: WebSocket[] = [];  //stock les requetes 
@@ -99,17 +100,9 @@ router.delete('/api/liste', mw.authMw, ListCtr.deleteList);
 
 // Route pour ajouter un commentaire
 router.post('/api/films/:id/reviews',mw.authMw, reviewCtr.commentFilm);
+router.get('/api/films/:id/reviews', reviewCtr.getFilmReview);
 
 
-
-
-//testes middlexware
-// router.get("/api/test-auth", mw.authMw, (ctx) => {
-//     ctx.response.body = {
-//       message: "Access granted",
-//       user: ctx.state.tokenData,
-//     };
-//   });
   
 
 
