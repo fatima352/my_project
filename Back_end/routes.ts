@@ -1,6 +1,8 @@
 import {Router, Context} from "https://deno.land/x/oak@v17.1.4/mod.ts";
 
 import * as mw from "./middlewares.ts"; 
+// import { WebSocket } from "https://deno.land/std/ws/mod.ts"; // Importation de WebSocket
+import { handleWsConnection } from "./websocket.ts"; // Importation de la fonction pour gérer les connexions WebSocket
 
 import * as userCtrl from "./controllers/contrUser.ts";//contreollers pour les fonctionnalité des utilisateurs
 import * as authCtrl from "./controllers/contrAuth.ts";//controllers pour l'authentification
@@ -11,10 +13,12 @@ import * as ListCtr from "./controllers/contrListe.ts";
 
 export const router = new Router();
 
-const connections: WebSocket[] = [];  //stock les requetes 
 // Route popur les ws
-// router.get("/ws", mw.authMw, (ctx) => userCtrl.WebSocket(ctx, connections));// router.get("/register", cont.showRegister);//pour recupere la page register
-
+// router.get("/ws", mw.authMw, (ctx) => userCtrl.WebSocket(ctx, connections));
+router.get("/ws", async (ctx) => {
+    const socket = await ctx.upgrade();
+    handleWsConnection(socket);
+  });
 
 
 /*

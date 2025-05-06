@@ -1,6 +1,6 @@
 import { db } from "../database/data.ts";
 import {Context} from "https://deno.land/x/oak@v17.1.4/mod.ts";
-import { notifyNewFilm } from "../websocket.ts";
+import { notifyDeleteFilm, notifyNewFilm } from "../websocket.ts";
 
 
 //Fonction pour récupérer tous les films de la base de données
@@ -42,6 +42,7 @@ export const addFilm = async (ctx:Context) =>{
         const newFilm = { title, date, posterURL, description };
         db.prepare(`INSERT INTO film (title, date, posterURL, description) VALUES (?, ?, ?, ?)`).run(title, date, posterURL, description);
         notifyNewFilm(newFilm);
+
         ctx.response.status = 201;
         ctx.response.body = {message: "Film ajouté avec succès"};
         console.log("Film ajouté avec succès");
@@ -72,8 +73,10 @@ export const getFilm = (ctx:Context)=>{
             console.log("Le film n'existe pas dans la base de données");
             return;
         }
-       ctx.response.status = 200;
-       ctx.response.body = {message:"Film trouvé", film};
+
+        ctx.response.status = 200;
+        ctx.response.body = {message:"Film trouvé", film};
+
     } catch (error) {
         ctx.response.status = 500;
         ctx.response.body = { message: "Erreur serveur", error: error.message };
@@ -144,9 +147,11 @@ export const deleteFilm = (ctx:Context)=>{
         }
     
         db.prepare(`DELETE FROM film WHERE id = ?`).run(id);
+
+        notifyDeleteFilm(film);
         ctx.response.status = 200;
-        ctx.response.body = {message: "Suprimer avec succe"};
-        console.log("film supprimer");
+        ctx.response.body = {message: "Supprimé avec succès"};
+        console.log("film supprimé");
     }
     catch(error){
         ctx.response.status = 500;

@@ -1,51 +1,72 @@
 // backend/ws.ts
 
-import { Application } from "https://deno.land/x/oak/mod.ts";
+// import { WebSocket } from "https://deno.land/std@0.51.0/ws/mod.ts";
+const sockets: WebSocket[] = [];
 
-// Stockage des connexions WebSocket
-const sockets = new Set<WebSocket>();
+// Ajouter un nouveau client
+export function handleWsConnection(socket: WebSocket) {
+  console.log("WebSocket connecté...");
+  sockets.push(socket);
+  console.log("Client WebSocket connecté");
 
-// Fonction pour diffuser un message à tous les clients connectés
-function broadcast(message: string): void {
-  for (const socket of sockets) {
-    if (socket.readyState === WebSocket.OPEN) {
-      socket.send(message);
+  socket.onclose = () => {
+    const index = sockets.indexOf(socket);
+    if (index > -1) sockets.splice(index, 1);
+    console.log("Client WebSocket déconnecté");
+  };
+
+  socket.onerror = () => {
+    const index = sockets.indexOf(socket);
+    if (index > -1) sockets.splice(index, 1);
+    console.log("Erreur WebSocket");
+  };
+
+  // Tu peux aussi gérer les messages reçus si besoin
+  socket.onmessage = (event) => {
+    console.log("Message reçu du client :", event.data);
+
+    const data = JSON.parse(event.data);
+    if (data.type === "NEW_FILM") {
+      // Traitez le message ici si nécessaire
+      console.log("Nouveau film ajouté:", data.title);
     }
-  }
+    if (data.type === "DELETE_FILM") {
+      // Traitez le message ici si nécessaire
+      console.log("Film supprimé:", data.title);
+    }
+  };
 }
 
-// Fonction pour initialiser WebSocket
-export function initWebSocket(app: Application): void {
-  // Gestion des connexions WebSocket
-  app.use(async (ctx, next) => {
-    if (ctx.request.url.pathname === "/ws") {
-      const socket = await ctx.upgrade();
-      
-      sockets.add(socket);
-      
-      socket.onopen = () => {
-        console.log("Nouveau client WebSocket connecté");
-      };
-      
-      socket.onmessage = (event) => {
-        // Tu peux gérer les messages entrants ici si besoin
-        console.log("Message reçu:", event.data);
-      };
-      
-      socket.onclose = () => {
-        sockets.delete(socket);
-        console.log("Client WebSocket déconnecté");
-      };
-    } else {
-      await next();
+// Notifier tous les clients
+export function notifyNewFilm(filmData: any) {
+  const message = JSON.stringify({
+    type: "NEW_FILM",
+    data: filmData,
+  });
+
+  sockets.forEach((socket) => {
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(message);
     }
   });
 }
 
-// Fonction pour notifier les nouveaux films
-export function notifyNewFilm(filmData: any): void {
-  broadcast(JSON.stringify({
-    type: "NEW_FILM",
-    data: filmData
-  }));
+export function notifyDeleteFilm(filmData: any) {
+  const message = JSON.stringify({
+    type: "DELETE_FILM",
+    data: filmData,
+  });
+
+  sockets.forEach((socket) => {
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(message);
+    }
+  });
+}
+
+export function notifyNewReviewFilm(reviewData: any ){
+  const message = JSON.stringify({
+    type: "ADD_REVIEWFILM",
+    data: reviewData,
+  });
 }
