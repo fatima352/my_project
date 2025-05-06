@@ -8,11 +8,11 @@
         <!-- pour les icones -->
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     </head>
-    <body onload="getUser()" class="profil-body">
+    <body id="profil" onload="authUser();getUserLists(); getUserCollection()" class="profil-body">
         <header class="header">
             <h2 class="logo">MOVIEW</h2> 
             <nav class="navigation">
-                <ul class= "menu" id="menu">
+                <ul class= "menu" id="menu-profil">
                     <li class="menu-home">
                         <a href="index.html" class="nav-link">
                             <span class="link-text">HOME</span>
@@ -34,12 +34,12 @@
         <div class="main-page">
             <section class="sous-header">
                 <div class="profil-container">
-                  <!-- Photo de profil -->
+                  
                   <div class="profil">
                     <span class="icon-profil">
                       <img src="fav.png" alt="image" class="profil-img">
                     </span>
-                    <!-- Nom de l'utilisateur -->
+                   
                     <div class="name-user">
                         <h3 class="iduser" >
                             <p id="username"></p>
@@ -59,21 +59,13 @@
                 <div class="mini-headers">
                 <h3 class="titre">COLLECTION</h3>
                 <div class="userActions">
-                    <button class="btn-add">Ajouter film</button>
+                    <button class="btn-addFilm" onclick="showPopup2()">Add movie</button>
                 </div>
                 </div>
                 <hr class="line">
                 
-                <lu class="list">
-                    <li class="item">
-                        <img src="fav.png" alt="image-film" class="img">
-                        <a href="#" class="films-links"> film 1</a>
-                </li>
-
-                <li class="item">
-                    <img src="fav.png" alt="image-film" class="img">
-                    <a href="#" class="films-links"> film 2</a>
-                </li>
+                <lu id="filmsContainer" class="list">
+                        <p class="VIDE"> VIDE </p>
                      <!-- cree un autre element a chauque fois que l'utilistaure ajoute un film  -->
                 </lu>
             </div>
@@ -82,38 +74,93 @@
                 <div class="mini-headers">
                     <h3 class="titre">LISTES</h3>
                     <div class="userActions">
-                        <button class="btn-add">Créer liste</button>
+                        <button class="btn-addFilm" onclick="showPopup()">Create list</button>
                         <!-- POPUP CRÉER LISTE -->
 
                     </div>
                 </div>
-                <hr class="line">
-                <lu class="list">
-                    <li class="item">
-                        <img src="fav.png" alt="image" class="img">
 
+                <hr class="line">
+
+                <lu id="containerListe"class="list">
+                    <li class="item">
+                        <!-- <img src="fav.png" alt="image" class="img"> -->
                         <a href="#" class="lists-links">
-                            Liste1
+                            
                         </a>
                     </li>
                 </lu>
             </div>
         </div>
 
-        <!-- POPUP CRÉER LISTE
-        <div id="popup" class="popup hidden">
-            <div class="popup-content">
-            <h3>Créer une nouvelle liste</h3>
-            <input type="text" id="listName" placeholder="Nom de la liste" />
-            <div class="popup-buttons">
-                <button onclick="createList()">Confirmer</button>
-                <button onclick="closePopup()">Fermer</button>
+        <!-- POPUP POUR CREE LISTE -->
+        <div id="addMoviePopup" class="popup hidden ">
+            <div class="popup-content-delete">
+                <div class="headerpop">
+                    <h2 class="popuptitle">CREATE LIST</h2>
+                    <span class="close-btn" onclick="closePopup()">&times;</span>
+                </div>
+                <div class="addfilm" id="addfilm">
+                    <div class="mini">
+                        <label for="titlefilm">Name list :</label>
+                        <input class="input" type="text" id="nameList" name="title">
+                    </div>
+                    <button class="btn add" type="submit" onclick="CreateList()">Confirm</button>
+                </div>
             </div>
+        </div>
+
+        <!-- POPUP POUR AJOUTER UN FILM DANS LA COLLECTION -->
+        <div id="DeleteMoviePopup" class="popup hidden ">
+            <div class="popup-content-delete">
+                <div class="headerpop">
+                    <h2 class="popuptitle">ADD MOVIE</h2>
+                    <span class="close-btn" onclick="closePopup2()">&times;</span>
+                </div>
+                <div class="addfilm" id="addfilm">
+                    <div class="mini">
+                        <label for="titlefilm">Movie's name :</label>
+                        <input class="input" type="text" id="titleMovie" name="title" required>
+
+                    </div>
+                    <button class="btn add" type="submit" onclick=" AddMovieCollection()">confirm</button>
+                </div>
             </div>
-        </div> -->
+        </div>
   
+        <!-- POPUP POUR SUPPRIMER UN LISTE -->
+        <div id="DeleteListPopup" class="popup hidden ">
+            <div class="popup-content-delete">
+                <div class="headerpop">
+                    <h2 class="popuptitle">DELETE LIST</h2>
+                    <span class="close-btn" onclick="closePopup3()">&times;</span>
+                </div>
+                <div class="addfilm" id="addfilm">
+                    <div class="mini">
+                        <label for="titlefilm">Delete the list ?</label>
+                    </div>
+                    <button class="btn add" type="submit" onclick=" deleteList()">confirm</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- POPUP POUR SUPPRIMER UN FILM DANS LA COLLECTION -->
+        <div id="DeleteFilmPopup" class="popup hidden ">
+            <div class="popup-content-delete">
+                <div class="headerpop">
+                    <h2 class="popuptitle">DELETE LIST</h2>
+                    <span class="close-btn" onclick="closePopup3()">&times;</span>
+                </div>
+                <div class="addfilm" id="addfilm">
+                    <div class="mini">
+                        <label for="titlefilm">Delete the movie ?</label>
+                    </div>
+                    <button class="btn add" type="submit" onclick=" deleteFilmColl()">confirm</button>
+                </div>
+            </div>
+        </div>
+    
 
     </body>
     <script src="script.js"></script> <!-- script pour les fetchs-->
-    <script src="script2.js"></script> <!-- script pour les fonction de la page-->
 </html>
