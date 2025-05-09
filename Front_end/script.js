@@ -370,7 +370,7 @@ function getUserCollection(){
             deleteFilm.className = "btn-addFilm delete";
             deleteFilm.innerText = "X";
 
-            deleteFilm.onclick = () => showPopup3(film.id);
+            deleteFilm.onclick = () => showDeleteFilmPopup(film.id);
 
             filmsItem.classList.add('item')
             filmsItem.innerHTML = `
@@ -797,7 +797,7 @@ function getUserLists(){
             deleteBtn.innerText = "X";
             
             //ici on recupere l'id de la liste qu'on souhaite supprimer
-            deleteBtn.onclick = () => showPopup3(list.id);
+            deleteBtn.onclick = () => showDeleteListPopup(list.id);
 
             listItem.classList.add('item')
             listItem.innerHTML = `
@@ -1038,35 +1038,54 @@ function AddMovieCollection(){
 }
 
 // --> Fonction popup pour supprimer une liste ou film de la collection a partir d'un bouton
-let aSupprimer; // Variable pour stocker l'ID de la liste à supprimer
+// let aSupprimer; // Variable pour stocker l'ID de la liste à supprimer
 
-function showPopup3(Id) {
+// function showPopup3(Id) {
 
-    aSupprimer = Id;
-    const popupDeleteList = document.getElementById('DeleteListPopup');
-    const popupDeleteFilm = document.getElementById('DeleteFilmPopup');
+//     aSupprimer = Id;
+//     const popupDeleteList = document.getElementById('DeleteListPopup');
+//     const popupDeleteFilm = document.getElementById('DeleteFilmPopup');
 
-    if(popupDeleteList){
-        popupDeleteList.classList.remove('hidden');
-    }
-    if(popupDeleteFilm){
-        popupDeleteFilm.classList.remove('hidden');
-    }
+//     if(popupDeleteList){
+//         popupDeleteList.classList.remove('hidden');
+//     }
+//     if(popupDeleteFilm){
+//         popupDeleteFilm.classList.remove('hidden');
+//     }
+// }
+
+// function closePopup3() {
+//     const popupDeleteList = document.getElementById('DeleteListPopup');
+//     const popupDeleteFilm = document.getElementById('DeleteFilmPopup');
+
+//     if(popupDeleteList){
+//         popupDeleteList.classList.add('hidden');
+//     }
+//     if(popupDeleteFilm){
+//         popupDeleteFilm.classList.add('hidden');
+//     }
+//     aSupprimer = null;
+// }
+
+let aSupprimer; // ID à supprimer
+
+function showDeleteListPopup(id) {
+    aSupprimer = id;
+    document.getElementById('DeleteListPopup').classList.remove('hidden');
+}
+
+function showDeleteFilmPopup(id) {
+    aSupprimer = id;
+    document.getElementById('DeleteFilmPopup').classList.remove('hidden');
 }
 
 function closePopup3() {
-    const popupDeleteList = document.getElementById('DeleteListPopup');
-    const popupDeleteFilm = document.getElementById('DeleteFilmPopup');
-
-    if(popupDeleteList){
-        popupDeleteList.classList.add('hidden');
-    }
-    if(popupDeleteFilm){
-        popupDeleteFilm.classList.add('hidden');
-    }
-
+    document.getElementById('DeleteListPopup').classList.add('hidden');
+    document.getElementById('DeleteFilmPopup').classList.add('hidden');
     aSupprimer = null;
 }
+
+
 
 function deleteList(){
     fetchDeleteList(aSupprimer);
