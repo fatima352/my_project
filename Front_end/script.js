@@ -394,13 +394,13 @@ function getUserCollection(){
 // Fonction fetch pour commenter un film
 function fetchCommenterFilm(){
     const contenu = document.getElementById('contenu').value;
-    const date = document.getElementById('date').value;
+    // const date = document.getElementById('date').value;
     const rating = document.getElementById('rating').value;
 
     const params = new URLSearchParams(window.location.search);
     const idFilm = params.get("id");
 
-    const data = {idFilm,contenu,date,rating};
+    const data = {idFilm,contenu,rating};
 
     fetch(`http://localhost:3000/api/films/${idFilm}/reviews`,{
         method:'POST',
@@ -478,6 +478,7 @@ function getReviews(){
             reviewItem.innerHTML = `
                <div class="infoReview">
                <a href="#" class="films-links">${review.username} </a>
+               <a href="#" class="films-links">${review.date} </a>
                 <p class="reviewContenu">${review.contenu}</p>
                </div>
                
@@ -533,11 +534,15 @@ function getMovies(event){
 }
 
 // Fonction fetch pour ajouter un film à la base de donée (admin)
-function fetchaddFilm(){
+async function fetchaddFilm() {
+     // 1. D'abord uploader l'affiche
+     const posterPath = await uploadPoster();
+     if (!posterPath) return; // Arrête si l'upload échoue
     // Récupérer les valeurs saisies par l'utilisateur
     const title = document.getElementById('titlefilm').value;
     const date = document.getElementById('datefilm').value;
-    const posterURL = document.getElementById('posterURL').value;
+    const posterURL = posterPath // Utilise le chemin retourné par l'upload
+    // const posterURL = document.getElementById('posterURL').value;
     const description = document.getElementById('descriptionfilm').value;
 
 
@@ -970,37 +975,6 @@ function fetchDeleteFilmCollec(filmId){
     });
 
 }
-
-
-//teste mw
-// async function testAuth() {
-//     fetch(`http://localhost:3000/api/test-auth`, {
-//         method: "GET",
-//         mode: "cors",
-//         credentials: "include",
-//         // body: JSON.stringify(data)
-//     })
-//     .then(response => {
-//         if(response.ok){
-//             alert("yesss");
-//             console.log("yesss")
-//             return response.json();
-//         }
-//         else{
-//             alert("pb mw")
-//             console.log ("pb mw ");
-//         }
-//     })
-//     .then(data=>{
-//         console.log(data);
-//         alert('yess');
-//     })
-//     .catch(error => {
-//         console.log(error);
-//         alert('Erreur: ' + error.message);
-//     });
-// }
-
   
 /************************************************************ */
 /*********************  AUTRES FONCTIONS  *********************/
@@ -1104,8 +1078,6 @@ function deleteFilmColl(){
     closePopup3();
 }
 
-
-
 // Fonction pour afficher la fenetre popup de l'ajout de film
 function showPopup4() {
     const popup = document.getElementById('popupComment');
@@ -1121,4 +1093,35 @@ function closePopup4() {
 function commenter(){
     fetchCommenterFilm();
     closePopup4();
+}
+
+async function uploadPoster() {
+    const fileInput = document.getElementById('posterUpload');
+    const filmTitleInput = document.getElementById('titlefilm');
+    const file = fileInput.files[0];
+    const filmTitle = filmTitleInput.value.trim();
+    
+    if (!file) return null;
+
+    // Upload
+    const formData = new FormData();
+    formData.append('posterImage', file);
+    formData.append('filmTitle', filmTitle); // <- nouveau champ
+
+    try {
+        const response = await fetch('http://localhost:3000/api/upload-poster', {
+            method: 'POST',
+            credentials: 'include',
+            body: formData
+        });
+
+        if (!response.ok) throw await response.json();
+        
+        const data = await response.json();
+        return data.path; 
+    } catch (error) {
+        console.error("Upload failed:", error);
+        alert(`Échec de l'upload: ${error.error || 'Erreur serveur'}`);
+        return null;
+    }
 }

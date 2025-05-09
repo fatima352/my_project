@@ -6,7 +6,7 @@ import {Context} from "https://deno.land/x/oak@v17.1.4/mod.ts";
 export const commentFilm = async (ctx)=>{
     try {
         const body = await ctx.request.body.json();
-        const {contenu,date,rating} = body;
+        const {contenu,rating} = body;
         const intRating = parseInt(rating);
         const tokenData = ctx.state.tokenData;
         if(!tokenData){
@@ -30,8 +30,9 @@ export const commentFilm = async (ctx)=>{
             ctx.response.body = { message: "ID manquant dans l'URL" };
             return;
         }
+        const dateNow = Date.now();
 
-        db.prepare(`INSERT INTO reviewsFilm (userId, filmId, contenu, date, rating) VALUES (?,?,?,?,?)`).run(user.id, idfilm, contenu, date, intRating);
+        db.prepare(`INSERT INTO reviewsFilm (userId, filmId, contenu, date, rating) VALUES (?,?,?,?,?)`).run(user.id, idfilm, contenu, dateNow, intRating);
         ctx.response.status = 201;
         ctx.response.body = {message: "Commentaire ajouté avec succès"};
         console.log("Commentaire ajouté avec succès");

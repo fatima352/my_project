@@ -9,6 +9,7 @@ import * as authCtrl from "./controllers/contrAuth.ts";//controllers pour l'auth
 import * as filmCtrl from "./controllers/controFilm.ts";//controllers pour les fonctionnalité des films
 import * as reviewCtr from "./controllers/contrReview.ts";//contreollers popur la gestion des commentaires
 import * as ListCtr from "./controllers/contrListe.ts";
+import * as uploadCtr from "./controllers/contrUpload.ts"
 
 
 export const router = new Router();
@@ -39,8 +40,8 @@ router.get('/', mw.authMw, userCtrl.getUser);
 
 // Route securiser page profil
 
-
-
+// Route protégée par authMw + adminMw
+router.post("/api/upload-poster", uploadCtr.uploadPoster);
 
 /*
  * ROUTES POUR LES FONCTIONNALITÉS DES UTILISATEURS 

@@ -1,7 +1,7 @@
 import {Application, send} from "https://deno.land/x/oak@v17.1.4/mod.ts";
-import { oakCors } from "https://deno.land/x/cors/mod.ts"; // pour resoudre le probleme de oakCors
+import { oakCors } from "https://deno.land/x/cors/mod.ts";
 import{router} from "./routes.ts"
-import { initWebSocket } from "./websocket.ts";
+// import { initWebSocket } from "./websocket.ts";
 
 const app = new Application();
 
@@ -21,6 +21,11 @@ if (Deno.args.length >= 3) {
   
 console.log(`Oak back server running on port ${options.port}`);
 
+// Configuration du dossier "uploads"
+export const UPLOAD_DIR = "./uploads";
+try { await Deno.mkdir(UPLOAD_DIR); } catch {} // Crée le dossier s'il n'existe pas
+
+
 /**
  * Cros qui permet toutes les méthodes
  */
@@ -31,17 +36,21 @@ app.use(oakCors({
   credentials: true
 }));
 
-// Recupération des fichiers images 
-app.use(async (ctx, next) => {
-  if (ctx.request.url.pathname.startsWith("/images")) {
-    const filePath = ctx.request.url.pathname.replace("/images", ""); // Remove "/images" prefix
-    await send(ctx, filePath, {
-      root: `${Deno.cwd()}/images`, // Correct path to the "images" folder
-    });
-  } else {
+
+  // Serve static files
+  app.use(async (ctx, next) => {
+    const path = ctx.request.url.pathname;
+    if (path.startsWith('/images/')) {
+        try {
+            const filePath = `.${path}`;
+            ctx.response.body = await Deno.readFile(filePath);
+            return;
+        } catch {
+            ctx.response.status = 404;
+        }
+    }
     await next();
-  }
-});
+  });
 
 app.use(router.routes()); 
 app.use(router.allowedMethods()); 
