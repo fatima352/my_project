@@ -425,8 +425,16 @@ h1{
 .list{
     display: flex;
     flex-direction: row;
-    gap: 40px;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-start;
     padding: 0px 20px;
+}
+
+.list li{
+    width: 100px;
+    flex: 1 0 auto; /* ou une largeur fixe/min/max selon tes besoins */
+    min-width: 15px; /* Largeur minimale avant le retour à la ligne */
 }
 
 .img{
