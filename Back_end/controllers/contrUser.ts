@@ -74,6 +74,7 @@ export const getUserLists = (ctx)=>{
     }
 
     const userList = db.prepare(`SELECT * FROM liste WHERE userId = ?`).all(userId.id);
+    
     if(userList.length > 0){
         ctx.response.status = 200;
         ctx.response.body = {message : "Récupération des liste réussite", userList};

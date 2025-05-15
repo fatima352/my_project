@@ -1,7 +1,7 @@
 import {Application, send} from "https://deno.land/x/oak@v17.1.4/mod.ts";
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
 import{router} from "./routes.ts"
-// import { initWebSocket } from "./websocket.ts";
+
 
 const app = new Application();
 
@@ -21,9 +21,6 @@ if (Deno.args.length >= 3) {
   
 console.log(`Oak back server running on port ${options.port}`);
 
-// Configuration du dossier "uploads"
-export const UPLOAD_DIR = "./uploads";
-try { await Deno.mkdir(UPLOAD_DIR); } catch {} // Crée le dossier s'il n'existe pas
 
 
 /**

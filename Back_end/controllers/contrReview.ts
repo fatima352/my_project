@@ -1,4 +1,5 @@
 import { db } from "../database/data.ts";
+import { notifyNewReviewFilm } from "../websocket.ts";
 import {Context} from "https://deno.land/x/oak@v17.1.4/mod.ts";
 
 
@@ -30,9 +31,14 @@ export const commentFilm = async (ctx)=>{
             ctx.response.body = { message: "ID manquant dans l'URL" };
             return;
         }
-        const dateNow = Date.now();
+        const dateNow = new Date();
+        const date = dateNow.toLocaleDateString('fr-FR');
 
-        db.prepare(`INSERT INTO reviewsFilm (userId, filmId, contenu, date, rating) VALUES (?,?,?,?,?)`).run(user.id, idfilm, contenu, dateNow, intRating);
+
+        db.prepare(`INSERT INTO reviewsFilm (userId, filmId, contenu, date, rating) VALUES (?,?,?,?,?)`).run(user.id, idfilm, contenu, date, intRating);
+        const reviewData = { userId: user.id, filmId: idfilm, contenu, date, rating: intRating };
+        notifyNewReviewFilm(reviewData);
+        
         ctx.response.status = 201;
         ctx.response.body = {message: "Commentaire ajouté avec succès"};
         console.log("Commentaire ajouté avec succès");
@@ -73,4 +79,104 @@ export const getFilmReview = (ctx)=>{
         console.error("Erreur dans commentFilm :", error);
     }
 
+}
+
+// export const commentList = async (ctx)=>{
+//     try {
+//         const body = await ctx.request.body.json();
+//         const {contenu} = body;
+
+//         const tokenData = ctx.state.tokenData;
+//         if(!tokenData){
+//             ctx.response.status = 401;
+//             ctx.response.body = {message: "Token non valide, utilisateur non connecté"};
+//             console.log("problème token");
+//             return;
+//         }
+
+//         const user = db.prepare(`SELECT id FROM users WHERE username = ?`).get(tokenData.username) as {id: number} | undefined;
+//         if(!user){
+//             ctx.response.status = 401;
+//             ctx.response.body = {message: "Utilisateur introuvable"};
+//             console.log("utilisateur introuvable");
+//             return;
+//         }
+
+//         const idList = parseInt(ctx.params.id);
+//         if(!idList){
+//             ctx.response.status = 400;
+//             ctx.response.body = { message: "ID manquant dans l'URL" };
+//             return;
+//         }
+//         const dateNow = new Date();
+//         const date = dateNow.toLocaleDateString('fr-FR');
+
+//         const listeExists = db.prepare(`SELECT id FROM liste WHERE id = ?`).get(idList);
+//         if(!listeExists) {
+//             ctx.response.status = 404;
+//             ctx.response.body = {message: "Liste introuvable"};
+//             return;
+//         }
+
+//         db.prepare(`INSERT INTO commentList (userId, listeId, contenu, date) VALUES (?, ?, ?, ?);`).run(user.id, idList, contenu, date);        
+
+//         ctx.response.status = 201;
+//         ctx.response.body = {message: "Commentaire ajouté avec succès"};
+//         console.log("Commentaire ajouté avec succès");
+
+//     }catch (error) {
+//         ctx.response.status = 500;
+//         ctx.response.body = { message: "Erreur serveur", error: error.message };
+//         console.error("Erreur dans commentFilm :", error);
+//     }
+    
+    
+// }
+
+export const commentList = async (ctx) => {
+    try {
+        const body = await ctx.request.body.json();
+        const {contenu, rating} = body
+        const tokenData = ctx.state.tokenData;
+        
+        if(!tokenData) {
+            ctx.response.status = 401;
+            ctx.response.body = {message: "Token non valide, utilisateur non connecté"};
+            return;
+        }
+
+        const user = db.prepare(`SELECT id FROM users WHERE username = ?`).get(tokenData.username) as {id: number} | undefined;
+        if(!user) {
+            ctx.response.status = 404;
+            ctx.response.body = {message: "Utilisateur introuvable"};
+            return;
+        }
+
+        const idList = parseInt(ctx.params.id);
+        console.log(idList);
+        console.log(user.id);
+        const listeExists = db.prepare(`SELECT id FROM liste WHERE id = ?`).get(idList);
+        if(!listeExists) {
+            ctx.response.status = 404;
+            ctx.response.body = {message: "Liste introuvable"};
+            return;
+        }
+
+        const dateNow = new Date();
+        const date = dateNow.toLocaleDateString('fr-FR');
+
+        db.prepare(`
+            INSERT INTO commentList (userId, listeId, contenu, date) VALUES (?, ?, ?, ?)`).run(user.id, idList, contenu, date);
+
+        ctx.response.status = 201;
+        ctx.response.body = {message: "Commentaire ajouté avec succès"};
+
+    } catch (error) {
+        console.error("Erreur détaillée:", error);
+        ctx.response.status = 500;
+        ctx.response.body = { 
+            message: "Erreur serveur",
+            details: error.message 
+        };
+    }
 }

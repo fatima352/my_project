@@ -153,49 +153,6 @@ form{
     align-items: center;   /* Centre verticalement les éléments */
 }
 
-/* Search bar style */
-/* .search{
-    position: absolute;
-    left: 20%; /* Use a percentage for better responsiveness 
-    top: 50%;
-    transform: translateY(-50%); /* Vertically center it 
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.2); /* No change needed, already consistent 
-    border-radius: 10px;
-    padding: 5px 10px;
-}
-
-.search input{
-    border: none;
-    background: transparent;
-    color: #fff;
-    font-size: 1em;
-    padding: 5px 50px;
-    outline: none;
-    border-radius: 5px;
-}
-
-.search input::placeholder{
-    color: #fff;
-}
-
-.search input {
-    padding-left: 10px;
-}
-
-.search i{
-    color: #fff;
-    font-size: 1.2em;
-    margin-left: 10px;
-    cursor: pointer;
-    transition: color 0.3s ease; /* Smooth transition for hover effect 
-}
-
-.search i:hover {
-    color: #000; /* Change icon color on hover 
-} */
-
 /* Style pour le bouton Logout */
 .menu-logout .nav-link {
     display: inline-block;

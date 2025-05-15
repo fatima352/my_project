@@ -82,7 +82,7 @@ db.exec(`
         contenu TEXT NOT NULL,
         date TEXT NOT NULL,
         FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
-        FOREIGN KEY (listeId) REFERENCES listes(id) ON DELETE CASCADE
+        FOREIGN KEY (listeId) REFERENCES liste(id) ON DELETE CASCADE
     );
 `)
 

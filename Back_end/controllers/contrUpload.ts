@@ -48,7 +48,6 @@ export const uploadPoster = async (ctx: Context) => {
           success: true,
           path: `${fileName}`
       };
-      console.log("réussiiiiii !")
   } catch (error) {
       console.error("Upload error:", error);
       ctx.response.status = 500;

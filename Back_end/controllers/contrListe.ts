@@ -86,13 +86,20 @@ export const addFilmToListe = async (ctx) => {
         ctx.response.body = {message:"Erreur interne du serveur"};
     }
 
-};
+}
 
 // Fonction pour récupérer les films d'une liste (à refaire)
-export const getFilmsList = (ctx) => {
+export const getList = (ctx) => {
     try{
         const listeId = parseInt(ctx.params.id);
-        const nameList = db.prepare(`SELECT name FROM liste WHERE id = ?`).get(listeId) as {name: string} | undefined;
+
+        const nameList = db.prepare(`
+        SELECT l.name, l.userId, u.username 
+        FROM liste l
+        JOIN users u ON l.userId = u.id
+        WHERE l.id = ?
+        `).get(listeId) as {name: string, user_id: number, username: string} | undefined;      
+
         if(!nameList){
             ctx.response.status = 400;
             ctx.response.body = { message: "Liste introuvable" };
@@ -122,10 +129,10 @@ export const getFilmsList = (ctx) => {
     catch (error) {
         ctx.response.status = 500;
         ctx.response.body = { message: "Erreur serveur", error: error.message };
-        console.error("Erreur dans getFilmsList :", error);
+        console.error("Erreur dans getList :", error);
     }
 
-};
+}
 
 export const deleteList = async (ctx) =>{
     try{
@@ -157,4 +164,57 @@ export const deleteList = async (ctx) =>{
     }
 
 }
+
+export const getAllListe = (ctx) => {
+    try{
+        const listes = db.prepare(`SELECT * FROM liste`).all();
+        if(listes.length <= 0){
+            ctx.response.status = 400;
+            ctx.response.body = {message: "Aucune liste trouvée"};
+            console.log("Aucune liste trouvée");
+            return;
+        }
+        ctx.response.status = 200;
+        ctx.response.body = {message: "Récupération des listes réussie", listes};
+        console.log("Récupération des listes réussie");
+    }
+    catch(error){
+        ctx.response.status = 500;
+        ctx.response.body = {message: "Erreur serveur", error: error.message};
+        console.error("Erreur dans getAllListe :", error);
+    }
+}
+
+// Dans controllers/contrListe.ts
+export const getListeOwner = (ctx: Context) => {
+    const listeId = parseInt(ctx.params.id); //recuperer id liste
+    const tokenData = ctx.state.tokenData; //recupere utilisateur connecter
+        if(!tokenData){
+            ctx.response.status = 401;
+            ctx.response.body = {message: "Token non valide, utilisateur non connecter"};
+            console.log("problème token");
+
+        }
+    if (!listeId) {
+        ctx.response.status = 400;
+        ctx.response.body = { message: "ID de la liste invalide" };
+        return;
+    }
+
+    const owner = db.prepare("SELECT users.username FROM liste JOIN users ON liste.userId = users.id WHERE liste.id = ?").get(listeId) as { username: string } | undefined;
+    
+    if (!owner) {
+        ctx.response.status = 404;
+        ctx.response.body = { message: "Liste introuvable" };
+        return;
+    }
+    
+
+    if(owner.username==tokenData.username){
+        ctx.response.status = 200;
+        ctx.response.body = { ownerUsername: owner.username };
+        return;
+    }
+};
+
 

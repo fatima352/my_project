@@ -15,9 +15,9 @@ socket.onmessage = (event) => {
         getMovies(); // recharge les films automatiquement
     }
     else if (message.type === "ADD_REVIEWFILM") {
-        const film = message.data;
-        alert(`Nouvelle critique ajoutée pour le film : ${film.title}`);
-        getMovies(); // recharge les films automatiquement
+        // const film = message.data;
+        // alert(`Nouvelle critique ajoutée pour le film`);
+        getReviews(); // recharge les films automatiquement
     }
 };
 

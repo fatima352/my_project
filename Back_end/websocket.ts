@@ -1,6 +1,5 @@
 // backend/ws.ts
 
-// import { WebSocket } from "https://deno.land/std@0.51.0/ws/mod.ts";
 const sockets: WebSocket[] = [];
 
 // Ajouter un nouveau client
@@ -33,6 +32,10 @@ export function handleWsConnection(socket: WebSocket) {
     if (data.type === "DELETE_FILM") {
       // Traitez le message ici si nécessaire
       console.log("Film supprimé:", data.title);
+    }
+    if (data.type === "ADD_REVIEWFILM") {
+      // Traitez le message ici si nécessaire
+      console.log("Nouvelle critique ajoutée:", data.title);
     }
   };
 }
@@ -68,5 +71,10 @@ export function notifyNewReviewFilm(reviewData: any ){
   const message = JSON.stringify({
     type: "ADD_REVIEWFILM",
     data: reviewData,
+  });
+  sockets.forEach((socket) => {
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(message);
+    }
   });
 }

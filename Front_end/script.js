@@ -1,7 +1,9 @@
 /************************************************************ */
 /*********************  FONCTIONS FETCHS  *********************/
 /************************************************************ */
-// Établir la connexion WebSocket
+
+
+//récupérer utilisateur connecté (variable global)
 
 /*--- AUTHENTIFICATIONS ---*/
 
@@ -150,6 +152,39 @@ function logoutUser(event) {
 
 }
 
+function owner(){
+    const params = new URLSearchParams(window.location.search);
+    const listeId = params.get("id");
+    fetch(`http://localhost:3000/api/liste/${listeId}/owner`,{
+        method : 'GET',
+        mode: 'cors',
+        credentials: 'include'
+   })
+   .then(response => {
+       if(response.ok){
+           return response.json();
+       }else{
+           throw new Error('Erreur lors de la récupération des listes');
+       }
+   })
+   .then(data => {
+        //Bouton pour ajouter un film si propriétaire de la liste
+        const ownerActions = document.getElementById("ownerActions");
+        if (ownerActions) {
+            const button = document.createElement("button");
+            button.className = "btn-addFilm";
+            button.innerText = "Add Film";
+            button.onclick =  showPopup; 
+            ownerActions.appendChild(button);
+        }
+        console.log(data);
+    })
+    // .catch(error => {
+    //     // Erreurs réseau ou autres : log silencieux
+    //     console.log("Erreur silencieuse (non bloquante) :", error.message);
+    // });
+}
+
 // Fonction pour vérifier la connection de  l'utilisateure
 function authUser(event){
 
@@ -191,6 +226,11 @@ function authUser(event){
                     <span class="link-text">MOVIES</span>
                 </a>
                 </li>
+                <li id="menu-lists">
+                        <a href="lists.html" class="nav-link">
+                            <span class="link-text">LISTS</span>
+                        </a>
+                </li>
                 <li class="menu-logout">
                     <a href="#" class="nav-link" onclick="logoutUser()">
                     <span class="link-text">LOG OUT</span>
@@ -199,33 +239,8 @@ function authUser(event){
             `;
         }
         document.getElementById("username").innerText = `@${data.username}`;
-        //BOUTON POUR AJOUTER UN FILM A LA LISTE SI PROPREITAIRE
-        // const UserAction = document.getElementById('UserAction');
-        // if(UserAction){
-        //     //bouton ajout film
-        //     const buttonAdd = document.createElement("button");
-        //     buttonAdd.className = "btn-addFilm";
-        //     buttonAdd.innerText = "Add film";
-        //     buttonAdd.onclick = showPopupEdit;//user
-        //     UserAction.appendChild(buttonAdd);
-
-        //     // //bouton supprimer list 
-        //     // const buttonDelete = document.createElement("button");
-        //     // buttonDelete.className = "btn-addFilm";
-        //     // buttonDelete.innerText = "Add film";
-        //     // buttonDelete.onclick = showPopupDeleteList;//user
-        //     // UserAction.appendChild(buttonDelete);
-
-        //     // //bouton modifier nom liste
-        //     // const buttonUpdate = document.createElement("button");
-        //     // buttonUpdate.className = "btn-addFilm";
-        //     // buttonUpdate.innerText = "Add film";
-        //     // buttonUpdate.onclick = showPopupEditList;//user
-        //     // UserAction.appendChild(buttonUpdate);
-
-        // }
         //Ajouter un commentaire utilisateur
-        const userActions = document.getElementById('userActions');
+        const userActions = document.getElementById('userActionsFilm');
         if(userActions){
             const btnCommenter = document.createElement('button');
             btnCommenter.className = 'btn-addFilm';
@@ -234,7 +249,17 @@ function authUser(event){
             userActions.appendChild(btnCommenter);
         }
 
-})
+        const userActionsList = document.getElementById('userActionsList');
+        if(userActionsList){
+            const btnCommenter = document.createElement('button');
+            btnCommenter.className = 'btn-addFilm';
+            btnCommenter.innerText = 'Commenter';
+            btnCommenter.onclick = showPopup4;
+            userActionsList.appendChild(btnCommenter);
+        }
+
+
+    })
     .catch(error => {
         console.error("Error:", error);
         const pageProfil = document.getElementById('profil');
@@ -394,7 +419,6 @@ function getUserCollection(){
 // Fonction fetch pour commenter un film
 function fetchCommenterFilm(){
     const contenu = document.getElementById('contenu').value;
-    // const date = document.getElementById('date').value;
     const rating = document.getElementById('rating').value;
 
     const params = new URLSearchParams(window.location.search);
@@ -442,12 +466,62 @@ function fetchCommenterFilm(){
     });
 }
 
+// Fonction fetch pour commenter un film
+function fetchCommenterList(){
+    const contenu = document.getElementById('contenu').value;
+    const rating = document.getElementById('rating').value;
+
+    const params = new URLSearchParams(window.location.search);
+    const idList = params.get("id");
+
+    const data = {idList,contenu,rating};
+
+    fetch(`http://localhost:3000/api/liste/${idList}/reviewsList`,{
+        method:'POST',
+        mode : 'cors',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },        
+        body: JSON.stringify(data)
+
+    })
+    .then(response =>{
+        if(response.ok){
+            return response.json();
+        }else {
+            switch(response.status){
+                case 400:
+                    alert("Requête invalide : Film introuvable");
+                    throw new Error("Requête invalide : Film introuvable");
+                case 401:
+                    alert("Non autorisé : Utilisateur non connecté");
+                    throw new Error("Non autorisé : Utilisateur non connecté");
+                case 500:
+                    alert("Erreur serveur : Veuillez réessayer plus tard");
+                    throw new Error("Erreur serveur : Veuillez réessayer plus tard");
+                default:
+                    alert("Erreur inconnue : " + response.status);
+                    throw new Error("Erreur inconnue : " + response.status);
+            }
+        }
+        
+    })
+    .then(data=>{
+        console.log("Réponse reçue : ", data);
+        alert(data.message);
+    })
+    .catch(error => {
+        console.error("Erreur:", error.message);
+    });
+}
+
 // Fonction fetch pour récupérer les commentaires d'un film
 function getReviews(){
     const params = new URLSearchParams(window.location.search);
     const idFilm = params.get("id");
 
-    fetch(`http://localhost:3000/api/films/${idFilm}/reviews`,{
+    fetch(`http://localhost:3000/api/films/${idFilm}/reviewsFilm`,{
         method:'GET',
         mode : 'cors'
     })
@@ -521,7 +595,7 @@ function getMovies(event){
                <a href="film.html?id=${film.id}">
                     <img src="http://localhost:3000/images/${film.posterURL}" alt="${film.title}" class="img"> 
                 </a>
-                <a href="infoFilm.html?id=${film.id}" class="films-links">${film.title}</a>
+                <a href="film.html?id=${film.id}" class="films-links">${film.title}</a>
             `;
             filmsContainer.appendChild(filmsItem);
         });
@@ -535,14 +609,14 @@ function getMovies(event){
 
 // Fonction fetch pour ajouter un film à la base de donée (admin)
 async function fetchaddFilm() {
-     // 1. D'abord uploader l'affiche
-     const posterPath = await uploadPoster();
-     if (!posterPath) return; // Arrête si l'upload échoue
-    // Récupérer les valeurs saisies par l'utilisateur
+
+    const posterPath = await uploadPoster();
+    if (!posterPath) return; 
+
     const title = document.getElementById('titlefilm').value;
     const date = document.getElementById('datefilm').value;
-    const posterURL = posterPath // Utilise le chemin retourné par l'upload
-    // const posterURL = document.getElementById('posterURL').value;
+    const posterURL = posterPath 
+
     const description = document.getElementById('descriptionfilm').value;
 
 
@@ -553,7 +627,7 @@ async function fetchaddFilm() {
         description
     }
 
-    // fetch qui envoie les données vers le backend
+   
     fetch(`http://localhost:3000/api/films`,{
         method : 'POST',
         mode: 'cors',
@@ -561,7 +635,7 @@ async function fetchaddFilm() {
             'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify(data) // Convert the data object to JSON
+        body: JSON.stringify(data) 
     })
     .then(response => {
         if (!response.ok){
@@ -594,7 +668,6 @@ async function fetchaddFilm() {
     .then(data => {
         console.log(data);
         alert('Film ajouté avec succès !');
-        // window.location.href = 'films.html';
     })
 
 }
@@ -729,7 +802,6 @@ function fetchDeleteMovie(){
     });
 }
 
-
 /*--- GESTIONS DES LISTES ---*/
 
 //Fonction fetch pour créer une liste
@@ -824,7 +896,7 @@ function fetchaddFilmToListe() {
     const listeId = params.get("id");
 
 
-    fetch(`http://localhost:3000/api/liste/${listeId}/films`, {
+    fetch(`http://localhost:3000/api/liste/${listeId}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -862,10 +934,10 @@ function fetchaddFilmToListe() {
 }
 
 //Fonction pour récupérer les films d'une liste
-function getFilmsList(){
+function getList(){
     const params = new URLSearchParams(window.location.search);
     const listeId = params.get("id");
-    fetch(`http://localhost:3000/api/liste/${listeId}/films`,{
+    fetch(`http://localhost:3000/api/liste/${listeId}`,{
         method : 'GET',
         mode: 'cors'
     })
@@ -905,11 +977,11 @@ function getFilmsList(){
 
         });
         const titre = document.getElementById("nameList");
-        const nameList = document.createElement("h3");
-        nameList.innerHTML = '';
-        nameList.innerHTML = `                
-         <p class="titre">MOVIES IN THE LIST  ${data.nameList.name} </p>`;
-        titre.appendChild(nameList);
+        titre.innerHTML = `MOVIES IN THE LIST: ${data.nameList.name}`;
+        const creatorInfo = document.createElement("p");
+        creatorInfo.classList.add("creator-info");
+        creatorInfo.innerHTML = `Created by: ${data.nameList.username}`;
+        titre.after(creatorInfo); 
         console.log(data);
     })
 
@@ -975,7 +1047,40 @@ function fetchDeleteFilmCollec(filmId){
     });
 
 }
-  
+
+
+function getAllListe(){
+    fetch(`http://localhost:3000/api/listes`,{
+        method : 'GET',
+        mode: 'cors',
+        credentials: 'include'
+   })
+   .then(response => {
+       if(response.ok){
+           return response.json();
+       }else{
+           throw new Error('Erreur lors de la récupération des listes');
+       }
+   })
+   .then(data => {
+       const listesContainer = document.getElementById("listContainer");
+       listesContainer.innerHTML = '';
+        data.listes.forEach(liste => {
+            const listeItem = document.createElement('li');
+            listeItem.classList.add('item')
+            listeItem.innerHTML = `
+               <a href="list.html?id=${liste.id}">   
+                </a>
+                <a href="list.html?id=${liste.id}" class="films-links">${liste.name}</a>
+            `;
+            listesContainer.appendChild(listeItem);
+
+        });
+        console.log(data);
+    })
+
+}
+
 /************************************************************ */
 /*********************  AUTRES FONCTIONS  *********************/
 /************************************************************ */
@@ -1037,35 +1142,6 @@ function AddMovieCollection(){
     closePopup2();
 }
 
-// --> Fonction popup pour supprimer une liste ou film de la collection a partir d'un bouton
-// let aSupprimer; // Variable pour stocker l'ID de la liste à supprimer
-
-// function showPopup3(Id) {
-
-//     aSupprimer = Id;
-//     const popupDeleteList = document.getElementById('DeleteListPopup');
-//     const popupDeleteFilm = document.getElementById('DeleteFilmPopup');
-
-//     if(popupDeleteList){
-//         popupDeleteList.classList.remove('hidden');
-//     }
-//     if(popupDeleteFilm){
-//         popupDeleteFilm.classList.remove('hidden');
-//     }
-// }
-
-// function closePopup3() {
-//     const popupDeleteList = document.getElementById('DeleteListPopup');
-//     const popupDeleteFilm = document.getElementById('DeleteFilmPopup');
-
-//     if(popupDeleteList){
-//         popupDeleteList.classList.add('hidden');
-//     }
-//     if(popupDeleteFilm){
-//         popupDeleteFilm.classList.add('hidden');
-//     }
-//     aSupprimer = null;
-// }
 
 let aSupprimer; // ID à supprimer
 
@@ -1109,8 +1185,13 @@ function closePopup4() {
     popup.classList.add('hidden');
 }
 
-function commenter(){
+function commenterFilm(){
     fetchCommenterFilm();
+    closePopup4();
+}
+
+function commenterList(){
+    fetchCommenterList();
     closePopup4();
 }
 
@@ -1122,10 +1203,10 @@ async function uploadPoster() {
     
     if (!file) return null;
 
-    // Upload
+
     const formData = new FormData();
     formData.append('posterImage', file);
-    formData.append('filmTitle', filmTitle); // <- nouveau champ
+    formData.append('filmTitle', filmTitle); 
 
     try {
         const response = await fetch('http://localhost:3000/api/upload-poster', {
