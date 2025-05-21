@@ -7,7 +7,7 @@
         <!-- pour les icones -->
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     </head>
-    <body  onload="authUser();getList();owner()"class="films-body">
+    <body  onload="authUser();getList();owner();getReviewsList()"class="films-body">
         <header>
             <h2 class="logo">MOVIEW</h2> 
             <nav class="navigation">
@@ -62,6 +62,29 @@
       
         </section>
 
+
+        <div class="container commentaires">
+            <div class="mini-headers">
+                <h3 class="titre">REVIEWS</h3>
+                <div id="userActions" class="userActions">
+            
+                    <!-- admin gere les commentaires -->
+
+                    
+                </div>
+            </div>
+            <hr class="line">
+            <ul id = "reviewsContainer" class="list">
+                <li class="item">
+                    <a href="#" class="nav-link">
+                        <p> REVIEWS
+                            <!-- Ajout des commentaires ici -->
+                        </p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
         <!-- FENÊTRE POPUP AJOUT FILM-->
         <div id="addMoviePopup" class="popup hidden">
             <div class="popup-content-delete">
@@ -79,6 +102,7 @@
                 </div>
             </div>
         </div>
+
 
         <!-- FENETRE POPUP COMMENTER LIST -->
         <div id="popupComment" class="popup hidden">

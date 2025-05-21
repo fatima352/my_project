@@ -115,6 +115,7 @@ router.get('/api/films/:id/reviewsFilm', reviewCtr.getFilmReview);
 
 //Commenter un list
 router.post('/api/liste/:id/reviewsList', mw.authMw, reviewCtr.commentList);
+router.get('/api/liste/:id/reviewsList', reviewCtr.getListReview);
 
 
   

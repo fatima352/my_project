@@ -10,13 +10,26 @@ if (Deno.args.length < 1) {
     Deno.exit();
   }
 
-const options = {port: Deno.args[0]}
+//modif https
+let options: {
+  port: number;
+  secure?: boolean;
+  certFile?: string;
+  keyFile?: string;
+} = {
+  port: Number(Deno.args[0])
+};
 
 if (Deno.args.length >= 3) {
     options.secure = true;
+    options.certFile = Deno.args[1];
+    options.keyFile = Deno.args[2];
+    console.log(`✅ HTTPS activé avec certificat ${options.certFile}`);
     options.cert = await Deno.readTextFile(Deno.args[1]);
     options.key = await Deno.readTextFile(Deno.args[2]);
     console.log(`SSL conf ready (use https)`);
+}else {
+  console.log(`🟢 HTTP simple (aucun certificat fourni)`);
 }
   
 console.log(`Oak back server running on port ${options.port}`);
@@ -51,5 +64,8 @@ app.use(oakCors({
 
 app.use(router.routes()); 
 app.use(router.allowedMethods()); 
+
+// Lancement du serveur (HTTP ou HTTPS)
+console.log(`Serveur Oak lancé sur ${options.secure ? "https" : "http"}://localhost:${options.port}`);
 
 await app.listen({port: 3000}); 

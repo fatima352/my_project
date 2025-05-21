@@ -23,7 +23,7 @@ function registerUser(event) {
     };
 
     //Envoyer les données vers le backend avec la méthode POST
-    fetch(`http://localhost:3000/register`, {
+    fetch(`https://localhost:8443/register`, {
         method: 'POST',
         // mode: 'cros',
         headers: {
@@ -76,7 +76,7 @@ function loginUser(event){
         password
     };
     //Envoyer les données vers le backend avec la méthode POST
-    fetch(`http://localhost:3000/login`, {
+    fetch(`https://localhost:8443/login`, {
         method : 'POST',
         mode: 'cors',
         credentials : 'include',
@@ -119,7 +119,7 @@ function loginUser(event){
 // Fonction fetch pour se deconnecter
 function logoutUser(event) {
     // event.preventDefault();
-    fetch(`http://localhost:3000/logout`, {
+    fetch(`https://localhost:8443/logout`, {
         method : 'POST',
         mode: 'cors',
         credentials : 'include'
@@ -155,7 +155,7 @@ function logoutUser(event) {
 function owner(){
     const params = new URLSearchParams(window.location.search);
     const listeId = params.get("id");
-    fetch(`http://localhost:3000/api/liste/${listeId}/owner`,{
+    fetch(`https://localhost:8443/api/liste/${listeId}/owner`, {
         method : 'GET',
         mode: 'cors',
         credentials: 'include'
@@ -189,7 +189,7 @@ function owner(){
 function authUser(event){
 
     //Fetch qui récupere les inforamtion du backend, methode GET
-    fetch(`http://localhost:3000/`,
+    fetch(`https://localhost:8443/`,
         {
             method : 'GET',
             mode: 'cors',
@@ -271,7 +271,7 @@ function authUser(event){
 
 //Fonction pour vérifier si l'utilisateur a accès à la au fonctionnalité admin
 function checkAdminAccess() {
-    fetch('http://localhost:3000/api/admin-access', {
+    fetch('https://localhost:8443/api/admin-access', {
         method: 'GET',
         mode: 'cors',
         credentials: 'include'
@@ -329,7 +329,7 @@ function fetchAddMovieCollection(){
         return;
     }
     
-    fetch(`http://localhost:3000/api/collection`,{
+    fetch(`https://localhost:8443/api/collection`, {
         method : 'POST',
         mode: 'cors',
         headers: {
@@ -367,7 +367,7 @@ function fetchAddMovieCollection(){
 
 // Fonction fetch pour récupérer la collection de l'utilisateur
 function getUserCollection(){
-    fetch(`http://localhost:3000/api/collection`,{
+    fetch(`https://localhost:8443/api/collection`, {
         method : 'GET',
         mode: 'cors',
         credentials: 'include'
@@ -426,7 +426,7 @@ function fetchCommenterFilm(){
 
     const data = {idFilm,contenu,rating};
 
-    fetch(`http://localhost:3000/api/films/${idFilm}/reviews`,{
+    fetch(`https://localhost:8443/api/films/${idFilm}/reviews`, {
         method:'POST',
         mode : 'cors',
         credentials: 'include',
@@ -469,14 +469,13 @@ function fetchCommenterFilm(){
 // Fonction fetch pour commenter un film
 function fetchCommenterList(){
     const contenu = document.getElementById('contenu').value;
-    const rating = document.getElementById('rating').value;
 
     const params = new URLSearchParams(window.location.search);
     const idList = params.get("id");
 
-    const data = {idList,contenu,rating};
+    const data = {idList,contenu};
 
-    fetch(`http://localhost:3000/api/liste/${idList}/reviewsList`,{
+    fetch(`https://localhost:8443/api/liste/${idList}/reviewsList`, {
         method:'POST',
         mode : 'cors',
         credentials: 'include',
@@ -521,7 +520,54 @@ function getReviews(){
     const params = new URLSearchParams(window.location.search);
     const idFilm = params.get("id");
 
-    fetch(`http://localhost:3000/api/films/${idFilm}/reviewsFilm`,{
+    fetch(`https://localhost:8443/api/films/${idFilm}/reviewsFilm`, {
+        method:'GET',
+        mode : 'cors'
+    })
+    .then(response => {
+        if(response.ok){
+            return response.json();
+        }else{
+            switch(response.status){
+                case 400:
+                    alert("Requête invalide : Commentaire introuvable");
+                    throw new Error("Requête invalide : Film introuvable");
+                case 500:
+                    alert("Erreur serveur : Veuillez réessayer plus tard");
+                    throw new Error("Erreur serveur : Veuillez réessayer plus tard");
+                default:
+                    alert("Erreur inconnue : " + response.status);
+                    throw new Error("Erreur inconnue : " + response.status);    
+            }
+        }
+    })
+    .then(data => {
+        const reviewsContainer = document.getElementById('reviewsContainer');
+        reviewsContainer.innerHTML = '';
+        data.reviews.forEach(review => {
+            const reviewItem = document.createElement('li');
+
+            reviewItem.classList.add('item_review')
+            reviewItem.innerHTML = `
+               <div class="infoReview">
+               <a href="#" class="films-links">${review.username} </a>
+               <a href="#" class="films-links">${review.date} </a>
+                <p class="reviewContenu">${review.contenu}</p>
+               </div>
+               
+            `;
+            reviewsContainer.appendChild(reviewItem);
+        });
+    })
+}
+
+
+// Fonction fetch pour récupérer les commentaires d'un film
+function getReviewsList(){
+    const params = new URLSearchParams(window.location.search);
+    const idList = params.get("id");
+
+    fetch(`https://localhost:8443/api/liste/${idList}/reviewsList`, {
         method:'GET',
         mode : 'cors'
     })
@@ -567,7 +613,7 @@ function getReviews(){
 // Fonction fetch pour récupérer les films du backend
 function getMovies(event){
     // Fonction fetch qui récupere les inforamtion du backend, methode GET
-    fetch(`http://localhost:3000/api/films`,{
+    fetch(`https://localhost:8443/api/films`, {
         method : 'GET',
         mode: 'cors',
         credentials: 'include'
@@ -628,7 +674,7 @@ async function fetchaddFilm() {
     }
 
    
-    fetch(`http://localhost:3000/api/films`,{
+    fetch(`https://localhost:8443/api/films`, {
         method : 'POST',
         mode: 'cors',
         headers: {
@@ -683,7 +729,7 @@ function getMovie(){
         return;
     }
     // Fetch qui récupere les informations du backend, methode GET
-    fetch(`http://localhost:3000/api/films/${id}`,{
+    fetch(`https://localhost:8443/api/films/${id}`, {
         method: 'GET',
         mode: 'cors',
         credentials: 'include',
@@ -742,7 +788,7 @@ function fetchUpdateFilm() {
     };
 
     // Envoyer les données vers le backend avec la méthode PUT
-    fetch(`http://localhost:3000/api/films/${id}`, {
+    fetch(`https://localhost:8443/api/films/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -776,7 +822,7 @@ function fetchDeleteMovie(){
         return;
     }
 
-    fetch(`http://localhost:3000/api/films/${id}`,{
+    fetch(`https://localhost:8443/api/films/${id}`, {
         method: 'DELETE',
         mode: 'cors',
         headers: {
@@ -810,7 +856,7 @@ function fetchCreateList(){
     const data = {listName};
 
     //fetch pour envoyer les données vers le backend (table liste)
-    fetch(`http://localhost:3000/api/liste`,{
+    fetch(`https://localhost:8443/api/liste`, {
         method : 'POST',
         mode: 'cors',
         headers: {
@@ -841,7 +887,7 @@ function fetchCreateList(){
  
 //Fonction pour récupérer les listes de l'utilisateur
 function getUserLists(){
-    fetch(`http://localhost:3000/api/liste`,{
+    fetch(`https://localhost:8443/api/liste`, {
         method : 'GET',
         mode: 'cors',
         credentials: 'include'
@@ -896,7 +942,7 @@ function fetchaddFilmToListe() {
     const listeId = params.get("id");
 
 
-    fetch(`http://localhost:3000/api/liste/${listeId}`, {
+    fetch(`https://localhost:8443/api/liste/${listeId}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -937,7 +983,7 @@ function fetchaddFilmToListe() {
 function getList(){
     const params = new URLSearchParams(window.location.search);
     const listeId = params.get("id");
-    fetch(`http://localhost:3000/api/liste/${listeId}`,{
+    fetch(`https://localhost:8443/api/liste/${listeId}`, {
         method : 'GET',
         mode: 'cors'
     })
@@ -990,7 +1036,7 @@ function getList(){
 // Fonction pour supprimer une liste
 function fetchDeleteList(listId) {
 
-    fetch(`http://localhost:3000/api/liste`,{
+    fetch(`https://localhost:8443/api/liste`, {
         method: 'DELETE',
         mode: 'cors',
         headers: {
@@ -1019,7 +1065,7 @@ function fetchDeleteList(listId) {
 
 // Fonction pour supprimer un film de la collection
 function fetchDeleteFilmCollec(filmId){
-    fetch(`http://localhost:3000/api/collection`, {
+    fetch(`https://localhost:8443/api/collection`, {
         method : 'DELETE',
         mode : 'cors',
         headers: {
@@ -1050,7 +1096,7 @@ function fetchDeleteFilmCollec(filmId){
 
 
 function getAllListe(){
-    fetch(`http://localhost:3000/api/listes`,{
+    fetch(`https://localhost:8443/api/listes`, {
         method : 'GET',
         mode: 'cors',
         credentials: 'include'
@@ -1209,7 +1255,7 @@ async function uploadPoster() {
     formData.append('filmTitle', filmTitle); 
 
     try {
-        const response = await fetch('http://localhost:3000/api/upload-poster', {
+        const response = await fetch('https://localhost:8443/api/upload-poster', {
             method: 'POST',
             credentials: 'include',
             body: formData
