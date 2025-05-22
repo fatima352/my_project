@@ -5,7 +5,7 @@
 
 //récupérer utilisateur connecté (variable global)
 
-/*--- AUTHENTIFICATIONS ---*/
+/*--- 0) AUTHENTIFICATIONS ---*/
 
 // Fonction fetch pour l'inscription
 function registerUser(event) {
@@ -23,7 +23,7 @@ function registerUser(event) {
     };
 
     //Envoyer les données vers le backend avec la méthode POST
-    fetch(`https://localhost:8443/register`, {
+    fetch(`http://localhost:3000/register`, {
         method: 'POST',
         // mode: 'cros',
         headers: {
@@ -57,7 +57,6 @@ function registerUser(event) {
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error: ' + error.message); 
     });
     
 }
@@ -76,7 +75,7 @@ function loginUser(event){
         password
     };
     //Envoyer les données vers le backend avec la méthode POST
-    fetch(`https://localhost:8443/login`, {
+    fetch(`http://localhost:3000/login`, {
         method : 'POST',
         mode: 'cors',
         credentials : 'include',
@@ -111,7 +110,6 @@ function loginUser(event){
         })
     .catch(error => {
         console.error('Error', error);
-        alert('Error: ' + error.message);
     })
 
 }
@@ -119,7 +117,7 @@ function loginUser(event){
 // Fonction fetch pour se deconnecter
 function logoutUser(event) {
     // event.preventDefault();
-    fetch(`https://localhost:8443/logout`, {
+    fetch(`http://localhost:3000/logout`, {
         method : 'POST',
         mode: 'cors',
         credentials : 'include'
@@ -142,12 +140,10 @@ function logoutUser(event) {
     .then(data =>{
         console.log(data);
         alert('Deconnexion réussie !');
-        // localStorage.removeItem('auth_token');// vu qu'
         window.location.href = '/login.html';
     })
     .catch(error => {
         console.error('Error', error);
-        alert('Error:' + error.message);
     })
 
 }
@@ -155,7 +151,7 @@ function logoutUser(event) {
 function owner(){
     const params = new URLSearchParams(window.location.search);
     const listeId = params.get("id");
-    fetch(`https://localhost:8443/api/liste/${listeId}/owner`, {
+    fetch(`http://localhost:3000/api/liste/${listeId}/owner`, {
         method : 'GET',
         mode: 'cors',
         credentials: 'include'
@@ -179,17 +175,14 @@ function owner(){
         }
         console.log(data);
     })
-    // .catch(error => {
-    //     // Erreurs réseau ou autres : log silencieux
-    //     console.log("Erreur silencieuse (non bloquante) :", error.message);
-    // });
+
 }
 
 // Fonction pour vérifier la connection de  l'utilisateure
 function authUser(event){
 
     //Fetch qui récupere les inforamtion du backend, methode GET
-    fetch(`https://localhost:8443/`,
+    fetch(`http://localhost:3000/`,
         {
             method : 'GET',
             mode: 'cors',
@@ -271,7 +264,7 @@ function authUser(event){
 
 //Fonction pour vérifier si l'utilisateur a accès à la au fonctionnalité admin
 function checkAdminAccess() {
-    fetch('https://localhost:8443/api/admin-access', {
+    fetch('http://localhost:3000/api/admin-access', {
         method: 'GET',
         mode: 'cors',
         credentials: 'include'
@@ -311,12 +304,14 @@ function checkAdminAccess() {
         console.log(data.message);
     })
     .catch(error => {
-        console.warn("Non admin ou non connecté :", error.message);
+        console.log("Non admin ou non connecté :", error.message);
     });
 }
 
+/*------------------------------*/
+/*--- 1)  FONCTIONNALTÉ USER  ----*/
+/*------------------------------*/
 
-/*---  FONCTIONNALTÉ USER  ----*/
 
 // Fonction fetch pour ajouter un film à la collection de l'utilisateur (PAS FONCTIONNEL)
 function fetchAddMovieCollection(){
@@ -329,7 +324,7 @@ function fetchAddMovieCollection(){
         return;
     }
     
-    fetch(`https://localhost:8443/api/collection`, {
+    fetch(`http://localhost:3000/api/collection`, {
         method : 'POST',
         mode: 'cors',
         headers: {
@@ -356,18 +351,16 @@ function fetchAddMovieCollection(){
     })
     .then(data =>{
         console.log(data);
-        alert('Film ajouter');
-        // window.location.href = 'profil.html';
+  
     })
     .catch(error => {
         console.log(error);
-        alert('Erreur: ' + error.message);
     });
 }
 
 // Fonction fetch pour récupérer la collection de l'utilisateur
 function getUserCollection(){
-    fetch(`https://localhost:8443/api/collection`, {
+    fetch(`http://localhost:3000/api/collection`, {
         method : 'GET',
         mode: 'cors',
         credentials: 'include'
@@ -375,9 +368,6 @@ function getUserCollection(){
     .then(response => {
         if(response.ok){
             return response.json();
-        }
-        else{
-            throw new Error('Erreur lors de la récupération des films');
         }
     })
     .then(data =>{
@@ -426,7 +416,7 @@ function fetchCommenterFilm(){
 
     const data = {idFilm,contenu,rating};
 
-    fetch(`https://localhost:8443/api/films/${idFilm}/reviews`, {
+    fetch(`http://localhost:3000/api/films/${idFilm}/reviewsFilm`, {
         method:'POST',
         mode : 'cors',
         credentials: 'include',
@@ -460,6 +450,7 @@ function fetchCommenterFilm(){
     .then(data=>{
         console.log("Réponse reçue : ", data);
         alert(data.message);
+        window.location.href = `film.html?id=${params.get("id")}`;
     })
     .catch(error => {
         console.error("Erreur:", error.message);
@@ -475,7 +466,7 @@ function fetchCommenterList(){
 
     const data = {idList,contenu};
 
-    fetch(`https://localhost:8443/api/liste/${idList}/reviewsList`, {
+    fetch(`http://localhost:3000/api/liste/${idList}/reviewsList`, {
         method:'POST',
         mode : 'cors',
         credentials: 'include',
@@ -509,6 +500,7 @@ function fetchCommenterList(){
     .then(data=>{
         console.log("Réponse reçue : ", data);
         alert(data.message);
+        window.location.href = `list.html?id=${params.get("id")}`;
     })
     .catch(error => {
         console.error("Erreur:", error.message);
@@ -520,7 +512,7 @@ function getReviews(){
     const params = new URLSearchParams(window.location.search);
     const idFilm = params.get("id");
 
-    fetch(`https://localhost:8443/api/films/${idFilm}/reviewsFilm`, {
+    fetch(`http://localhost:3000/api/films/${idFilm}/reviewsFilm`, {
         method:'GET',
         mode : 'cors'
     })
@@ -550,8 +542,10 @@ function getReviews(){
             reviewItem.classList.add('item_review')
             reviewItem.innerHTML = `
                <div class="infoReview">
-               <a href="#" class="films-links">${review.username} </a>
-               <a href="#" class="films-links">${review.date} </a>
+                <div class="user-meta">
+                    <span class="username">${review.username}</span>
+                    <span class="date">${review.date}</span>
+                </div>
                 <p class="reviewContenu">${review.contenu}</p>
                </div>
                
@@ -567,7 +561,7 @@ function getReviewsList(){
     const params = new URLSearchParams(window.location.search);
     const idList = params.get("id");
 
-    fetch(`https://localhost:8443/api/liste/${idList}/reviewsList`, {
+    fetch(`http://localhost:3000/api/liste/${idList}/reviewsList`, {
         method:'GET',
         mode : 'cors'
     })
@@ -597,8 +591,10 @@ function getReviewsList(){
             reviewItem.classList.add('item_review')
             reviewItem.innerHTML = `
                <div class="infoReview">
-               <a href="#" class="films-links">${review.username} </a>
-               <a href="#" class="films-links">${review.date} </a>
+                <div class="user-meta">
+                    <span class="username">${review.username}</span>
+                    <span class="date">${review.date}</span>
+                </div>
                 <p class="reviewContenu">${review.contenu}</p>
                </div>
                
@@ -608,12 +604,12 @@ function getReviewsList(){
     })
 }
 
-/*--- GESTIONS DES FILMS ---*/
+/*--- 3) GESTIONS DES FILMS ---*/
 
 // Fonction fetch pour récupérer les films du backend
 function getMovies(event){
     // Fonction fetch qui récupere les inforamtion du backend, methode GET
-    fetch(`https://localhost:8443/api/films`, {
+    fetch(`http://localhost:3000/api/films`, {
         method : 'GET',
         mode: 'cors',
         credentials: 'include'
@@ -621,9 +617,6 @@ function getMovies(event){
     .then(response => {
         if(response.ok){
             return response.json();
-        }
-        else{
-            throw new Error('Erreur lors de la récupération des films');
         }
     })
     .then(data =>{
@@ -674,7 +667,7 @@ async function fetchaddFilm() {
     }
 
    
-    fetch(`https://localhost:8443/api/films`, {
+    fetch(`http://localhost:3000/api/films`, {
         method : 'POST',
         mode: 'cors',
         headers: {
@@ -713,7 +706,7 @@ async function fetchaddFilm() {
     })
     .then(data => {
         console.log(data);
-        alert('Film ajouté avec succès !');
+        // alert('Film ajouté avec succès !');
     })
 
 }
@@ -729,7 +722,7 @@ function getMovie(){
         return;
     }
     // Fetch qui récupere les informations du backend, methode GET
-    fetch(`https://localhost:8443/api/films/${id}`, {
+    fetch(`http://localhost:3000/api/films/${id}`, {
         method: 'GET',
         mode: 'cors',
         credentials: 'include',
@@ -788,7 +781,7 @@ function fetchUpdateFilm() {
     };
 
     // Envoyer les données vers le backend avec la méthode PUT
-    fetch(`https://localhost:8443/api/films/${id}`, {
+    fetch(`http://localhost:3000/api/films/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -798,8 +791,6 @@ function fetchUpdateFilm() {
     .then(response => {
         if (response.ok) {
             return response.json();
-        } else {
-            throw new Error('Erreur lors de la mise à jour du film');
         }
     })
     .then(data => {
@@ -822,7 +813,7 @@ function fetchDeleteMovie(){
         return;
     }
 
-    fetch(`https://localhost:8443/api/films/${id}`, {
+    fetch(`http://localhost:3000/api/films/${id}`, {
         method: 'DELETE',
         mode: 'cors',
         headers: {
@@ -833,8 +824,6 @@ function fetchDeleteMovie(){
     .then(response => {
         if(response.ok){
             return response.json();
-        }else{
-            throw new Error('Erreur lors de la suppression du film');
         }
     })
     .then(data=>{
@@ -848,7 +837,7 @@ function fetchDeleteMovie(){
     });
 }
 
-/*--- GESTIONS DES LISTES ---*/
+/*--- 4) GESTIONS DES LISTES ---*/
 
 //Fonction fetch pour créer une liste
 function fetchCreateList(){
@@ -856,7 +845,7 @@ function fetchCreateList(){
     const data = {listName};
 
     //fetch pour envoyer les données vers le backend (table liste)
-    fetch(`https://localhost:8443/api/liste`, {
+    fetch(`http://localhost:3000/api/liste`, {
         method : 'POST',
         mode: 'cors',
         headers: {
@@ -868,15 +857,10 @@ function fetchCreateList(){
     .then(response =>{
         if (response.ok){
             return response.json();
-        }else{
-            alert("Utilisateur non connecter");
-            throw Error("Token non valide, utilisateur non connecter");
         }
     })
     .then(data =>{
         console.log(data);
-        alert('List created');
-        window.location.href = 'profil.html';
     })
     .catch(error => {
         console.log(error);
@@ -887,7 +871,7 @@ function fetchCreateList(){
  
 //Fonction pour récupérer les listes de l'utilisateur
 function getUserLists(){
-    fetch(`https://localhost:8443/api/liste`, {
+    fetch(`http://localhost:3000/api/liste`, {
         method : 'GET',
         mode: 'cors',
         credentials: 'include'
@@ -928,7 +912,6 @@ function getUserLists(){
     })
     .catch(error => {
         console.error('Error:', error);
-        // alert('Erreur: ' + error.message);
     });
 
 }
@@ -942,7 +925,7 @@ function fetchaddFilmToListe() {
     const listeId = params.get("id");
 
 
-    fetch(`https://localhost:8443/api/liste/${listeId}`, {
+    fetch(`http://localhost:3000/api/liste/${listeId}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -975,7 +958,7 @@ function fetchaddFilmToListe() {
         console.log(data);
     })
     .catch(error => {
-        alert("Erreur : " + error.message);
+        console.error("Erreur:", error.message);
     });
 }
 
@@ -983,7 +966,7 @@ function fetchaddFilmToListe() {
 function getList(){
     const params = new URLSearchParams(window.location.search);
     const listeId = params.get("id");
-    fetch(`https://localhost:8443/api/liste/${listeId}`, {
+    fetch(`http://localhost:3000/api/liste/${listeId}`, {
         method : 'GET',
         mode: 'cors'
     })
@@ -1023,11 +1006,21 @@ function getList(){
 
         });
         const titre = document.getElementById("nameList");
-        titre.innerHTML = `MOVIES IN THE LIST: ${data.nameList.name}`;
-        const creatorInfo = document.createElement("p");
-        creatorInfo.classList.add("creator-info");
-        creatorInfo.innerHTML = `Created by: ${data.nameList.username}`;
-        titre.after(creatorInfo); 
+        titre.innerHTML = '';
+        titre.innerHTML = `MOVIES IN THE LIST : ${data.nameList.name}`;
+        
+        let creatorInfo = document.getElementById("creator-info");
+        if (!creatorInfo) {
+            // S'il n'existe pas, le créer
+            creatorInfo = document.createElement("p");
+            creatorInfo.id = "creator-info";
+            creatorInfo.classList.add("creator-info");
+            titre.after(creatorInfo);
+        }
+      
+      // Mettre à jour son contenu
+      creatorInfo.innerHTML = `Created by : ${data.nameList.username}`;
+      
         console.log(data);
     })
 
@@ -1036,7 +1029,7 @@ function getList(){
 // Fonction pour supprimer une liste
 function fetchDeleteList(listId) {
 
-    fetch(`https://localhost:8443/api/liste`, {
+    fetch(`http://localhost:3000/api/liste`, {
         method: 'DELETE',
         mode: 'cors',
         headers: {
@@ -1053,19 +1046,16 @@ function fetchDeleteList(listId) {
         }
     })
     .then(data=>{
-        console.log("Suppression réussie")
-        alert(data.message);
-        window.location.href = "profil.html";
+        console.log("Suppression réussie");
     })
     .catch(error => {
         console.log(error);
-        alert('Erreur: ' + error.message);
     });
 }
 
 // Fonction pour supprimer un film de la collection
 function fetchDeleteFilmCollec(filmId){
-    fetch(`https://localhost:8443/api/collection`, {
+    fetch(`http://localhost:3000/api/collection`, {
         method : 'DELETE',
         mode : 'cors',
         headers: {
@@ -1076,7 +1066,6 @@ function fetchDeleteFilmCollec(filmId){
     })
     .then(response => {
         if(response.ok){
-            alert("Film supprimé avec succé");
             return response.json();
         }else{
             throw new Error('Erreur lors de la suppression du film');
@@ -1085,18 +1074,15 @@ function fetchDeleteFilmCollec(filmId){
     .then(data=>{
         console.log("Suppression réussie")
         alert(data.message);
-        window.location.href = "profil.html";
     })
     .catch(error => {
         console.log(error);
-        alert('Erreur: ' + error.message);
     });
-
 }
 
 
 function getAllListe(){
-    fetch(`https://localhost:8443/api/listes`, {
+    fetch(`http://localhost:3000/api/listes`, {
         method : 'GET',
         mode: 'cors',
         credentials: 'include'
@@ -1115,8 +1101,6 @@ function getAllListe(){
             const listeItem = document.createElement('li');
             listeItem.classList.add('item')
             listeItem.innerHTML = `
-               <a href="list.html?id=${liste.id}">   
-                </a>
                 <a href="list.html?id=${liste.id}" class="films-links">${liste.name}</a>
             `;
             listesContainer.appendChild(listeItem);
@@ -1126,6 +1110,192 @@ function getAllListe(){
     })
 
 }
+function getLastFilm(){
+    fetch(`http://localhost:3000/api/home/films`, {
+        method : 'GET',
+        mode: 'cors',
+    })
+    .then(response => {
+        if(response.ok){
+            return response.json();
+        }else{
+            throw new Error('Erreur lors de la récupération des listes');
+        }
+    })
+    .then(data => {
+        const filmsContainer = document.getElementById('latestMoviesContainer');
+        if (!filmsContainer) {
+            console.error("filmsContainer pas trouver dans le DOM.");
+            return;
+        }
+        // Ajouter les films dans le DOM 
+        filmsContainer.innerHTML = '';
+        data.films.forEach(film => {
+            const filmsItem = document.createElement('li');
+            filmsItem.classList.add('item')
+            filmsItem.innerHTML = `
+                <div class="movie-card placeholder">
+                        <div class="movie-poster">
+                            <a href="film.html?id=${film.id}">
+                        <img src="http://localhost:3000/images/${film.posterURL}" alt="${film.title}" class="movie-poster"> 
+                          </a>
+                        </div>
+                </div>
+                <a href="film.html?id=${film.id}" class="films-links">${film.title}</a>
+
+            `;
+            filmsContainer.appendChild(filmsItem);
+        });
+
+    })
+}
+
+function getlastListe(){
+    fetch(`http://localhost:3000/api/home/liste`, {
+        method : 'GET',
+        mode: 'cors',
+    })
+    .then(response => {
+        if(response.ok){
+            return response.json();
+        }else{
+            throw new Error('Erreur lors de la récupération des listes');
+        }
+    })
+    .then(data => {
+        const listesContainer = document.getElementById('latestListsContainer');
+        if (!listesContainer) {
+            console.error("listesContainer pas trouver dans le DOM.");
+            return;
+        }
+        
+        // Clear container
+        listesContainer.innerHTML = '';
+        
+        // Check if data and lists array exist
+        if (!data || !data.list) {
+            console.error("Données de listes non trouvées", data);
+            listesContainer.innerHTML = '<div class="list-card">Aucune liste disponible</div>';
+            return;
+        }
+        
+        // Iterate through lists
+        data.list.forEach(liste => {
+            const listCard = document.createElement('div');
+            listCard.className = 'list-card';
+            
+            // Utilisez "nameListe" au lieu de "name" pour correspondre à l'alias SQL
+            const listName = liste.nameListe || "Liste sans nom";
+            const listId = liste.id || "#";
+            const username = liste.username || "Utilisateur inconnu";
+            
+            listCard.innerHTML = `
+                <h3><a href="list.html?id=${listId}">${listName}</a></h3>
+                <p>by ${username}</p>
+            `;
+            
+            listesContainer.appendChild(listCard);
+        });
+        
+        console.log("Listes récupérées:", data);
+    })
+    .catch(error => {
+        console.error("Erreur lors du chargement des listes:", error);
+        const listesContainer = document.getElementById('latestListsContainer');
+        if (listesContainer) {
+            listesContainer.innerHTML = '<div class="list-card">Erreur de chargement</div>';
+        }
+    });
+}
+/// iciiiiiiii
+
+function getTopRatedFilms() {
+    fetch(`http://localhost:3000/api/home/top-films`, {
+        method: 'GET',
+        mode: 'cors',
+    })
+    .then(response => {
+        if(response.ok){
+            return response.json();
+        }else{
+            throw new Error('Erreur lors de la récupération des films les mieux notés');
+        }
+    })
+    .then(data => {
+        const filmsContainer = document.getElementById('latestMoviesContainer');
+        if (!filmsContainer) {
+            console.error("topRatedFilmsContainer pas trouver dans le DOM.");
+            return;
+        }
+        // Ajouter les films dans le DOM 
+        filmsContainer.innerHTML = '';
+        data.topFilms.forEach(film => {
+            const filmsItem = document.createElement('li');
+            filmsItem.classList.add('item')
+            filmsItem.innerHTML = `
+                <div class="movie-card placeholder">
+                    <div class="movie-poster">
+                        <a href="film.html?id=${film.id}">
+                            <img src="http://localhost:3000/images/${film.posterURL}" alt="${film.title}" class="movie-poster"> 
+                        </a>
+                    </div>
+                </div>
+                <a href="film.html?id=${film.id}" class="films-links">${film.title}</a>
+                <div class="rating">★ ${film.averageRating}/5</div>
+            `;
+            filmsContainer.appendChild(filmsItem);
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Erreur: ' + error.message);
+    });
+}
+
+
+// function getTopRatedFilms() {
+//     fetch(`http://localhost:3000/api/home/top-films`, {
+//         method: 'GET',
+//         mode: 'cors',
+//     })
+//     .then(response => {
+//         if(response.ok){
+//             return response.json();
+//         }else{
+//             throw new Error('Erreur lors de la récupération des films les mieux notés');
+//         }
+//     })
+//     .then(data => {
+//         const topFilmsContainer = document.getElementById('topFilmsContainer');
+//         if (!topFilmsContainer) {
+//             console.error("topFilmsContainer pas trouvé dans le DOM.");
+//             return;
+//         }
+        
+//         // Afficher les films les mieux notés
+//         topFilmsContainer.innerHTML = '<h2>Top 5 des films les mieux notés</h2>';
+//         const filmsWrapper = document.createElement('div');
+//         filmsWrapper.className = 'top-films-wrapper';
+        
+//         data.topFilms.forEach(film => {
+//             const filmCard = document.createElement('div');
+//             filmCard.className = 'top-film-card';
+//             filmCard.innerHTML = `
+//                 <a href="film.html?id=${film.id}">
+//                     <img src="http://localhost:3000/images/${film.posterURL}" alt="${film.title}" class="top-film-poster">
+//                 </a>
+//                 <h4>${film.title}</h4>
+//                 <div class="rating">★ ${film.averageRating}/5</div>
+//             `;
+//             filmsWrapper.appendChild(filmCard);
+//         });
+        
+//         topFilmsContainer.appendChild(filmsWrapper);
+//     })
+//     .catch(error => {
+//         console.error("Erreur:", error);
+//     });
+// }
 
 /************************************************************ */
 /*********************  AUTRES FONCTIONS  *********************/
@@ -1207,8 +1377,6 @@ function closePopup3() {
     aSupprimer = null;
 }
 
-
-
 function deleteList(){
     fetchDeleteList(aSupprimer);
     closePopup3();
@@ -1234,6 +1402,9 @@ function closePopup4() {
 function commenterFilm(){
     fetchCommenterFilm();
     closePopup4();
+    setTimeout(() => {
+        initStarRating(); 
+    }, 50);
 }
 
 function commenterList(){
@@ -1255,7 +1426,7 @@ async function uploadPoster() {
     formData.append('filmTitle', filmTitle); 
 
     try {
-        const response = await fetch('https://localhost:8443/api/upload-poster', {
+        const response = await fetch('http://localhost:3000/api/upload-poster', {
             method: 'POST',
             credentials: 'include',
             body: formData
@@ -1270,4 +1441,38 @@ async function uploadPoster() {
         alert(`Échec de l'upload: ${error.error || 'Erreur serveur'}`);
         return null;
     }
+}
+
+// Updated function to initialize star rating component
+function initStarRating() {
+    const starRating = document.querySelector('.star-rating');
+    const stars = document.querySelectorAll('.star');
+    const ratingInput = document.getElementById('rating');
+    
+    // Reset initial state
+    stars.forEach(s => s.classList.remove('selected'));
+    starRating.classList.remove('has-selection');
+    ratingInput.value = 0;
+    
+    stars.forEach(star => {
+        star.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent any default action
+            
+            const rating = this.getAttribute('data-rating');
+            ratingInput.value = rating;
+            
+            // Clear all selected stars first
+            stars.forEach(s => s.classList.remove('selected'));
+            
+            // Mark the star rating container as having a selection
+            starRating.classList.add('has-selection');
+            
+            // Apply selected class to this star and all stars before it
+            for (let i = 0; i < stars.length; i++) {
+                if (parseInt(stars[i].getAttribute('data-rating')) <= parseInt(rating)) {
+                    stars[i].classList.add('selected');
+                }
+            }
+        });
+    });
 }

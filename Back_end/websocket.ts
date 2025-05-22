@@ -33,9 +33,20 @@ export function handleWsConnection(socket: WebSocket) {
       // Traitez le message ici si nécessaire
       console.log("Film supprimé:", data.title);
     }
-    if (data.type === "ADD_REVIEWFILM") {
-      // Traitez le message ici si nécessaire
-      console.log("Nouvelle critique ajoutée:", data.title);
+    if(data.type === "ADD_TO_COLLECTION"){
+      console.log("ADD_TO_COLLECTION");
+    }
+    if(data.type === "DELETE_FILM_COLLECTION"){
+      console.log("DELETE_FILM_COLLECTION");
+    }
+    if(data.type === "ADD_LIST"){
+      console.log("ADD_LIST");
+    }
+    if(data.type === "DELETE_LIST"){
+      console.log("DELETE_LIST");
+    }
+    if(data.type === "ADD_FILM_LIST"){
+      console.log("ADD_FILM_LIST");
     }
   };
 }
@@ -67,11 +78,65 @@ export function notifyDeleteFilm(filmData: any) {
   });
 }
 
-export function notifyNewReviewFilm(reviewData: any ){
+export function notifyFilmAddedToCollection(filmData: any) {
   const message = JSON.stringify({
-    type: "ADD_REVIEWFILM",
-    data: reviewData,
+    type: "ADD_TO_COLLECTION",
+    data: filmData,
   });
+
+  sockets.forEach((socket) => {
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(message);
+    }
+  });
+}
+
+
+export function notifyDeleteFilmCollection(filmData: any) {
+  const message = JSON.stringify({
+    type: "DELETE_FILM_COLLECTION",
+    data: filmData,
+  });
+
+  sockets.forEach((socket) => {
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(message);
+    }
+  });
+}
+
+
+export function notifyListCreated(listData: any) {
+  const message = JSON.stringify({
+    type: "ADD_LIST",
+    data: listData,
+  });
+
+  sockets.forEach((socket) => {
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(message);
+    }
+  });
+}
+export function notifyDeleteList(listData: any) {
+  const message = JSON.stringify({
+    type: "DELETE_LIST",
+    data: listData,
+  });
+
+  sockets.forEach((socket) => {
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(message);
+    }
+  });
+}
+
+export function notifyAddFilmList(listData: any) {
+  const message = JSON.stringify({
+    type: "ADD_FILM_LIST",
+    data: listData,
+  });
+
   sockets.forEach((socket) => {
     if (socket.readyState === WebSocket.OPEN) {
       socket.send(message);

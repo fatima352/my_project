@@ -10,6 +10,7 @@ import * as filmCtrl from "./controllers/controFilm.ts";//controllers pour les f
 import * as reviewCtr from "./controllers/contrReview.ts";//contreollers popur la gestion des commentaires
 import * as ListCtr from "./controllers/contrListe.ts";
 import * as uploadCtr from "./controllers/contrUpload.ts"
+import * as HomeCtr from "./controllers/contrHome.ts";
 
 
 export const router = new Router();
@@ -118,6 +119,14 @@ router.post('/api/liste/:id/reviewsList', mw.authMw, reviewCtr.commentList);
 router.get('/api/liste/:id/reviewsList', reviewCtr.getListReview);
 
 
-  
+/*
+* ROUTE POUR LA PAGE HOME
+*/
+
+// router.get('/api/home/films', HommeCtr.getlastfilm); // Récupérer les 5 derniers films ajoutés
+router.get('/api/home/liste', HomeCtr.getlastList); // Récupérer les 5 dernières listes ajoutées
+router.get("/api/home/top-films", HomeCtr.getTopRatedFilms);
+
+
 
 

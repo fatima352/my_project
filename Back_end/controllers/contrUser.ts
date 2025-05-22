@@ -1,5 +1,7 @@
 import { db } from "../database/data.ts";
 import {Context} from "https://deno.land/x/oak@v17.1.4/mod.ts";
+import * as ws from "../websocket.ts";
+
 
 //fonction pour récupérer les information d'un utilisateur
 export const getUser = async(ctx:Context)=>{    
@@ -46,6 +48,9 @@ export const addFilmCollection = async (ctx)=>{
         console.log("Film déjà ajouté");
         return;
     }
+    
+    const filmInfo = db.prepare(`SELECT title FROM film WHERE id = ?`).get(film.id);
+    ws.notifyFilmAddedToCollection(filmInfo);
     
 
     db.prepare(`INSERT INTO library (userId, filmId) VALUES (?,?)`).run(userId.id, film.id);
@@ -105,12 +110,6 @@ export const getUserCollection = (ctx)=>{
         return;
     }
     const userCollection = db.prepare(`SELECT * FROM library, film WHERE userId = ? AND library.filmId = film.id`).all(userId.id);
-    // if(userCollection.length <= 0){
-    //     ctx.response.status = 404;
-    //     ctx.response.body = {message : "Aucun film dans la collection"};
-    //     console.log("Aucun film dans la collection");
-    //     return;
-    // }
     ctx.response.status = 200;
     ctx.response.body = {message : "Récupération de la collection réussite", userCollection};
     console.log("recuperation de la collection reussite");
@@ -135,17 +134,50 @@ export const deleteFilmCollection = async (ctx)=>{
 
     console.log("user bien récupéré");
     db.prepare(`DELETE FROM library WHERE userId = ? AND filmId = ?`).run(userId.id,filmId);
+    
+    const filmInfo = db.prepare(`SELECT title FROM film WHERE id = ?`).get(filmId);
+    ws.notifyDeleteFilmCollection(filmInfo);
     ctx.response.status = 200;
     ctx.response.body = {message: "Film supprimé avec succès"};
     console.log("Film supprimé avec succès");
 }
 
-//permettre a l'utilisateur de commenter
+// //Fonction pour ajouter une photo de profil
+// export const addProfilePicture = async (ctx:Context)=>{
+//     const tokenData = ctx.state.tokenData;
+//     if(!tokenData){
+//         ctx.response.status =401;
+//         ctx.response.body = {message: "Token non valide, utilisateur non connecter"};
+//         console.log("probleme token");
+//         return;
+//     }
+//     const username = tokenData.username;
 
-//recuperere les commentaires d'un film
-
-
-//ajouter un film a la collection
-//ajouter directement a partir de la page description film ou apartir de la page profil qui renvoie vers page recherche film avoir  
-
-
+//     const userId = db.prepare(`SELECT id FROM users WHERE username = ?`).get(username) as {id:number}|undefined;
+//     if(!userId){
+//         ctx.response.status = 401;
+//         ctx.response.body = {message : "Utilisateur introuvable"};
+//         console.log("Utilisateur introuvable");
+//         return;
+//     }
+    
+//     const body = await ctx.request.body({type:"form-data"});
+//     const data = await body.value.read();
+//     const file = data.files[0];
+    
+//     if(!file){
+//         ctx.response.status = 400;
+//         ctx.response.body = {message: "Aucun fichier trouvé"};
+//         console.log("Aucun fichier trouvé");
+//         return;
+//     }
+    
+//     const filePath = `./Back_end/uploads/${file.filename}`;
+    
+//     await Deno.writeFile(filePath, await Deno.readFile(file.path));
+    
+//     db.prepare(`UPDATE users SET profilePicture = ? WHERE id = ?`).run(filePath, userId.id);
+    
+//     ctx.response.status = 200;
+//     ctx.response.body = {message: "Photo de profil ajoutée avec succès"};
+// }

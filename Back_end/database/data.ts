@@ -85,13 +85,3 @@ db.exec(`
         FOREIGN KEY (listeId) REFERENCES liste(id) ON DELETE CASCADE
     );
 `)
-
-/* TABLE NOTIFICATIONS */
-db.exec(`
-    CREATE TABLE IF NOT EXISTS notification(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        titre TEXT NOT NULL,
-        userId INTEGER NOT NULL,
-        FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
-    );
-`)

@@ -69,7 +69,7 @@
             <div class="container description">
                 <div class="mini-headers">
                 <h3 class="titre">DESCRIPTION</h3>
-                <div class="userActionsFilm">
+                <div id = "userActionsFilm" class="userActionsFilm">
                     <!-- modifier descriptio admin -->
                     <!-- <button class="btn-add">Ajouter film</button> -->
                 </div>
@@ -97,7 +97,7 @@
                     </div>
                 </div>
                 <hr class="line">
-                <ul id = "reviewsContainer" class="list">
+                <ul id = "reviewsContainer" class="listreviews">
                     <li class="item">
                         <a href="#" class="nav-link">
                             <p> REVIEWS
@@ -165,7 +165,8 @@
                 <div class="addfilm reviews" id="addfilm">
                     <div class="mini">
                         <label for="titlefilm">Commente:</label>
-                        <input class="input" type="text" id="contenu" name="title">
+                        <textarea class="input desc" id="contenu" name="title"></textarea>
+                        <!-- <input class="input" type="text" id="contenu" name="title"> -->
                     </div>
                     <!-- <div class="mini">
                         <label for="datefilm">Date:</label>
@@ -173,7 +174,14 @@
                     </div> -->
                     <div class="mini">
                         <label for="descriptionfilm">Rating:</label>
-                        <textarea class="input desc" id="rating" name="description"></textarea>
+                        <div class="star-rating">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                            <input type="hidden" id="rating" value="0">
+                        </div>
                     </div>
                     <button class="btn add" type="submit" onclick=" commenterFilm()">Commenter</button>
                 </div>

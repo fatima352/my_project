@@ -1,5 +1,4 @@
 import { db } from "../database/data.ts";
-import { notifyNewReviewFilm } from "../websocket.ts";
 import {Context} from "https://deno.land/x/oak@v17.1.4/mod.ts";
 
 
@@ -36,8 +35,6 @@ export const commentFilm = async (ctx)=>{
 
 
         db.prepare(`INSERT INTO reviewsFilm (userId, filmId, contenu, date, rating) VALUES (?,?,?,?,?)`).run(user.id, idfilm, contenu, date, intRating);
-        const reviewData = { userId: user.id, filmId: idfilm, contenu, date, rating: intRating };
-        notifyNewReviewFilm(reviewData);
         
         ctx.response.status = 201;
         ctx.response.body = {message: "Commentaire ajouté avec succès"};

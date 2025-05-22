@@ -160,3 +160,7 @@ export const deleteFilm = (ctx:Context)=>{
     }
 
 }
+
+export function getlastfilm(arg0: string, getlastfilm: any) {
+  throw new Error("Function not implemented.");
+}

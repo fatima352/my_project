@@ -9,6 +9,8 @@
   --couleurecriturebouton: #121622;     
   --couleurbtnLogout:  #40648d;
   --couleurecritureLogout: #f9f9fa;
+
+  
   
   --couleurtransition: #92a6cf;         
   --backgroundPopup: rgba(37, 49, 91, 0.5); 
@@ -32,6 +34,9 @@ body{
     color: var(--couleurecriture);
     font-family: var(--policesite);
     color: var(--couleurecriture);
+    min-height: 100vh; /* Ensure body is at least full viewport height */
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
 }
 
 
@@ -613,40 +618,491 @@ h1{
     color: var(--couleurecriturebouton);
 }
 
+.popup-content-Reviewlist {
+    background-color: var(--couleurpopup);
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    height: 255px;
+    /* max-width: 90%; */
+    color: var(--couleurecriturebouton);
+}
+
 
 /* REVIEWS DES FILMS */
+/* Liste des commentaires */
+.listreviews {
+    list-style: none;
+    flex-direction: row;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 4px;
+}
 
-/* Style for the review container */
+/* Élément de commentaire individuel */
+.item_review {
+    display: flex;
+    padding: 10px 0;
+    /* border-bottom: 1px solid var(--couleurtransition); Change separator line color to red */
+    margin-bottom: 34px; /* Add 34px spacing between comments */
+}
+
+/* Conteneur principal de chaque commentaire */
 .infoReview {
     display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+/* Colonne de gauche : username + date */
+.user-meta {
+    display: flex;
     flex-direction: column;
-    background-color: #f9f9f9; /* Light background for contrast */
-    border: 1px solid #ddd; /* Subtle border */
-    border-radius: 8px; /* Rounded corners */
-    padding: 16px; /* Spacing inside the container */
-    margin-bottom: 12px; /* Space between reviews */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    min-width: 120px;
+    gap: 4px; 
 }
 
-/* Style for the username link */
-.infoReview .films-links {
+/* Nom en gras et mis en valeur */
+.username {
     font-weight: bold;
-    color: #007BFF; /* Blue color for links */
+    color: #ffffff;
+    gap: 4px; /* <-- espace automatique entre les éléments */
+}
+
+/* Date en dessous, plus discrète */
+.date {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+/* Contenu du commentaire à droite */
+.reviewContenu {
+    margin: 0;
+    flex: 1;
+    color: #ffffff;
+}
+
+/****************************** PAGE HOME / ACCUEIL *****************************/
+
+/* Specific body style for homepage */
+.home-body {
+    background-color: var(--couleursite);
+    color: var(--couleurecriture);
+}
+
+/* Hero Section Styles */
+.hero-section {
+    padding: 80px 50px;
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+    border-radius: 10px;
+    background: linear-gradient(rgba(30, 34, 53, 0.7), rgba(30, 34, 53, 0.9)), 
+                url('../images/hero-bg.jpg') center/cover no-repeat;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-content h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+    color: var(--couleurecriture);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transform: none;
+}
+
+.hero-content p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+    line-height: 1.5;
+    color: #e0e0e0;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 12px 30px;
+    border-radius: 6px;
     text-decoration: none;
-    margin-bottom: 8px; /* Space below the username */
+    font-weight: 500;
+    transition: all 0.3s ease;
+    font-size: 1em;
 }
 
-.infoReview .films-links:hover {
-    text-decoration: underline; /* Underline on hover */
+.btn-primary {
+    background-color: var(--couleurbouton);
+    color: var(--couleurecriturebouton);
 }
 
-/* Style for the review content */
-.infoReview .reviewContenu {
-    font-size: 14px;
-    color: #333; /* Darker text for readability */
-    line-height: 1.5; /* Better line spacing */
+.btn-secondary {
+    background-color: transparent;
+    color: var(--couleurecriture);
+    border: 2px solid var(--couleurtransition);
+}
+
+.btn-primary:hover, .btn-secondary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary:hover {
+    background-color: var(--couleurtransition);
+    color: var(--couleurecriture);
+}
+
+.btn-secondary:hover {
+    background-color: var(--couleurtransition);
+    color: var(--couleurecriturebouton);
+}
+
+/* Latest Movies Section */
+.latest-movies, .latest-lists {
+    margin-bottom: 60px;
+}
+
+.view-all {
+    color: var(--couleurtransition);
+    text-decoration: none;
+    font-size: 1em;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin-right: 20px;
+}
+
+.view-all:hover {
+    color: var(--couleurecriture);
+    text-decoration: underline;
+}
+
+.movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 30px;
+    padding: 0 20px;
+}
+
+.movie-card {
+    background-color: var(--couleurheader);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    height: auto; /* Change from fixed height to auto */
+    max-height: 300px; /* Add a max-height instead */
+}
+
+.movie-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.movie-poster {
+    height: 240px; /* Adjust this height as needed */
+    background-color: var(--couleurtransition);
+    background-size: cover;
+    background-position: center;
+    overflow: hidden; /* Prevent content overflow */
+    position: relative; /* For positioning the image inside */
+}
+
+/* Add styles for the actual poster images */
+.movie-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This maintains aspect ratio while filling container */
+    object-position: center;
+}
+
+.movie-card h3 {
+    padding: 15px;
+    text-align: center;
+    font-size: 1em;
+    font-weight: 500;
+    margin: 0;
+}
+
+.movie-card.placeholder h3 {
+    opacity: 0.6;
+    animation: pulse 1.5s infinite;
+}
+
+/* Latest Lists Section */
+.lists-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 0 20px;
+}
+
+.list-card {
+    background-color: var(--couleurheader);
+    border-radius: 10px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    min-height: 100px;
+    position: relative;
+}
+
+/* Make the entire list card clickable by making the anchor cover the whole area */
+.list-card a.card-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Ensure content remains clickable above the overlay link */
+.list-card h3, .list-card p {
+    position: relative;
+    z-index: 2;
+}
+
+.list-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.list-card h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: var(--couleurecriture);
+}
+
+.list-card p {
+    font-size: 0.9em;
+    color: #b0b0b0;
+    margin-top: auto;
+}
+
+.list-card.placeholder {
+    opacity: 0.6;
+    animation: pulse 1.5s infinite;
 }
 
 
+/* Footer Styles */
+footer {
+    background-color: var(--couleurheader);
+    padding: 20px 0;
+    text-align: center;
+    margin-top: auto; /* Push to bottom of flex container */
+    width: 100%;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-content p {
+    color: var(--couleurecriture);
+    font-size: 0.9em;
+}
 
 
+.list-card a, .list-card a:visited {
+    color: var(--couleurecriture);
+    text-decoration: none;
+}
+
+.movie-card a, .movie-card a:visited {
+    color: var(--couleurecriture);
+    text-decoration: none;
+}
+
+/* Specific styles for navigation links that shouldn't override hover effects */
+.navigation a, .navigation a:visited {
+    color: var(--couleurecriture);
+}
+
+/* Responsive design for homepage */
+@media (max-width: 1024px) {
+    .movies-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+    
+    .hero-content h1 {
+        font-size: 2.5em;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 60px 30px;
+    }
+    
+    .hero-content h1 {
+        font-size: 2em;
+    }
+    
+    .hero-content p {
+        font-size: 1em;
+    }
+    
+    .movies-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+    
+    .lists-container {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .btn-primary, .btn-secondary {
+        width: 80%;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-page {
+        padding: 20px 30px;
+    }
+    
+    .hero-section {
+        padding: 40px 20px;
+    }
+    
+    .hero-content h1 {
+        font-size: 1.8em;
+    }
+    
+    .movies-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+}
+
+/* Logo styles */
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.site-logo {
+    height: 40px; /* Ajustez selon la taille souhaitée */
+    margin-right: 10px;
+}
+
+/* Star Rating Styles */
+.star-rating {
+    display: flex;
+    flex-direction: row;
+    font-size: 30px;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+.star {
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    margin: 0 3px;
+    user-select: none; /* Prevent text selection */
+}
+
+/* Hover effects */
+.star-rating:not(.has-selection) .star:hover {
+    color: #ffb400; /* Gold color for hovered star */
+}
+
+/* Make all previous siblings gold on hover */
+.star-rating:not(.has-selection) .star:hover ~ .star {
+    color: #ccc; /* Keep subsequent stars gray */
+}
+
+/* Fix for Firefox and other browsers - use JavaScript to handle this */
+.star-rating .star.hovered {
+    color: #ffb400;
+}
+
+/* Selected stars - permanently gold */
+.star.selected {
+    color: #ffb400 !important; /* Important to override hover effects */
+}
+
+/* All stars before the selected star should be gold too */
+.star.selected ~ .star.selected {
+    color: #ffb400 !important;
+}
+
+/* iciiiiiiiii */
+/* Style pour le film le mieux noté */
+.best-film-card {
+    background-color: var(--couleurheader);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.best-film-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.best-film-poster {
+    width: 180px;
+    height: 270px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.best-film-info {
+    flex: 1;
+}
+
+.rating {
+    color: #ffe100;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+/* Style pour le top 5 des films */
+.top-films-wrapper {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding: 10px 0;
+}
+
+.top-film-card {
+    min-width: 150px;
+    text-align: center;
+}
+
+.top-film-poster {
+    width: 120px;
+    height: 180px;
+    border-radius: 4px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.top-film-poster:hover {
+    transform: scale(1.05);
+}
