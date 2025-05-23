@@ -7,7 +7,7 @@ const app = new Application();
 if (Deno.args.length < 1) {
     console.log(`Usage: $ deno run --allow-net server.ts PORT [CERT_PATH KEY_PATH]`);
     Deno.exit();
-  }
+}
 
 //modif https
 let options: {
@@ -32,14 +32,14 @@ console.log(`Oak back server running on port ${options.port}`);
  * Cros qui permet toutes les méthodes
  */
 app.use(oakCors({
-  origin: "https://localhost:8443",
+  origin: "http://localhost:8000", // Autoriser les requêtes depuis le frontend
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], 
   allowedHeaders: ["Content-Type", "Authorization"], 
   credentials: true
 }));
 
-  // Serve static files
-  app.use(async (ctx, next) => {
+// Serve static files
+app.use(async (ctx, next) => {
     const path = ctx.request.url.pathname;
     if (path.startsWith('/images/')) {
         try {
@@ -51,7 +51,7 @@ app.use(oakCors({
         }
     }
     await next();
-  });
+});
 
 app.use(router.routes()); 
 app.use(router.allowedMethods()); 
@@ -59,4 +59,4 @@ app.use(router.allowedMethods());
 // Lancement du serveur (HTTP ou HTTPS)
 // console.log(`Serveur Oak lancé sur ${options.secure ? "https" : "http"}://localhost:${options.port}`);
 
-await app.listen({ hostname: "192.168.1.152", port: 3000 });
+await app.listen({port: 3000});
