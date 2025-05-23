@@ -108,7 +108,6 @@ export function notifyDeleteFilmCollection(filmData: any) {
   });
 }
 
-
 export function notifyListCreated(listData: any) {
   const message = JSON.stringify({
     type: "ADD_LIST",

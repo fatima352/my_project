@@ -60,36 +60,42 @@ export const addFilmCollection = async (ctx)=>{
 }
 
 // fonction pour récupérer les listes de l'utilisateur
-export const getUserLists = (ctx)=>{
+export const getUserLists = (ctx) => {
     const tokenData = ctx.state.tokenData;
-    if(!tokenData){
-        ctx.response.status =401;
-        ctx.response.body = {message: "Token non valide, utilisateur non connecter"};
-        console.log("probleme token");
+    if (!tokenData) {
+        ctx.response.status = 401;
+        ctx.response.body = { message: "Token non valide, utilisateur non connecté" };
+        console.log("problème token");
         return;
     }
+    
     const username = tokenData.username;
-
-    const userId = db.prepare(`SELECT id FROM users WHERE username = ?`).get(username) as {id:number}|undefined;
-    if(!userId){
+    
+    const userId = db.prepare(`SELECT id FROM users WHERE username = ?`).get(username) as { id: number } | undefined;
+    if (!userId) {
         ctx.response.status = 401;
-        ctx.response.body = {message : "Utilisateur introuvable"};
+        ctx.response.body = { message: "Utilisateur introuvable" };
         console.log("Utilisateur introuvable");
         return;
     }
-
+    
     const userList = db.prepare(`SELECT * FROM liste WHERE userId = ?`).all(userId.id);
     
-    if(userList.length > 0){
-        ctx.response.status = 200;
-        ctx.response.body = {message : "Récupération des liste réussite", userList};
-        console.log("recuperation des liste reussite"); 
-        return;
+    ctx.response.status = 200;
+    
+    if (userList.length === 0) { // Correction : === au lieu de =
+        ctx.response.body = { 
+            message: "Aucune liste créée",
+            userList: [] // Toujours inclure userList même si vide
+        };
+        console.log("Aucune liste");
+    } else {
+        ctx.response.body = { 
+            message: "Récupération des listes réussie",
+            userList: userList // Inclure les listes trouvées
+        };
     }
-    ctx.response.status = 404;
-    ctx.response.body = {message : "Aucune liste créer"};
-    console.log("Aucune liste");
-}
+};
 
 // Fonction pour récupérer la collection de film d'un utilisateur
 export const getUserCollection = (ctx)=>{

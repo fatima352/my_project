@@ -449,6 +449,7 @@ function fetchCommenterFilm(){
     })
     .then(data=>{
         console.log("Réponse reçue : ", data);
+        //recharger la page pour afficher le commentaire
         window.location.reload();
         alert(data.message);
     })
@@ -872,50 +873,64 @@ function fetchCreateList(){
 }
  
 //Fonction pour récupérer les listes de l'utilisateur
-function getUserLists(){
+function getUserLists() {
     fetch(`http://localhost:3000/api/liste`, {
-        method : 'GET',
+        method: 'GET',
         mode: 'cors',
         credentials: 'include'
     })
     .then(response => {
-        if(response.ok){
+        if (response.ok) {
             return response.json();
         }
-        else{
-            throw new Error('Erreur lors de la récupération des listes');
-        }
+        // Gérer les erreurs de réponse
+        throw new Error(`Erreur ${response.status}`);
     })
-    .then(data =>{
+    .then(data => {
         const containerListe = document.getElementById('containerListe');
         if (!containerListe) {
             console.error("containerListe élément non trouvé dans le DOM.");
             return;
         }
+        
+        // Vérifier si data existe et si userList existe
+        if (!data || !data.userList || data.userList.length === 0) {
+            console.log('Aucune liste ou données undefined:', data);
+            containerListe.innerHTML = '<p>Aucune liste</p>';
+            return;
+        }
+        
+        // Vider le conteneur avant d'ajouter les listes
         containerListe.innerHTML = '';
+        
+        // Parcourir et afficher les listes
         data.userList.forEach(list => {
             const listItem = document.createElement('li');
             const deleteBtn = document.createElement('button');
 
             deleteBtn.className = "btn-addFilm delete";
             deleteBtn.innerText = "X";
-            
+
             //ici on recupere l'id de la liste qu'on souhaite supprimer
             deleteBtn.onclick = () => showDeleteListPopup(list.id);
 
-            listItem.classList.add('item')
+            listItem.classList.add('item');
             listItem.innerHTML = `
                 <a href="list.html?id=${list.id}" class="films-links" data-id="${list.id}">${list.name}</a>
             `;
             listItem.appendChild(deleteBtn);
             containerListe.appendChild(listItem);
         });
-
     })
     .catch(error => {
         console.error('Error:', error);
+        
+        // Afficher "Aucune liste" en cas d'erreur aussi
+        const containerListe = document.getElementById('containerListe');
+        if (containerListe) {
+            containerListe.innerHTML = '<p>Aucune liste</p>';
+        }
     });
-
 }
 
 //Fonction pour ajouter un film à une liste
