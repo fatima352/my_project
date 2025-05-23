@@ -1,6 +1,5 @@
 import {Context} from "https://deno.land/x/oak@v17.1.4/mod.ts";
 
-// controllers/posterController.ts
 export const uploadPoster = async (ctx: Context) => {
   try {
       // 1. Vérification du Content-Type

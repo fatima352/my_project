@@ -9,7 +9,8 @@ db.exec(`
         username TEXT UNIQUE NOT NULL,
         role TEXT NOT NULL DEFAULT 'user',
         email TEXT UNIQUE NOT NULL,
-        password_hash TEXT NOT NULL
+        password_hash TEXT NOT NULL,
+        url_pp TEXT
     );
 `)
 

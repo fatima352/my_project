@@ -28,7 +28,6 @@ export const register = async(ctx:Context)=>{
     try{
         const body = await ctx.request.body.json();
         const { username, email, password } = body;
-        // const { response } = ctx;
     
         if(!username || !email || !password){
             ctx.response.status = 400;
@@ -64,7 +63,7 @@ export const login = async(ctx:Context)=>{
     try{
         const body = await ctx.request.body.json();
         const { username, password } = body;
-        // const { response } = ctx; 
+      
     
         if(!username || !password){
             ctx.response.status = 400;
@@ -92,19 +91,16 @@ export const login = async(ctx:Context)=>{
             return;
         }
         const role = user?.role;
-        //utilisation de l'username et du role pour créer le token ou pas ?
-        // const token = await create({alg: "HS512", typ: "JWT"}, {username, role}, secretKey );
         const token = await create({alg: "HS512", typ: "JWT"}, {username,role},  mw.secretKey );
     
         removeTokenByUser(username);//supprimer token si existant commme ca un seule session par utilisateur
     
         mw.tokens[username] = token; //stocké le token de l'utilisateur
     
-        // ctx.response.headers.set("Set-Cookie", `auth_token; HttpOnly; SameSite=Strict; Max-Age=3600`); //?????
         ctx.response.headers.set("Set-Cookie", `auth_token=${token}; HttpOnly; SameSite=Strict; Max-Age=3600`);//enelever secure
     
         ctx.response.status = 200;
-        ctx.response.body = {message: "Connexion réussie"};//ajout du token dans le body ???
+        ctx.response.body = {message: "Connexion réussie"};
     }catch(error){
         ctx.response.status = 500;
         ctx.response.body = {message: "Erreur serveur", error: error.message};
@@ -143,4 +139,70 @@ export const logout = async (ctx:Context) => {
     }
 };
 
-
+export const changePassword = async (ctx: Context) => {
+    try {
+        const body = await ctx.request.body.json();
+        const { currentPassword, newPassword, confirmNewPassword } = body;
+        const tokenData = ctx.state.tokenData;
+        if (!tokenData) {
+            ctx.response.status = 401;
+            ctx.response.body = { message: "Token non valide, utilisateur non connecté" };
+            return;
+        }
+        
+        const username = tokenData.username;
+        if (!currentPassword || !newPassword || !confirmNewPassword) {
+            ctx.response.status = 400;
+            ctx.response.body = { message: "Tous les champs sont obligatoires" };
+            return;
+        }
+        
+        if (newPassword !== confirmNewPassword) {
+            ctx.response.status = 400;
+            ctx.response.body = { message: "Les nouveaux mots de passe ne correspondent pas" };
+            return;
+        }
+        
+        const user = db.prepare(`SELECT password_hash FROM users WHERE username = ?`).get(username) as { password_hash: string } | undefined;
+        if (!user) {
+            ctx.response.status = 404;
+            ctx.response.body = { message: "Utilisateur introuvable" };
+            return;
+        }
+        
+        const isCurrentPasswordValid = await bcrypt.compare(currentPassword, user.password_hash);
+        
+        if (!isCurrentPasswordValid) {
+            ctx.response.status = 401;
+            ctx.response.body = { message: "Mot de passe actuel incorrect" };
+            return;
+        }
+        
+        const isSamePassword = await bcrypt.compare(newPassword, user.password_hash);
+        if (isSamePassword) {
+            ctx.response.status = 400;
+            ctx.response.body = { message: "Le nouveau mot de passe doit être différent de l'ancien" };
+            return;
+        }
+        
+        // Hasher le nouveau mot de passe
+        const newPasswordHash = await get_hash(newPassword);
+        
+        // Mettre à jour le mot de passe dans la base de données
+        const result = db.prepare(`UPDATE users SET password_hash = ? WHERE username = ?`).run(newPasswordHash, username);
+        
+        if (result.changes > 0) {
+            ctx.response.status = 200;
+            ctx.response.body = { message: "Mot de passe modifié avec succès" };
+            console.log(`Mot de passe modifié pour l'utilisateur: ${username}`);
+        } else {
+            ctx.response.status = 500;
+            ctx.response.body = { message: "Erreur lors de la mise à jour du mot de passe" };
+        }
+        
+    } catch (error) {
+        ctx.response.status = 500;
+        ctx.response.body = { message: "Erreur serveur", error: error.message };
+        console.error("Erreur dans changePassword :", error);
+    }
+};

@@ -1,45 +1,38 @@
-<!-- PAGE INFORMATION DU PROFIL -->
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title> MOVIEW </title>
-        <link rel="stylesheet" href="Style/style.css">
-        <!-- pour les icones -->
-        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    </head>
-    <body class="login-body">
-        <header class="header">
-            <h2 class="logo">MOVIEW</h2> 
-            <nav class="navigation">
-                <ul class= "menu" id="menu">
-                    <li class="menu-home">
-                        <a href="index.html" class="nav-link">
-                            <span class="link-text">HOME</span>
-                        </a>
-                    </li>
-                  <li id="menu-films">
-                    <a href="films.html" class="nav-link">
-                        <span class="link-text">FILMS</span>
-                    </a>
-                  </li>
-                  <li id="menu-profil">
-                    <a href="user.html" class="nav-link">
-                        <span class="link-text">PROFIL</span>
-                    </a>
-                   </li>
-                    <li class="menu-logout">
-                        <a href="#" class="nav-link" onclick="logoutUser()">
-                        <span class="link-text">LOG OUT</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </header>
-        <main>
-            
-        </main>
+<head>
+  <meta charset="UTF-8" />
+  <title>Settings - MOVIEW</title>
+  <link rel="stylesheet" href="Style/style.css" />
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body id="profil" class="profil-body" onload="authUser()">
+  <header class="header">
+    <h2 class="logo">MOVIEW</h2>
+    <nav class="navigation">
+      <ul class="menu">
+        <li><a href="index.html" class="nav-link">HOME</a></li>
+        <li><a href="profil.html" class="nav-link">PROFILE</a></li>
+        <li><a href="#" class="nav-link" onclick="logoutUser()">LOG OUT</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    </body>
-    <script src="script.js"></script>
+  <div class="main-page-pp">
+    <h3 class="titre">Settings</h3>
+
+    <!-- Changer mot de passe -->
+    <div class="container-pp">
+      <h4>Change Password</h4>
+      <form id="passwordForm">
+        <input type="password" id="currentPassword" placeholder="Current password" required />
+        <input type="password" id="newPassword" placeholder="New password" required />
+        <input type="password" id="confirmNewPassword" placeholder="Confirm password" required />
+        <button type="submit" onclick="changePassword(event)">Change</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
 </html>

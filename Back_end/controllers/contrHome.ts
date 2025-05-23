@@ -1,24 +1,8 @@
 import { db } from "../database/data.ts";
-import * as mw from "../middlewares.ts";
-
-// export const getlastfilm = (ctx) => {
-//     try {
-//         const films = db.prepare(`SELECT * FROM film ORDER BY id DESC LIMIT 5`).all(); // Fetch all films from the "film" table
-//         ctx.response.status = 200;
-//         ctx.response.body = { films }; // Return the films as JSON
-//         console.log("Films récupérer avec succé");
-//     } catch (error) {
-//         console.error("Erreur lors de la récupérartion:", error);
-//         ctx.response.status = 500;
-//         ctx.response.body = { message: "Erreur lors de la récupération des films" };
-//     }
-// }
-
 
 
 export const getlastList = (ctx) => {
     try {
-        // Simplified query to avoid join issues
         const list = db.prepare(`
             SELECT liste.id, liste.name AS nameListe, users.username AS username 
             FROM liste 
@@ -47,8 +31,7 @@ export const getlastList = (ctx) => {
 export const getTopRatedFilms = (ctx) => {
     try {
         const topFilms = db.prepare(`
-            SELECT 
-                film.id,
+            SELECT film.id,
                 film.title, 
                 film.posterURL,
                 film.description,

@@ -59,9 +59,8 @@ export const addFilmToListe = async (ctx) => {
             console.log("Entrez le titre su film");
             return;
         }
-        //chercher film dans la base de donnée et recupere son id
+
         const filmId = db.prepare(`SELECT id  FROM film WHERE title LIKE ?`).get(filmTitle) as {id:number}|undefined;
-            //si pas la erreur film introuvable 
         if(!filmId){
             ctx.response.status = 400;
             ctx.response.body = {message:"Film indisponible dans la base de données"};
@@ -69,7 +68,6 @@ export const addFilmToListe = async (ctx) => {
             return;
         }
         //recuperer id liste du URL
-        // const liste = ;
         const listeId = parseInt(ctx.params.id);
         if(!listeId){
             ctx.response.status = 401;
@@ -77,7 +75,6 @@ export const addFilmToListe = async (ctx) => {
             console.log("Erreur lors de la récupération de l'id liste dans l'URL");
             return;
         }
-        //ajoute dans la table association Film-Liste
         db.prepare(`INSERT INTO listeFilm (listeId, filmId) VALUES (?,?)`).run(listeId, filmId.id);
         
         ws.notifyAddFilmList(filmTitle);
@@ -141,7 +138,6 @@ export const getList = (ctx) => {
 
 export const deleteList = async (ctx) =>{
     try{
-            // recupere l'id de la liste 
     const body =  await ctx.request.body.json();
     const {listId} = body;
     if(!listId){
@@ -150,7 +146,6 @@ export const deleteList = async (ctx) =>{
         console.log("Erreur lors de la récupération de l'id liste dans le body");
         return;
     }
-    // je le supprime de la db
     const deleteList = db.prepare(`DELETE FROM liste WHERE id = ?`).run(listId);
     if(!deleteList){
         ctx.response.status = 400;
@@ -192,7 +187,6 @@ export const getAllListe = (ctx) => {
     }
 }
 
-// Dans controllers/contrListe.ts
 export const getListeOwner = (ctx: Context) => {
     const listeId = parseInt(ctx.params.id); //recuperer id liste
     const tokenData = ctx.state.tokenData; //recupere utilisateur connecter

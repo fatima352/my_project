@@ -44,6 +44,8 @@ router.get('/', mw.authMw, userCtrl.getUser);
 // Route protégée par authMw + adminMw
 router.post("/api/upload-poster", uploadCtr.uploadPoster);
 
+router.put('/api/change-password', mw.authMw, authCtrl.changePassword);
+
 /*
  * ROUTES POUR LES FONCTIONNALITÉS DES UTILISATEURS 
  */

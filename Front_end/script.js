@@ -232,6 +232,12 @@ function authUser(event){
             `;
         }
         document.getElementById("username").innerText = `@${data.username}`;
+        if (data.profilePicturePath) {
+            const ppImg = document.getElementById('previewPP');
+            if (ppImg) {
+                ppImg.src = data.profilePicturePath;
+            }
+        }
         //Ajouter un commentaire utilisateur
         const userActions = document.getElementById('userActionsFilm');
         if(userActions){
@@ -261,6 +267,9 @@ function authUser(event){
         }
     });
 }
+
+
+
 
 //Fonction pour vérifier si l'utilisateur a accès à la au fonctionnalité admin
 function checkAdminAccess() {
@@ -305,6 +314,52 @@ function checkAdminAccess() {
     })
     .catch(error => {
         console.log("Non admin ou non connecté :", error.message);
+    });
+}
+
+// Fonction pour changer le mot de passe côté client
+function changePassword(event) {
+    event.preventDefault()
+    const currentPassword = document.getElementById('currentPassword').value ;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+
+    const data = {
+        currentPassword,
+        newPassword,
+        confirmNewPassword
+    }
+
+    fetch(`http://localhost:3000/api/change-password`, {
+        method: 'PUT',
+        mode: 'cors',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            return response.json().then(errorData => {
+                throw new Error(errorData.message || 'Erreur lors du changement de mot de passe');
+            });
+        }
+    })
+    .then(data => {
+        console.log('Succès:', data.message);
+        
+        alert('Mot de passe modifié avec succès !');
+        
+        document.getElementById('currentPassword').value = '';
+        document.getElementById('newPassword').value = '';
+        document.getElementById('confirmNewPassword').value = '';
+    })
+    .catch(error => {
+        console.error('Erreur:', error.message);
+        alert('Erreur: ' + error.message);
     });
 }
 
@@ -1270,51 +1325,6 @@ function getTopRatedFilms() {
     });
 }
 
-
-// function getTopRatedFilms() {
-//     fetch(`http://localhost:3000/api/home/top-films`, {
-//         method: 'GET',
-//         mode: 'cors',
-//     })
-//     .then(response => {
-//         if(response.ok){
-//             return response.json();
-//         }else{
-//             throw new Error('Erreur lors de la récupération des films les mieux notés');
-//         }
-//     })
-//     .then(data => {
-//         const topFilmsContainer = document.getElementById('topFilmsContainer');
-//         if (!topFilmsContainer) {
-//             console.error("topFilmsContainer pas trouvé dans le DOM.");
-//             return;
-//         }
-        
-//         // Afficher les films les mieux notés
-//         topFilmsContainer.innerHTML = '<h2>Top 5 des films les mieux notés</h2>';
-//         const filmsWrapper = document.createElement('div');
-//         filmsWrapper.className = 'top-films-wrapper';
-        
-//         data.topFilms.forEach(film => {
-//             const filmCard = document.createElement('div');
-//             filmCard.className = 'top-film-card';
-//             filmCard.innerHTML = `
-//                 <a href="film.html?id=${film.id}">
-//                     <img src="http://localhost:3000/images/${film.posterURL}" alt="${film.title}" class="top-film-poster">
-//                 </a>
-//                 <h4>${film.title}</h4>
-//                 <div class="rating">★ ${film.averageRating}/5</div>
-//             `;
-//             filmsWrapper.appendChild(filmCard);
-//         });
-        
-//         topFilmsContainer.appendChild(filmsWrapper);
-//     })
-//     .catch(error => {
-//         console.error("Erreur:", error);
-//     });
-// }
-
 /************************************************************ */
 /*********************  AUTRES FONCTIONS  *********************/
 /************************************************************ */
@@ -1461,7 +1471,39 @@ async function uploadPoster() {
     }
 }
 
+async function uploadProfilePicture(username) {
+    const fileInput = document.getElementById('ppInput');
+    // const filmTitleInput = document.getElementById('');
+    const file = fileInput.files[0];
+    // const filmTitle = username.value.trim();
+    
+    if (!file) return null;
+
+
+    const formData = new FormData();
+    formData.append('posterImage', file);
+    formData.append('filmTitle', username); 
+
+    try {
+        const response = await fetch('http://localhost:3000/api/upload-pp', {
+            method: 'POST',
+            credentials: 'include',
+            body: formData
+        });
+
+        if (!response.ok) throw await response.json();
+        
+        const data = await response.json();
+        return data.path; 
+    } catch (error) {
+        console.error("Upload failed:", error);
+        alert(`Échec de l'upload: ${error.error || 'Erreur serveur'}`);
+        return null;
+    }
+}
+
 // Updated function to initialize star rating component
+
 function initStarRating() {
     const starRating = document.querySelector('.star-rating');
     const stars = document.querySelectorAll('.star');
