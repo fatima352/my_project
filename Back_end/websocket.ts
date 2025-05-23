@@ -48,6 +48,9 @@ export function handleWsConnection(socket: WebSocket) {
     if(data.type === "ADD_FILM_LIST"){
       console.log("ADD_FILM_LIST");
     }
+    if(data.type === "UPDATE_FILM"){
+      console.log("UPDATE_FILM");
+    }
   };
 }
 
@@ -135,6 +138,19 @@ export function notifyAddFilmList(listData: any) {
   const message = JSON.stringify({
     type: "ADD_FILM_LIST",
     data: listData,
+  });
+
+  sockets.forEach((socket) => {
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(message);
+    }
+  });
+}
+
+export function notifyUpdateFilm(filmData: any) {
+  const message = JSON.stringify({
+    type: "UPDATE_FILM",
+    data: filmData,
   });
 
   sockets.forEach((socket) => {

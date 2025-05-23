@@ -128,8 +128,9 @@
                     </div>
                     <div class="mini">
                         <label for="posterURL">Poster URL:</label>
-                        <input class="input" type="text" id="posterURL" name="posterURL">    
-                    </div>
+                        <input type="file" id="posterUpload" accept="image/*">
+                        <img id="posterPreview" style="max-height: 200px; display: none;">                    
+                   </div>
                     <div class="mini">
                         <label for="descriptionfilm">Description:</label>
                         <textarea class="input desc" id="descriptionfilm" name="description"></textarea>
@@ -189,4 +190,5 @@
         </div>
     </body>
     <script src="script.js"></script> <!-- script pour les fetchs-->
+    <script src="ws.js"></script>
 </html>

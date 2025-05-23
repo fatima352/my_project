@@ -449,8 +449,8 @@ function fetchCommenterFilm(){
     })
     .then(data=>{
         console.log("Réponse reçue : ", data);
+        window.location.reload();
         alert(data.message);
-        window.location.href = `film.html?id=${params.get("id")}`;
     })
     .catch(error => {
         console.error("Erreur:", error.message);
@@ -500,7 +500,6 @@ function fetchCommenterList(){
     .then(data=>{
         console.log("Réponse reçue : ", data);
         alert(data.message);
-        window.location.href = `list.html?id=${params.get("id")}`;
     })
     .catch(error => {
         console.error("Erreur:", error.message);
@@ -706,7 +705,7 @@ async function fetchaddFilm() {
     })
     .then(data => {
         console.log(data);
-        // alert('Film ajouté avec succès !');
+        alert('Film ajouté avec succès !');
     })
 
 }
@@ -722,7 +721,7 @@ function getMovie(){
         return;
     }
     // Fetch qui récupere les informations du backend, methode GET
-    fetch(`http://localhost:3000/api/films/${id}`, {
+    fetch(`http://localhost:3000/api/films/${id}`,{
         method: 'GET',
         mode: 'cors',
         credentials: 'include',
@@ -756,10 +755,13 @@ function getMovie(){
 }
 
 // Fonction fetch pour modifier un film (admin)
-function fetchUpdateFilm() {
+async function fetchUpdateFilm() {
 
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
+
+    const posterPath = await uploadPoster();
+ 
 
     if (!id) {
         console.error("Aucun ID trouvé dans l'URL");
@@ -1050,6 +1052,7 @@ function fetchDeleteList(listId) {
     })
     .catch(error => {
         console.log(error);
+        alert('Erreur: ' + error.message);
     });
 }
 
@@ -1072,17 +1075,17 @@ function fetchDeleteFilmCollec(filmId){
         }
     })
     .then(data=>{
-        console.log("Suppression réussie")
-        alert(data.message);
+        console.log("Suppression réussie");
     })
     .catch(error => {
         console.log(error);
+        alert('Erreur: ' + error.message);
     });
 }
 
 
 function getAllListe(){
-    fetch(`http://localhost:3000/api/listes`, {
+    fetch(`http://localhost:3000/api/listes`,{
         method : 'GET',
         mode: 'cors',
         credentials: 'include'
@@ -1476,3 +1479,71 @@ function initStarRating() {
         });
     });
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    const starRatings = document.querySelectorAll('.star-rating');
+
+    starRatings.forEach(container => {
+        const stars = container.querySelectorAll('.star');
+        const ratingInput = container.querySelector('input[type="hidden"]');
+
+        stars.forEach(star => {
+            // Gérer le clic sur une étoile
+            star.addEventListener('click', function () {
+                const rating = parseInt(this.getAttribute('data-rating'));
+                setRating(container, stars, rating, ratingInput);
+            });
+
+            // Gérer le survol des étoiles
+            star.addEventListener('mouseover', function () {
+                if (!container.classList.contains('has-selection')) {
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    highlightStars(stars, rating);
+                }
+            });
+
+            // Réinitialiser les étoiles au survol en dehors
+            container.addEventListener('mouseout', function () {
+                if (!container.classList.contains('has-selection')) {
+                    resetStars(stars);
+                }
+            });
+        });
+    });
+
+    // Fonction pour définir la notation
+    function setRating(container, stars, rating, inputElement) {
+        container.classList.add('has-selection'); // Marquer comme sélectionné
+        if (inputElement) {
+            inputElement.value = rating; // Mettre à jour l'input caché
+        }
+
+        // Réinitialiser toutes les étoiles
+        stars.forEach(star => star.classList.remove('selected'));
+
+        // Ajouter la classe `.selected` aux étoiles jusqu'à la sélection
+        stars.forEach(star => {
+            const starRating = parseInt(star.getAttribute('data-rating'));
+            if (starRating <= rating) {
+                star.classList.add('selected');
+            }
+        });
+    }
+
+    // Fonction pour mettre en évidence les étoiles au survol
+    function highlightStars(stars, rating) {
+        stars.forEach(star => {
+            const starRating = parseInt(star.getAttribute('data-rating'));
+            if (starRating <= rating) {
+                star.classList.add('hovered');
+            } else {
+                star.classList.remove('hovered');
+            }
+        });
+    }
+
+    // Fonction pour réinitialiser les étoiles
+    function resetStars(stars) {
+        stars.forEach(star => star.classList.remove('hovered'));
+    }
+});

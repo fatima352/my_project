@@ -39,6 +39,11 @@ socket.onmessage = (event) => {
     else if (message.type ==="ADD_FILM_LIST"){
         getList();
     }
+    else if (message.type === "UPDATE_FILM") {
+        const film = message.data;
+        getMovie();
+        showNotification(`Film "${film.title}" mis à jour`);
+    }
 };
 
 function showNotification(message) {

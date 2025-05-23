@@ -496,8 +496,8 @@ h1{
     padding: 20px;
     border-radius: 10px;
     width: 400px;
-    height: 500px;
-    /* max-width: 90%; */
+    height: auto;
+    max-height: 90vh; /* Set a maximum height */
     color: var(--couleurecriturebouton);
 }
 .headerpop {
@@ -1025,28 +1025,18 @@ footer {
 }
 
 /* Hover effects */
-.star-rating:not(.has-selection) .star:hover {
-    color: #ffb400; /* Gold color for hovered star */
-}
-
-/* Make all previous siblings gold on hover */
+.star-rating:not(.has-selection) .star:hover,
 .star-rating:not(.has-selection) .star:hover ~ .star {
     color: #ccc; /* Keep subsequent stars gray */
 }
 
-/* Fix for Firefox and other browsers - use JavaScript to handle this */
-.star-rating .star.hovered {
-    color: #ffb400;
+.star-rating:not(.has-selection) .star:hover {
+    color: #ffb400; /* Gold color for hovered star */
 }
 
-/* Selected stars - permanently gold */
+/* Selected stars */
 .star.selected {
     color: #ffb400 !important; /* Important to override hover effects */
-}
-
-/* All stars before the selected star should be gold too */
-.star.selected ~ .star.selected {
-    color: #ffb400 !important;
 }
 
 /* iciiiiiiiii */
