@@ -1,13 +1,11 @@
 // backend/ws.ts
 
-// import { WebSocket } from "https://deno.land/std@0.51.0/ws/mod.ts";
 const sockets: WebSocket[] = [];
 
 // Ajouter un nouveau client
 export function handleWsConnection(socket: WebSocket) {
   console.log("WebSocket connecté...");
   sockets.push(socket);
-  console.log("Client WebSocket connecté");
 
   socket.onclose = () => {
     const index = sockets.indexOf(socket);
@@ -34,7 +32,20 @@ export function handleWsConnection(socket: WebSocket) {
       // Traitez le message ici si nécessaire
       console.log("Film supprimé:", data.title);
     }
+    if(data.type === "ADD_LIST"){
+      console.log("ADD_LIST");
+    }
+    if(data.type === "DELETE_LIST"){
+      console.log("DELETE_LIST");
+    }
+    if(data.type === "ADD_FILM_LIST"){
+      console.log("ADD_FILM_LIST");
+    }
+    if(data.type === "UPDATE_FILM"){
+      console.log("UPDATE_FILM");
+    }
   };
+  socket.close()
 }
 
 // Notifier tous les clients
@@ -64,9 +75,54 @@ export function notifyDeleteFilm(filmData: any) {
   });
 }
 
-export function notifyNewReviewFilm(reviewData: any ){
+
+export function notifyListCreated(listData: any) {
   const message = JSON.stringify({
-    type: "ADD_REVIEWFILM",
-    data: reviewData,
+    type: "ADD_LIST",
+    data: listData,
+  });
+
+  sockets.forEach((socket) => {
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(message);
+    }
+  });
+}
+export function notifyDeleteList(listData: any) {
+  const message = JSON.stringify({
+    type: "DELETE_LIST",
+    data: listData,
+  });
+
+  sockets.forEach((socket) => {
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(message);
+    }
+  });
+}
+
+export function notifyAddFilmList(listData: any) {
+  const message = JSON.stringify({
+    type: "ADD_FILM_LIST",
+    data: listData,
+  });
+
+  sockets.forEach((socket) => {
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(message);
+    }
+  });
+}
+
+export function notifyUpdateFilm(filmData: any) {
+  const message = JSON.stringify({
+    type: "UPDATE_FILM",
+    data: filmData,
+  });
+
+  sockets.forEach((socket) => {
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(message);
+    }
   });
 }

@@ -23,6 +23,11 @@
                         <span class="link-text">MOVIES</span>
                     </a>
                   </li>
+                    <li id="menu-lists">
+                        <a href="lists.html" class="nav-link">
+                            <span class="link-text">LISTS</span>
+                        </a>
+                    </li>
                     <li class="menu-logout">
                         <a href="#" class="nav-link" onclick="logoutUser()">
                         <span class="link-text">LOG OUT</span>
@@ -50,7 +55,7 @@
                   <!-- Bouton modifier (à remplir) -->
                   <div class="bouton-edit">
                     <!-- Par exemple que l'admin: -->
-                    <button class="btn-edit">Modifier</button>  
+                    <button onclick="window.location.href='settingUser.html'"  class="btn-edit">Modifier</button>  
 
                 </div>
                 </div>
@@ -148,7 +153,7 @@
         <div id="DeleteFilmPopup" class="popup hidden ">
             <div class="popup-content-delete">
                 <div class="headerpop">
-                    <h2 class="popuptitle">DELETE LIST</h2>
+                    <h2 class="popuptitle">DELETE MOVIE</h2>
                     <span class="close-btn" onclick="closePopup3()">&times;</span>
                 </div>
                 <div class="addfilm" id="addfilm">
@@ -163,4 +168,5 @@
 
     </body>
     <script src="script.js"></script> <!-- script pour les fetchs-->
+    <script src="ws.js"></script>
 </html>

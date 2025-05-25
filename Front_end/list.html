@@ -7,7 +7,7 @@
         <!-- pour les icones -->
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     </head>
-    <body  onload="authUser();getFilmsList()"class="films-body">
+    <body  onload="authUser();getList();owner();getReviewsList()"class="films-body">
         <header>
             <h2 class="logo">MOVIEW</h2> 
             <nav class="navigation">
@@ -42,10 +42,16 @@
         </header>
         <section class="all-films">
             <div id= "mini-headers" class="mini-headers">
-                <h3 id="nameList" class="titre"></h3>
-                <div id="UserAction" class="adminAction">
-                    <!-- ajouter un boutton add si proprietaire -->
-                     <button id="ajoutfilm" class="btn-addFilm" onclick="showPopup()">Add Film</button>
+                <div class="infoList">
+                    <h3 id="nameList" class="titre"></h3>
+                </div>
+                <div id="userActionsList" class="adminAction">
+                        <!-- ajouter un boutton add si proprietaire -->
+                        <!-- <button id="ajoutfilm" class="btn-addFilm" onclick="showPopup()">Add Film</button> -->
+
+                    <div id="ownerActions" class="adminAction">
+                        <!-- ajouter un boutton add si proprietaire -->
+                    </div>
                 </div>
             </div>
             <hr class="line">
@@ -56,7 +62,30 @@
       
         </section>
 
-        <!-- FENÊTRE POPUP -->
+
+        <div class="container commentaires">
+            <div class="mini-headers">
+                <h3 class="titre">REVIEWS</h3>
+                <div id="userActions" class="userActions">
+            
+                    <!-- admin gere les commentaires -->
+
+                    
+                </div>
+            </div>
+            <hr class="line">
+            <ul id = "reviewsContainer" class="listreviews">
+                <li class="item">
+                    <a href="#" class="nav-link">
+                        <p> REVIEWS
+                            <!-- Ajout des commentaires ici -->
+                        </p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- FENÊTRE POPUP AJOUT FILM-->
         <div id="addMoviePopup" class="popup hidden">
             <div class="popup-content-delete">
                 <div class="headerpop">
@@ -73,6 +102,26 @@
                 </div>
             </div>
         </div>
+
+
+        <!-- FENETRE POPUP COMMENTER LIST -->
+        <div id="popupComment" class="popup hidden">
+            <div class="popup-content-Reviewlist">
+                <div class="headerpop">
+                    <h2 class="popuptitle">REVIEW</h2>
+                    <span class="close-btn" onclick="closePopup4()">&times;</span>
+                </div>
+                <div class="addfilm reviews" id="addfilm">
+                    <div class="mini">
+                        <label for="titlefilm">Commente:</label>
+                        <textarea class="input desc" id="contenu" name="title"></textarea>
+                    </div>
+                    <button class="btn add" type="submit" onclick=" commenterList()">Commenter</button>
+                </div>
+            </div>
+        </div>
+
     </body>
     <script src="script.js"></script> <!-- script pour les fetchs-->
+    <script src="ws.js"></script>
 </html>

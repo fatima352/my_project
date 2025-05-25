@@ -3,21 +3,24 @@
     <head>
         <meta charset="UTF-8">
         <title> MOVIEW </title>
+        <div class="logo-container">
+                <img src="fav.png" alt="Logo du site" class="site-logo">
+            </div>
         <link rel="stylesheet" href="Style/style.css">
         <!-- pour les icones -->
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     </head>
-    <body class="login-body" onload="authUser(event)">
+    <body class="login-body" onload="authUser(event);getTopRatedFilms();  getlastListe()">
         <header>
             <h2 class="logo">MOVIEW</h2> 
             <nav class="navigation">
-                <ul class= "menu"id="menu">
+                <ul class= "menu" id="menu">
                     <li id="menu-films">
                         <a href="films.html" class="nav-link">
                             <span class="link-text">MOVIES</span>
                         </a>
                     </li>
-                      <li id="menu-lists">
+                    <li id="menu-lists">
                         <a href="lists.html" class="nav-link">
                             <span class="link-text">LISTS</span>
                         </a>
@@ -34,9 +37,75 @@
                     </li>
                 </ul>
             </nav>
-
         </header>
 
+        <div class="main-page">
+            <!-- Hero Section / Site Presentation -->
+            <section class="hero-section">
+                <div class="hero-content">
+                    <h1>Welcome to MOVIEW</h1>
+                    <p>Discover, review, and create lists of your favorite movies. Join our community of movie enthusiasts!</p>
+                    <div class="hero-buttons">
+                        <a href="films.html" class="btn-primary">Explore Movies</a>
+                        <a href="register.html" class="btn-secondary">Join Now</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Latest Movies Section -->
+            <section class="container latest-movies">
+                <div class="mini-headers">
+                    <h2 class="titre">TOP MOVIES</h2>
+                    <a href="films.html" class="view-all">View All</a>
+                </div>
+                <hr class="line">
+                <div id="latestMoviesContainer" class="movies-grid">
+                    <!-- Movies will be loaded here dynamically -->
+                    <div class="movie-card placeholder">
+                        <div class="movie-poster"></div>
+                        <h3>Loading...</h3>
+                    </div>
+                    <div class="movie-card placeholder">
+                        <div class="movie-poster"></div>
+                        <h3>Loading...</h3>
+                    </div>
+                    <div class="movie-card placeholder">
+                        <div class="movie-poster"></div>
+                        <h3>Loading...</h3>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Latest Lists Section -->
+            <section class="container latest-lists">
+                <div class="mini-headers">
+                    <h2 class="titre">LATEST LISTS</h2>
+                    <a href="lists.html" class="view-all">View All</a>
+                </div>
+                <hr class="line">
+                <div id="latestListsContainer" class="lists-container">
+                    <!-- Lists will be loaded here dynamically -->
+                    <div class="list-card placeholder">
+                        <h3>Loading...</h3>
+                        <p>by User</p>
+                    </div>
+                    <div class="list-card placeholder">
+                        <h3>Loading...</h3>
+                        <p>by User</p>
+                    </div>
+                    <div class="list-card placeholder">
+                        <h3>Loading...</h3>
+                        <p>by User</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <div class="footer-content">
+                <p>&copy; 2023 MOVIEW. All rights reserved.</p>
+            </div>
+        </footer>
 
     </body>
     <script src="script.js"></script> <!-- script pour les fetchs-->

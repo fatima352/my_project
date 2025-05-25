@@ -69,7 +69,7 @@
             <div class="container description">
                 <div class="mini-headers">
                 <h3 class="titre">DESCRIPTION</h3>
-                <div class="userActions">
+                <div id = "userActionsFilm" class="userActionsFilm">
                     <!-- modifier descriptio admin -->
                     <!-- <button class="btn-add">Ajouter film</button> -->
                 </div>
@@ -97,7 +97,7 @@
                     </div>
                 </div>
                 <hr class="line">
-                <ul id = "reviewsContainer" class="list">
+                <ul id = "reviewsContainer" class="listreviews">
                     <li class="item">
                         <a href="#" class="nav-link">
                             <p> REVIEWS
@@ -128,8 +128,9 @@
                     </div>
                     <div class="mini">
                         <label for="posterURL">Poster URL:</label>
-                        <input class="input" type="text" id="posterURL" name="posterURL">    
-                    </div>
+                        <input type="file" id="posterUpload" accept="image/*">
+                        <img id="posterPreview" style="max-height: 200px; display: none;">                    
+                   </div>
                     <div class="mini">
                         <label for="descriptionfilm">Description:</label>
                         <textarea class="input desc" id="descriptionfilm" name="description"></textarea>
@@ -138,6 +139,7 @@
                 </div>
             </div>
         </div>
+        
         <!-- POP UP PAGE SUPPRIMER UN FILM -->
         <div id="DeleteMoviePopup" class="popup hidden ">
             <div class="popup-content-delete">
@@ -164,20 +166,29 @@
                 <div class="addfilm reviews" id="addfilm">
                     <div class="mini">
                         <label for="titlefilm">Commente:</label>
-                        <input class="input" type="text" id="contenu" name="title">
+                        <textarea class="input desc" id="contenu" name="title"></textarea>
+                        <!-- <input class="input" type="text" id="contenu" name="title"> -->
                     </div>
-                    <div class="mini">
+                    <!-- <div class="mini">
                         <label for="datefilm">Date:</label>
                         <input class="input" type="text" id="date" name="date">    
-                    </div>
+                    </div> -->
                     <div class="mini">
                         <label for="descriptionfilm">Rating:</label>
-                        <textarea class="input desc" id="rating" name="description"></textarea>
+                        <div class="star-rating">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                            <input type="hidden" id="rating" value="0">
+                        </div>
                     </div>
-                    <button class="btn add" type="submit" onclick=" commenter()">Commenter</button>
+                    <button class="btn add" type="submit" onclick=" commenterFilm()">Commenter</button>
                 </div>
             </div>
         </div>
     </body>
     <script src="script.js"></script> <!-- script pour les fetchs-->
+    <script src="ws.js"></script>
 </html>

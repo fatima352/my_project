@@ -7,7 +7,7 @@
         <!-- Pour les icones -->
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     </head>
-    <body  onload="getMovies();authUser();checkAdminAccess()"class="films-body">
+    <body  onload="authUser();checkAdminAccess();getAllListe()"class="films-body">
         <header>
             <h2 class="logo">MOVIEW</h2> 
             <nav class="navigation">
@@ -43,19 +43,19 @@
 
         <section class="all-films">
             <div class="mini-headers">
-                <h3 class="titre">MOVIES</h3>
+                <h3 class="titre">LISTS</h3>
                 <div id="adminAction" class="adminAction">
                     <!-- Boutton "Add Movie" -->
                 </div>
             </div>
             <hr class="line">
-            <ul id="filmsContainer" class="list">
+            <ul id="listContainer" class="list">
                 <!-- Ajout des films ici  -->
             </ul>
             </div>
       
         </section>
-        <div id="addMoviePopup" class="popup hidden">
+        <!-- <div id="addMoviePopup" class="popup hidden">
             <div class="popup-content">
                 <div class="headerpop">
                     <h2 class="popuptitle">Add a New Movie</h2>
@@ -87,7 +87,7 @@
                     <button class="btn add" type="submit" onclick="addFilm(event)">Add Movie</button>
                 </div>
             </div>
-        </div>
+        </div> -->
         
         <footer>
             <div class="footer-content">

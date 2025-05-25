@@ -1,6 +1,6 @@
 import { db } from "../database/data.ts";
 import {Context} from "https://deno.land/x/oak@v17.1.4/mod.ts";
-import { notifyDeleteFilm, notifyNewFilm } from "../websocket.ts";
+import * as ws from "../websocket.ts";
 
 
 //Fonction pour récupérer tous les films de la base de données
@@ -18,7 +18,6 @@ export const getAllFilms = (ctx:Context) => {
 }
 
 // Fonction pour ajouter un film à la base de données (Accés admin uniquement)
-// --> ameliorations : ajouter websocket
 export const addFilm = async (ctx:Context) =>{
     try{
         const body = await ctx.request.body.json();
@@ -41,7 +40,7 @@ export const addFilm = async (ctx:Context) =>{
     
         const newFilm = { title, date, posterURL, description };
         db.prepare(`INSERT INTO film (title, date, posterURL, description) VALUES (?, ?, ?, ?)`).run(title, date, posterURL, description);
-        notifyNewFilm(newFilm);
+        ws.notifyNewFilm(newFilm);
 
         ctx.response.status = 201;
         ctx.response.body = {message: "Film ajouté avec succès"};
@@ -118,8 +117,18 @@ export const updateFilm = async (ctx:Context)=>{
         if (description) {
             db.prepare(`UPDATE film SET description = ? WHERE id = ?`).run(description, id);
         }
+
+        const filmData = db.prepare(`SELECT title FROM film WHERE id = ?`).get(id) as {title: string} | undefined;
+        if (!filmData) {
+            ctx.response.status = 404;
+            ctx.response.body = { message: "Film non trouvé" };
+            console.log("Film non trouvé");
+            return;
+        }
+        ws.notifyUpdateFilm(filmData);
         ctx.response.status = 200;
         ctx.response.body = { message: "Titre mis à jour avec succès" };
+
     }
     catch(error){
         ctx.response.status = 500;
@@ -148,7 +157,7 @@ export const deleteFilm = (ctx:Context)=>{
     
         db.prepare(`DELETE FROM film WHERE id = ?`).run(id);
 
-        notifyDeleteFilm(film);
+        ws.notifyDeleteFilm(film);
         ctx.response.status = 200;
         ctx.response.body = {message: "Supprimé avec succès"};
         console.log("film supprimé");
@@ -159,4 +168,8 @@ export const deleteFilm = (ctx:Context)=>{
         console.error("Erreur dans deleteFilm :", error);
     }
 
+}
+
+export function getlastfilm(arg0: string, getlastfilm: any) {
+  throw new Error("Function not implemented.");
 }
