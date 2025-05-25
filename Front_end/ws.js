@@ -1,4 +1,4 @@
-const socket = new WebSocket("ws://localhost:3000/ws");
+const socket = new WebSocket("wss://localhost:3000/ws");
 
 
 socket.onmessage = (event) => {
@@ -14,18 +14,7 @@ socket.onmessage = (event) => {
         showNotification(`Film supprimé : ${film.title}`)
         getMovies(); 
     }
-    else if (message.type === "ADD_TO_COLLECTION") {
-        const film = message.data;
-        getUserCollection();
-        showNotification(`Film "${film.title}" ajouté à votre collection`);
 
-    }
-    else if(message.type === "DELETE_FILM_COLLECTION"){
-        const film = message.data;
-        getUserCollection();
-        showNotification(`Film "${film.title}" ajouté à votre collection`);
-
-    }
     else if (message.type === "ADD_LIST") {
         const list = message.data;
         getUserLists();

@@ -2,6 +2,9 @@
 /*********************  FONCTIONS FETCHS  *********************/
 /************************************************************ */
 
+const { get } = require("http");
+const { getFilmReview } = require("../Back_end/controllers/contrReview");
+
 
 //récupérer utilisateur connecté (variable global)
 
@@ -25,7 +28,7 @@ function registerUser(event) {
     //Envoyer les données vers le backend avec la méthode POST
     fetch(`https://localhost:3000/register`, {
         method: 'POST',
-        // mode: 'cros',
+        mode: 'cros',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -403,6 +406,7 @@ function fetchAddMovieCollection(){
     })
     .then(data =>{
         console.log(data);
+        window.location.href = "profil.html"; // Rediriger vers la page de profil
   
     })
     .catch(error => {
@@ -435,7 +439,7 @@ function getUserCollection(){
             const deleteFilm = document.createElement('button');
 
             deleteFilm.className = "btn-addFilm delete";
-            deleteFilm.innerText = "X";
+            deleteFilm.innerText = "Delete";
 
             deleteFilm.onclick = () => showDeleteFilmPopup(film.id);
 
@@ -449,7 +453,6 @@ function getUserCollection(){
             filmsContainer.appendChild(filmsItem);
             filmsItem.appendChild(deleteFilm);
         });
-
     })
     .catch(error => {
         console.error('Error:', error);
@@ -1381,6 +1384,9 @@ function deleteMovie(){
 function AddMovieCollection(){
     fetchAddMovieCollection();
     closePopup2();
+    setTimeout(() => {
+        getUserCollection(); // Recharger la collection après ajout
+    }, 50);
 }
 
 
@@ -1410,6 +1416,9 @@ function deleteList(){
 function deleteFilmColl(){
     fetchDeleteFilmCollec(aSupprimer);
     closePopup3();
+    setTimeout(() => {
+        getUserCollection(); // Recharger la collection après suppression
+    }, 50);
 }
 
 // Fonction pour afficher la fenetre popup de l'ajout de film
@@ -1428,6 +1437,7 @@ function commenterFilm(){
     fetchCommenterFilm();
     closePopup4();
     setTimeout(() => {
+        getFilmReviews(); 
         initStarRating(); 
     }, 50);
 }
@@ -1435,6 +1445,9 @@ function commenterFilm(){
 function commenterList(){
     fetchCommenterList();
     closePopup4();
+    setTimeout(() => {
+        getReviewsList();
+    }, 50);
 }
 
 async function uploadPoster() {
@@ -1568,35 +1581,3 @@ document.addEventListener('DOMContentLoaded', function () {
         stars.forEach(star => star.classList.remove('hovered'));
     }
 });
-
-function fetchDeleteFilmFromList(filmId) {
-    const params = new URLSearchParams(window.location.search);
-    const listeId = params.get("id");
-
-    return fetch(`https://localhost:3000/api/liste/film`, {
-        method: 'DELETE',
-        mode: 'cors',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ listeId, filmId })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Erreur lors de la suppression du film');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log("Suppression réussie :", data);
-        // ici vous pouvez rafraîchir l'affichage de la liste
-    })
-    .catch(error => {
-        console.error(error);
-        alert('Erreur: ' + error.message);
-    });
-}
-
-function deleteFilmList(){
-    fetchDeleteFilmCollec(aSupprimer);
-    closePopup3();
-}

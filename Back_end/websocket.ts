@@ -32,12 +32,6 @@ export function handleWsConnection(socket: WebSocket) {
       // Traitez le message ici si nécessaire
       console.log("Film supprimé:", data.title);
     }
-    if(data.type === "ADD_TO_COLLECTION"){
-      console.log("ADD_TO_COLLECTION");
-    }
-    if(data.type === "DELETE_FILM_COLLECTION"){
-      console.log("DELETE_FILM_COLLECTION");
-    }
     if(data.type === "ADD_LIST"){
       console.log("ADD_LIST");
     }
@@ -81,32 +75,6 @@ export function notifyDeleteFilm(filmData: any) {
   });
 }
 
-export function notifyFilmAddedToCollection(filmData: any) {
-  const message = JSON.stringify({
-    type: "ADD_TO_COLLECTION",
-    data: filmData,
-  });
-
-  sockets.forEach((socket) => {
-    if (socket.readyState === WebSocket.OPEN) {
-      socket.send(message);
-    }
-  });
-}
-
-
-export function notifyDeleteFilmCollection(filmData: any) {
-  const message = JSON.stringify({
-    type: "DELETE_FILM_COLLECTION",
-    data: filmData,
-  });
-
-  sockets.forEach((socket) => {
-    if (socket.readyState === WebSocket.OPEN) {
-      socket.send(message);
-    }
-  });
-}
 
 export function notifyListCreated(listData: any) {
   const message = JSON.stringify({
