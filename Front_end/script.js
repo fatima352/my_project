@@ -827,7 +827,7 @@ async function fetchUpdateFilm() {
     // Récupérer les valeurs saisies par l'utilisateur
     const title = document.getElementById("titlefilm").value;
     const date = document.getElementById("datefilm").value;
-    const posterURL = document.getElementById("posterURL").value;
+    const posterURL = document.getElementById("posterUpload").value;
     const description = document.getElementById("descriptionfilm").value;
 
     // Créer un objet de données à envoyer au backend
