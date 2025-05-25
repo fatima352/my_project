@@ -231,12 +231,9 @@ function authUser(event){
                 </li>
             `;
         }
-        document.getElementById("username").innerText = `@${data.username}`;
-        if (data.profilePicturePath) {
-            const ppImg = document.getElementById('previewPP');
-            if (ppImg) {
-                ppImg.src = data.profilePicturePath;
-            }
+        const username = document.getElementById("username");
+        if(username){
+            username.innerText = `@${data.username}`;
         }
         //Ajouter un commentaire utilisateur
         const userActions = document.getElementById('userActionsFilm');
@@ -761,7 +758,7 @@ async function fetchaddFilm() {
     })
     .then(data => {
         console.log(data);
-        alert('Film ajouté avec succès !');
+        // alert('Film ajouté avec succès !');
     })
 
 }
@@ -853,7 +850,7 @@ async function fetchUpdateFilm() {
     })
     .then(data => {
         console.log("Réponse reçue : ", data);
-        alert(data.message);
+        // alert(data.message);
     })
     .catch(error => {
         console.error('Error:', error);
@@ -1471,39 +1468,6 @@ async function uploadPoster() {
     }
 }
 
-async function uploadProfilePicture(username) {
-    const fileInput = document.getElementById('ppInput');
-    // const filmTitleInput = document.getElementById('');
-    const file = fileInput.files[0];
-    // const filmTitle = username.value.trim();
-    
-    if (!file) return null;
-
-
-    const formData = new FormData();
-    formData.append('posterImage', file);
-    formData.append('filmTitle', username); 
-
-    try {
-        const response = await fetch('http://localhost:3000/api/upload-pp', {
-            method: 'POST',
-            credentials: 'include',
-            body: formData
-        });
-
-        if (!response.ok) throw await response.json();
-        
-        const data = await response.json();
-        return data.path; 
-    } catch (error) {
-        console.error("Upload failed:", error);
-        alert(`Échec de l'upload: ${error.error || 'Erreur serveur'}`);
-        return null;
-    }
-}
-
-// Updated function to initialize star rating component
-
 function initStarRating() {
     const starRating = document.querySelector('.star-rating');
     const stars = document.querySelectorAll('.star');
@@ -1604,3 +1568,35 @@ document.addEventListener('DOMContentLoaded', function () {
         stars.forEach(star => star.classList.remove('hovered'));
     }
 });
+
+function fetchDeleteFilmFromList(filmId) {
+    const params = new URLSearchParams(window.location.search);
+    const listeId = params.get("id");
+
+    return fetch(`http://localhost:3000/api/liste/film`, {
+        method: 'DELETE',
+        mode: 'cors',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ listeId, filmId })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erreur lors de la suppression du film');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Suppression réussie :", data);
+        // ici vous pouvez rafraîchir l'affichage de la liste
+    })
+    .catch(error => {
+        console.error(error);
+        alert('Erreur: ' + error.message);
+    });
+}
+
+function deleteFilmList(){
+    fetchDeleteFilmCollec(aSupprimer);
+    closePopup3();
+}

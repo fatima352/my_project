@@ -379,14 +379,16 @@ h1{
 }
 
 .list li{
-    width: 100px;
-    flex: 1 0 auto;
-    min-width: 15px;
+    width: 120px;       /* ou 100px si tu préfères */
+    flex: 0 0 auto;      /* ne grandit pas, ne rapetisse pas, garde sa largeur */
+    margin: 5px 0;
+    list-style: none;
 }
 
 .img{
-    width: 100px;
-    height: 150px;
+    width: 115px;
+    height: 155px;
+    object-fit: cover; 
     border-radius: 10%;
     text-decoration: none;
 }

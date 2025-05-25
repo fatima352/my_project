@@ -18,7 +18,6 @@ export const getAllFilms = (ctx:Context) => {
 }
 
 // Fonction pour ajouter un film à la base de données (Accés admin uniquement)
-// --> ameliorations : ajouter websocket
 export const addFilm = async (ctx:Context) =>{
     try{
         const body = await ctx.request.body.json();

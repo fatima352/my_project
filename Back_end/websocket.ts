@@ -6,7 +6,6 @@ const sockets: WebSocket[] = [];
 export function handleWsConnection(socket: WebSocket) {
   console.log("WebSocket connecté...");
   sockets.push(socket);
-  console.log("Client WebSocket connecté");
 
   socket.onclose = () => {
     const index = sockets.indexOf(socket);
@@ -52,6 +51,7 @@ export function handleWsConnection(socket: WebSocket) {
       console.log("UPDATE_FILM");
     }
   };
+  socket.close()
 }
 
 // Notifier tous les clients
