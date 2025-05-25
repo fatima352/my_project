@@ -36,12 +36,12 @@ Moview est un site web inspiré de [Letterboxd](https://letterboxd.com), destin�
 
 > Recommandé : navigateur **Firefox**
 
-1. Lancer le front à `http://localhost:PORTFRONT`
+1. Lancer le front à `https://localhost:PORTFRONT`
 2. Commandes :
    - Frontend :  
-     `deno run --allow-net --allow-read --allow-write front_server.ts 8000`
+     `deno run --allow-net --allow-read --allow-write front_server.ts 8000 ../localhost-cert.pem ../localhost-key.pem`
    - Backend :  
-     `deno run --allow-net --allow-read --allow-write back_server.ts 3000`
+     `deno run --allow-net --allow-read --allow-write back_server.ts 3000 ../localhost-cert.pem ../localhost-key.pem`
 3. Ouvrir `index.html` dans le navigateur
 4. Créer un compte utilisateur
 5. Pages disponibles : `login.html`, `register.html`, `films.html`, `list.html`, `profil.html`
