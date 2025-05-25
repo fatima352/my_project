@@ -54,5 +54,5 @@ Moview est un site web inspiré de [Letterboxd](https://letterboxd.com), destin�
 - Meilleure gestion des WebSockets
 - Recherche avancée
 - Suppression d’un film d’une liste (propriétaire)
-- Modération des commentaires (admin)
+- Gestion des commentaires (admin)
 - Système de notifications ou messagerie
