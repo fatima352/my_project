@@ -5,34 +5,40 @@ import{router} from "./routes.ts"
 const app = new Application();
 
 if (Deno.args.length < 1) {
-    console.log(`Usage: $ deno run --allow-net server.ts PORT [CERT_PATH KEY_PATH]`);
+    console.log(`Usage: $ deno run --allow-net --allow-read server.ts PORT [CERT_PATH KEY_PATH]`);
     Deno.exit();
 }
 
-//modif https
+// Configuration HTTPS modifiée
 let options: {
   port: number;
   secure?: boolean;
-  certFile?: string;
-  keyFile?: string;
+  cert?: string;
+  key?: string;
 } = {
   port: Number(Deno.args[0])
 };
 
+// Si certificats fournis en arguments
 if (Deno.args.length >= 3) {
     options.secure = true;
-    options.cert = await Deno.readTextFile(Deno.args[1]);
-    options.key = await Deno.readTextFile(Deno.args[2]);
+    options.cert = await Deno.readTextFile(Deno.args[1]);  // Lire le contenu du certificat
+    options.key = await Deno.readTextFile(Deno.args[2]);   // Lire le contenu de la clé
     console.log(`SSL conf ready (use https)`);
 }
 
 console.log(`Oak back server running on port ${options.port}`);
 
 /**
- * Cros qui permet toutes les méthodes
+ * CORS modifié pour HTTPS
  */
 app.use(oakCors({
-  origin: "http://localhost:8000", // Autoriser les requêtes depuis le frontend
+  origin: [
+    "https://localhost:8000", // Frontend HTTPS (port par défaut)
+    "http://localhost:8000",  // Frontend HTTP (port par défaut) 
+    "https://127.0.0.1:8000",
+    "http://127.0.0.1:8000"
+  ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], 
   allowedHeaders: ["Content-Type", "Authorization"], 
   credentials: true
@@ -53,10 +59,11 @@ app.use(async (ctx, next) => {
     await next();
 });
 
-app.use(router.routes()); 
-app.use(router.allowedMethods()); 
+app.use(router.routes());
+app.use(router.allowedMethods());
 
-// Lancement du serveur (HTTP ou HTTPS)
-// console.log(`Serveur Oak lancé sur ${options.secure ? "https" : "http"}://localhost:${options.port}`);
+// Lancement du serveur avec les bonnes options
+console.log(`Serveur Oak lancé sur ${options.secure ? "https" : "http"}://localhost:${options.port}`);
 
-await app.listen({port: 3000});
+// Utiliser les options configurées au lieu du port en dur
+await app.listen(options);
