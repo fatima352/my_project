@@ -32,8 +32,8 @@ const options: {
 
 if (Deno.args.length >= 3) {
   options.secure = true;
-  options.cert = await Deno.readTextFile(Deno.args[1]);  // Lire le contenu du certificat
-  options.key = await Deno.readTextFile(Deno.args[2]);   // Lire le contenu de la clé
+  // options.cert = await Deno.readTextFile(Deno.args[1]);  // Lire le contenu du certificat
+  // options.key = await Deno.readTextFile(Deno.args[2]);   // Lire le contenu de la clé
   console.log(`SSL conf ready (use https)`);
 }
 

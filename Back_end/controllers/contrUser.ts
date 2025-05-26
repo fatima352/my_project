@@ -48,10 +48,7 @@ export const addFilmCollection = async (ctx)=>{
         console.log("Film déjà ajouté");
         return;
     }
-    
-    const filmInfo = db.prepare(`SELECT title FROM film WHERE id = ?`).get(film.id);
-    ws.notifyFilmAddedToCollection(filmInfo);
-    
+      
 
     db.prepare(`INSERT INTO library (userId, filmId) VALUES (?,?)`).run(userId.id, film.id);
     ctx.response.status = 200;
@@ -142,7 +139,7 @@ export const deleteFilmCollection = async (ctx)=>{
     db.prepare(`DELETE FROM library WHERE userId = ? AND filmId = ?`).run(userId.id,filmId);
     
     const filmInfo = db.prepare(`SELECT title FROM film WHERE id = ?`).get(filmId);
-    ws.notifyDeleteFilmCollection(filmInfo);
+
     ctx.response.status = 200;
     ctx.response.body = {message: "Film supprimé avec succès"};
     console.log("Film supprimé avec succès");
