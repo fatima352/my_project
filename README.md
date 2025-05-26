@@ -36,6 +36,7 @@ Moview est un site web inspiré de [Letterboxd](https://letterboxd.com), destin�
 ## Installation
 
 > Recommandé : navigateur **Firefox**
+> Connection admin : username admin ,  pw  : admin
 
 1. Lancer le front à `https://localhost:PORTFRONT`
 2. Commandes :
