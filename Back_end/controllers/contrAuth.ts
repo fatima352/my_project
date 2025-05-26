@@ -97,7 +97,7 @@ export const login = async(ctx:Context)=>{
     
         mw.tokens[username] = token; //stocké le token de l'utilisateur
     
-        ctx.response.headers.set("Set-Cookie", `auth_token=${token}; HttpOnly; SameSite=Strict; Max-Age=3600`);//enelever secure
+        ctx.response.headers.set("Set-Cookie", `auth_token=${token}; HttpOnly; Secure;SameSite=Strict; Max-Age=3600`);//enelever secure
     
         ctx.response.status = 200;
         ctx.response.body = {message: "Connexion réussie"};
