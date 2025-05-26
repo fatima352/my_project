@@ -29,6 +29,7 @@ Moview est un site web inspiré de [Letterboxd](https://letterboxd.com), destin�
 - **Backend** : Deno (API REST)
 - Requêtes HTTP avec `fetch()`, gestion CORS + cookies
 - Upload via `FormData` pour les affiches
+- Utilisation de pages popup pour éviter d'a
 
 ---
 
@@ -54,5 +55,5 @@ Moview est un site web inspiré de [Letterboxd](https://letterboxd.com), destin�
 - Meilleure gestion des WebSockets
 - Recherche avancée
 - Suppression d’un film d’une liste (propriétaire)
-- Gestion des commentaires (admin)
+- Gestion des commentaires par l'admin
 - Système de notifications ou messagerie
