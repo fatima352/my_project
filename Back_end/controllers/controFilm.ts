@@ -125,7 +125,6 @@ export const updateFilm = async (ctx:Context)=>{
             console.log("Film non trouvé");
             return;
         }
-        ws.notifyUpdateFilm(filmData);
         ctx.response.status = 200;
         ctx.response.body = { message: "Titre mis à jour avec succès" };
 

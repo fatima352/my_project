@@ -55,7 +55,6 @@ export const getTopRatedFilms = (ctx) => {
             return;
         }
 
-        // Arrondir les moyennes pour chaque film
         topFilms.forEach(film => {
             const avg = Number(film.averageRating);
             film.averageRating = isNaN(avg) ? 0 : Math.round(avg * 10) / 10;

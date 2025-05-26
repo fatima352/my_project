@@ -14,25 +14,6 @@ socket.onmessage = (event) => {
         showNotification(`Film supprimé : ${film.title}`)
         getMovies(); 
     }
-
-    else if (message.type === "ADD_LIST") {
-        const list = message.data;
-        getUserLists();
-        showNotification(`Liste "${list.name}" ajoutée`);
-    }
-    else if (message.type === "DELETE_LIST") {
-        const list = message.data;
-        getUserLists();
-        showNotification(`Liste "${list.name}" supprimée`);
-    }
-    else if (message.type ==="ADD_FILM_LIST"){
-        getList();
-    }
-    else if (message.type === "UPDATE_FILM") {
-        const film = message.data;
-        getMovie();
-        showNotification(`Film "${film.title}" mis à jour`);
-    }
 };
 
 function showNotification(message) {

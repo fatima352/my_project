@@ -1,6 +1,5 @@
 import { db } from "../database/data.ts";
 import {Context} from "https://deno.land/x/oak@v17.1.4/mod.ts";
-import * as ws from "../websocket.ts";
 
 
 //fonction pour récupérer les information d'un utilisateur
@@ -80,10 +79,10 @@ export const getUserLists = (ctx) => {
     
     ctx.response.status = 200;
     
-    if (userList.length === 0) { // Correction : === au lieu de =
+    if (userList.length === 0) { 
         ctx.response.body = { 
             message: "Aucune liste créée",
-            userList: [] // Toujours inclure userList même si vide
+            userList: [] 
         };
         console.log("Aucune liste");
     } else {
@@ -144,43 +143,3 @@ export const deleteFilmCollection = async (ctx)=>{
     ctx.response.body = {message: "Film supprimé avec succès"};
     console.log("Film supprimé avec succès");
 }
-
-// //Fonction pour ajouter une photo de profil
-// export const addProfilePicture = async (ctx:Context)=>{
-//     const tokenData = ctx.state.tokenData;
-//     if(!tokenData){
-//         ctx.response.status =401;
-//         ctx.response.body = {message: "Token non valide, utilisateur non connecter"};
-//         console.log("probleme token");
-//         return;
-//     }
-//     const username = tokenData.username;
-
-//     const userId = db.prepare(`SELECT id FROM users WHERE username = ?`).get(username) as {id:number}|undefined;
-//     if(!userId){
-//         ctx.response.status = 401;
-//         ctx.response.body = {message : "Utilisateur introuvable"};
-//         console.log("Utilisateur introuvable");
-//         return;
-//     }
-    
-//     const body = await ctx.request.body({type:"form-data"});
-//     const data = await body.value.read();
-//     const file = data.files[0];
-    
-//     if(!file){
-//         ctx.response.status = 400;
-//         ctx.response.body = {message: "Aucun fichier trouvé"};
-//         console.log("Aucun fichier trouvé");
-//         return;
-//     }
-    
-//     const filePath = `./Back_end/uploads/${file.filename}`;
-    
-//     await Deno.writeFile(filePath, await Deno.readFile(file.path));
-    
-//     db.prepare(`UPDATE users SET profilePicture = ? WHERE id = ?`).run(filePath, userId.id);
-    
-//     ctx.response.status = 200;
-//     ctx.response.body = {message: "Photo de profil ajoutée avec succès"};
-// }
