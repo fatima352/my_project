@@ -1362,6 +1362,9 @@ function CreateList(){
 function addFilmList(){
     fetchaddFilmToListe();
     closePopup();
+    setTimeout(() => {
+        getList(); 
+    }, 50);
 }
 
 // --> Fonction popup pour ajouter un supprimer film db/ajouter film collection
@@ -1408,6 +1411,9 @@ function closePopup3() {
 function deleteList(){
     fetchDeleteList(aSupprimer);
     closePopup3();
+    setTimeout(() => {
+        getUserLists(); 
+    }, 50);
 }
 
 function deleteFilmColl(){
@@ -1438,6 +1444,9 @@ function commenterFilm(){
 function commenterList(){
     fetchCommenterList();
     closePopup4();
+    setTimeout(() => {
+        getReviewsList(); 
+    }, 50);
 }
 
 async function uploadPoster() {

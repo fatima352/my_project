@@ -1,6 +1,6 @@
 import { db } from "../database/data.ts";
 import {Context} from "https://deno.land/x/oak@v17.1.4/mod.ts";
-import * as ws from "../websocket.ts";
+
 
 
 // Fonction pour que l'user créer un liste ou stocker des films
@@ -29,7 +29,6 @@ export const createList = async (ctx:Context)=>{
         ctx.response.body = {message: "Liste crée avec succée"};
         console.log("Liste crée avec succée");
         const list = db.prepare(`SELECT name FROM liste WHERE name = ?`).get(listName) as {name: string} | undefined;
-        ws.notifyListCreated(list);
     }catch(error){
         ctx.response.status = 500;
         ctx.response.body = {message: "Erreur serveur", error: error.message};
@@ -77,7 +76,6 @@ export const addFilmToListe = async (ctx) => {
         }
         db.prepare(`INSERT INTO listeFilm (listeId, filmId) VALUES (?,?)`).run(listeId, filmId.id);
         
-        ws.notifyAddFilmList(filmTitle);
         ctx.response.status = 201;
         ctx.response.body = {message:"Film ajouté avec succès dans la liste"};
         console.log("Film ajouté avec succès dans la liste");
@@ -154,7 +152,6 @@ export const deleteList = async (ctx) =>{
         return;
     }
     const listData = db.prepare(`SELECT name FROM liste WHERE id = ?`).get(listId) as {name: string} | undefined;
-    ws.notifyDeleteList(listData);
     ctx.response.status = 200;
     ctx.response.body = {message: "Liste supprimée avec succès"};
     console.log("Liste supprimée avec succès");
