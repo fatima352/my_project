@@ -25,7 +25,7 @@ Moview est un site web inspiré de [Letterboxd](https://letterboxd.com), destin�
 
 ##  Technologies
 
-- **Frontend** : HTML, CSS, JavaScript (vanilla)
+- **Frontend** : HTML, CSS, JavaScript
 - **Backend** : Deno (API REST)
 - Requêtes HTTP avec `fetch()`, gestion CORS + cookies
 - Upload via `FormData` pour les affiches
@@ -39,9 +39,9 @@ Moview est un site web inspiré de [Letterboxd](https://letterboxd.com), destin�
 1. Lancer le front à `https://localhost:PORTFRONT`
 2. Commandes :
    - Frontend :  
-     `deno run --allow-net --allow-read --allow-write front_server.ts 8000 ../localhost-cert.pem ../localhost-key.pem`
+     `deno run --allow-net --allow-read --allow-write front_server.ts 8000 `
    - Backend :  
-     `deno run --allow-net --allow-read --allow-write back_server.ts 3000 ../localhost-cert.pem ../localhost-key.pem`
+     `deno run --allow-net --allow-read --allow-write back_server.ts 3000`
 3. Ouvrir `index.html` dans le navigateur
 4. Créer un compte utilisateur
 5. Pages disponibles : `login.html`, `register.html`, `films.html`, `list.html`, `profil.html`
